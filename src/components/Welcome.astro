@@ -1,10 +1,19 @@
 ---
 import background from '../assets/background.svg';
+const allBags = Object.values(import.meta.glob('../../content/bags/*.md', { eager: true }));
 ---
 
 <div id="container">
 	<img id="background" src={background.src} alt="" fetchpriority="high" />
 	<main>
+    <ul class="flex flex-col items-center">
+      {allBags.map((bag: any) => (
+        <li>
+          <h2>{bag.frontmatter.name}</h2>
+          <img class="h-96" src={bag.frontmatter.imgSrc} />
+        </li>
+        ))}
+    </ul>
 	</main>
 </div>
 
