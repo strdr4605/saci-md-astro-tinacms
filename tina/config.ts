@@ -46,6 +46,7 @@ export default defineConfig({
             label: "Body",
             isBody: true,
           },
+          { type: "string", name: "slug", label: "Link" },
           {
             type: "image",
             label: "Bag image",

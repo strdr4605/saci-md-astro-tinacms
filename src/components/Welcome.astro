@@ -1,30 +1,16 @@
 ---
-import background from '../assets/background.svg';
 const allBags = Object.values(import.meta.glob('../../content/bags/*.md', { eager: true }));
 ---
 
 <div id="container">
-	<img id="background" src={background.src} alt="" fetchpriority="high" />
 	<main>
     <ul class="flex flex-col items-center">
       {allBags.map((bag: any) => (
         <li>
-          <h2>{bag.frontmatter.name}</h2>
-          <img class="h-96" src={bag.frontmatter.imgSrc} />
+          <h2><a href={bag.frontmatter.slug}>{bag.frontmatter.name}</a></h2>
+          <img class="h-48" src={bag.frontmatter.imgSrc} />
         </li>
         ))}
     </ul>
 	</main>
 </div>
-
-<style>
-	#background {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: -1;
-		filter: blur(100px);
-	}
-</style>

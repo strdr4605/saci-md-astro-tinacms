@@ -1,5 +1,6 @@
 ---
 name: Bag 1
+slug: bag-1
 imgSrc: /polietilena80micron_35x65.png
 ---
 

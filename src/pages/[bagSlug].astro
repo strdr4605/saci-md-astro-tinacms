@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const bags = await getCollection('bags'); 
+
+  return bags.map((bag: any) => ({
+    params: { bagSlug: bag.data.slug },
+    props: { bag },
+  }));
+}
+
+const { bag } = Astro.props;
+---
+
+<Layout>
+  <head>
+    <title>{bag.data.name}</title>
+  </head>
+  <h1>{bag.data.name}</h1>
+  <img class="h-96" src={bag.data.imgSrc} />
+  <article>
+    {bag.body}
+  </article>
+</Layout>
