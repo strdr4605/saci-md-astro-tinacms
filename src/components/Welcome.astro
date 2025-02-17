@@ -6,7 +6,7 @@ const allBags = Object.values(import.meta.glob('../../content/bags/*.md', { eage
 	<main>
     <ul class="flex flex-col items-center">
       {allBags.map((bag: any) => (
-        <li>
+        <li class="p-2">
           <h2><a class="text-blue-900 underline" href={bag.frontmatter.slug}>{bag.frontmatter.name}</a></h2>
           <img class="h-48" src={bag.frontmatter.imgSrc} />
         </li>
