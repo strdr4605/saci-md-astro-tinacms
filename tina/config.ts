@@ -29,6 +29,14 @@ export default defineConfig({
   schema: {
     collections: [
       {
+        name: "categories",
+        label: "Categories",
+        path: "content/categories",
+        format: "md",
+        fields: [{ name: "name", label: "Category Name", type: "string" }],
+      },
+
+      {
         name: "bag",
         label: "Bags",
         path: "content/bags",
@@ -39,6 +47,12 @@ export default defineConfig({
             label: "Name",
             isTitle: true,
             required: true,
+          },
+          {
+            name: "categoryPath",
+            label: "Category",
+            type: "reference",
+            collections: ["categories"],
           },
           {
             type: "rich-text",

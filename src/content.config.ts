@@ -5,11 +5,20 @@ const bagsCollection = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./content/bags" }),
   schema: z.object({
     name: z.string(),
+    categoryPath: z.string(),
     slug: z.string(),
     imgSrc: z.string(),
   }),
 });
 
+const categoriesCollection = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./content/categories" }),
+  schema: z.object({
+    name: z.string(),
+  }),
+});
+
 export const collections = {
   bags: bagsCollection,
+  categories: categoriesCollection,
 };

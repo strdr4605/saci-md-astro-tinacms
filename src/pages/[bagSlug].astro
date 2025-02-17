@@ -12,15 +12,19 @@ export async function getStaticPaths() {
 }
 
 const { bag } = Astro.props;
+
+const categories = await getCollection('categories');
+
+const category = categories.find((c) => c.filePath === bag.data.categoryPath);
 ---
 
 <Layout>
-  <head>
-    <title>{bag.data.name}</title>
-  </head>
+<main class="flex flex-col items-center">
   <h1>{bag.data.name}</h1>
+  <h2 class="italic">{category && category.data.name}</h2>
   <img class="h-96" src={bag.data.imgSrc} />
   <article>
     {bag.body}
   </article>
+</main>
 </Layout>
