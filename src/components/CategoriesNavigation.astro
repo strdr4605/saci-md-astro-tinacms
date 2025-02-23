@@ -1,0 +1,21 @@
+---
+const allCategories = Object.values(
+  import.meta.glob("../../content/categories/*.md", { eager: true }),
+);
+---
+
+<nav id="categories-nav" class="py-12">
+  <ul class="flex justify-center gap-4">
+    {
+      allCategories.map((category: any) => (
+        <li class="flex flex-1">
+          <a class="flex flex-1" href={`#${category.frontmatter.name}`}>
+            <button class="flex flex-1 cursor-pointer justify-center rounded-lg bg-gray-100 p-4 uppercase">
+              {category.frontmatter.name}
+            </button>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
