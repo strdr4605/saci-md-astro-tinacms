@@ -1,10 +1,14 @@
 ---
 import CategoriesNavigation from "../components/CategoriesNavigation.astro";
 import Categories from "../components/Categories.astro";
+import Map from "../components/Map.astro";
 import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
-  <CategoriesNavigation />
-  <Categories />
+  <div class="flex flex-col gap-12">
+    <CategoriesNavigation />
+    <Categories />
+    <Map />
+  </div>
 </Layout>
