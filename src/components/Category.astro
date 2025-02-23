@@ -1,0 +1,35 @@
+---
+const allBags = Object.values(
+  import.meta.glob("../../content/bags/*.md", { eager: true }),
+);
+
+const { category } = Astro.props;
+
+const categoryBags = allBags.filter((bag: any) =>
+  category.file.includes(bag.frontmatter.categoryPath),
+);
+---
+
+<section id={category.frontmatter.name}>
+  <h2 class="flex items-center gap-6 text-3xl">
+    <a href={`#${category.frontmatter.name}`}>
+      {category.frontmatter.name}
+    </a>
+    <div class="h-[1px] flex-1 bg-gray-200"></div>
+  </h2>
+
+  <ul class="flex flex-col items-center md:flex-row md:justify-center">
+    {
+      categoryBags.map((bag: any) => (
+        <li class="p-2">
+          <h3>
+            <a class="text-blue-900 underline" href={bag.frontmatter.slug}>
+              {bag.frontmatter.name}
+            </a>
+          </h3>
+          <img class="h-48" src={bag.frontmatter.imgSrc} />
+        </li>
+      ))
+    }
+  </ul>
+</section>
