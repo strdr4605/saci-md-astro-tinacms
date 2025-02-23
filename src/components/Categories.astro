@@ -1,0 +1,11 @@
+---
+import Category from "./Category.astro";
+
+const allCategories = Object.values(
+  import.meta.glob("../../content/categories/*.md", { eager: true }),
+);
+---
+
+<main id="catalog">
+  {allCategories.map((category) => <Category category={category} />)}
+</main>
