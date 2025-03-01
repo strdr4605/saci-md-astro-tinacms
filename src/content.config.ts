@@ -8,6 +8,7 @@ const bagsCollection = defineCollection({
     categoryPath: z.string(),
     slug: z.string(),
     imgSrc: z.string(),
+    size: z.string(),
   }),
 });
 

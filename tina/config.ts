@@ -55,7 +55,13 @@ export default defineConfig({
             collections: ["categories"],
           },
           {
-            type: "rich-text",
+            type: "string",
+            name: "size",
+            label: "Size",
+            required: true,
+          },
+          {
+            type: "string",
             name: "body",
             label: "Body",
             isBody: true,
