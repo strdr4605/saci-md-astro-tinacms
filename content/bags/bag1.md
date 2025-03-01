@@ -2,6 +2,7 @@
 name: Bag 1
 slug: /bag-1
 categoryPath: content/categories/Polietilena.md
+size: 80 x 70 x 80
 imgSrc: /polietilena80micron_35x65.png
 ---
 
