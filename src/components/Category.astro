@@ -12,21 +12,22 @@ const categoryBags = allBags.filter((bag: any) =>
 );
 ---
 
-<section id={category.frontmatter.name}>
-  <h2 class="flex items-center gap-6 text-3xl">
-    <a href={`#${category.frontmatter.name}`}>
-      {category.frontmatter.name}
-    </a>
-    <div class="h-[1px] flex-1 bg-gray-200"></div>
-  </h2>
-
-  <ul class="flex flex-col flex-wrap items-center md:flex-row md:items-stretch">
-    {
-      categoryBags.map((bag: any) => (
-        <li class="p-2">
-          <CategoryBag bag={bag} />
-        </li>
-      ))
-    }
-  </ul>
-</section>
+{
+  categoryBags.length > 0 && (
+    <section id={category.frontmatter.name}>
+      <h2 class="flex items-center gap-6 text-3xl">
+        <a href={`#${category.frontmatter.name}`}>
+          {category.frontmatter.name}
+        </a>
+        <div class="h-[1px] flex-1 bg-gray-200" />
+      </h2>
+      <ul class="flex flex-col flex-wrap items-center md:flex-row md:items-stretch">
+        {categoryBags.map((bag: any) => (
+          <li class="p-2">
+            <CategoryBag bag={bag} />
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

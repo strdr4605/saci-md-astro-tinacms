@@ -2,17 +2,43 @@
 const allCategories = Object.values(
   import.meta.glob("../../content/categories/*.md", { eager: true }),
 );
+
+// Filter out categories that don't have bags
+const allBags = Object.values(
+  import.meta.glob("../../content/bags/*.md", { eager: true }),
+);
+
+const categoriesWithBags = allCategories.filter((category: any) => {
+  return allBags.some((bag: any) => 
+    category.file.includes(bag.frontmatter.categoryPath)
+  );
+});
 ---
 
-<nav id="categories-nav" class="mt-16">
-  <!-- Mobile scrollable navigation (visible on small screens) -->
-  <div class="relative overflow-x-auto pb-2 md:hidden">
-    <ul class="flex gap-4 px-4 whitespace-nowrap">
+{categoriesWithBags.length > 0 && (
+  <nav id="categories-nav" class="mt-16">
+    <!-- Mobile scrollable navigation (visible on small screens) -->
+    <div class="relative overflow-x-auto pb-2 md:hidden">
+      <ul class="flex gap-4 px-4 whitespace-nowrap">
+        {
+          categoriesWithBags.map((category: any) => (
+            <li class="flex-shrink-0">
+              <a href={`#${category.frontmatter.name}`}>
+                <button class="cursor-pointer rounded-lg bg-gray-100 px-4 py-3 uppercase transition-colors hover:bg-gray-200">
+                  {category.frontmatter.name}
+                </button>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <ul class="hidden justify-center gap-4 sm:flex">
       {
-        allCategories.map((category: any) => (
-          <li class="flex-shrink-0">
-            <a href={`#${category.frontmatter.name}`}>
-              <button class="cursor-pointer rounded-lg bg-gray-100 px-4 py-3 uppercase transition-colors hover:bg-gray-200">
+        categoriesWithBags.map((category: any) => (
+          <li class="flex flex-1">
+            <a class="flex flex-1" href={`#${category.frontmatter.name}`}>
+              <button class="flex flex-1 cursor-pointer justify-center rounded-lg bg-gray-100 p-4 uppercase">
                 {category.frontmatter.name}
               </button>
             </a>
@@ -20,19 +46,5 @@ const allCategories = Object.values(
         ))
       }
     </ul>
-  </div>
-
-  <ul class="hidden justify-center gap-4 sm:flex">
-    {
-      allCategories.map((category: any) => (
-        <li class="flex flex-1">
-          <a class="flex flex-1" href={`#${category.frontmatter.name}`}>
-            <button class="flex flex-1 cursor-pointer justify-center rounded-lg bg-gray-100 p-4 uppercase">
-              {category.frontmatter.name}
-            </button>
-          </a>
-        </li>
-      ))
-    }
-  </ul>
-</nav>
+  </nav>
+)}
