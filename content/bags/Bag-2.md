@@ -1,9 +1,9 @@
 ---
-name: Bag-2
-slug: /bag-2
-size: 60 x 95
-categoryPath: content/categories/Rafie.md
+name: Sac polietilenă 50x80
+categoryPath: content/categories/Polietilena.md
+size: 50x80-120mk
+slug: Polietilenă 50x80-120mk
 imgSrc: /polietilena100micron_50x80.png
 ---
 
-Salut from 2
+Sacul este produs din polietilenă ,reciclat din deseuri de polietilenă LDPE,sunt folositi pentru transportarea si păstrarea diferitor produse de uz gospadăresc(nisip,pietris,ciment,pămînt,gunoi,etc) 30-40kg
