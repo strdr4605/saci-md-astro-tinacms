@@ -4,24 +4,24 @@ const allCategories = Object.values(
 );
 
 // Filter out categories that don't have bags
-const allBags = Object.values(
-  import.meta.glob("../../content/bags/*.md", { eager: true }),
+const allProducts = Object.values(
+  import.meta.glob("../../content/products/*.md", { eager: true }),
 );
 
-const categoriesWithBags = allCategories.filter((category: any) => {
-  return allBags.some((bag: any) => 
-    category.file.includes(bag.frontmatter.categoryPath)
+const categoriesWithProducts = allCategories.filter((category: any) => {
+  return allProducts.some((product: any) => 
+    category.file.includes(product.frontmatter.categoryPath)
   );
 });
 ---
 
-{categoriesWithBags.length > 0 && (
+{categoriesWithProducts.length > 0 && (
   <nav id="categories-nav" class="mt-16">
     <!-- Mobile scrollable navigation (visible on small screens) -->
     <div class="relative overflow-x-auto pb-2 md:hidden">
       <ul class="flex gap-4 px-4 whitespace-nowrap">
         {
-          categoriesWithBags.map((category: any) => (
+          categoriesWithProducts.map((category: any) => (
             <li class="flex-shrink-0">
               <a href={`#${category.frontmatter.name}`}>
                 <button class="cursor-pointer rounded-lg bg-gray-100 px-4 py-3 uppercase transition-colors hover:bg-gray-200">
@@ -35,7 +35,7 @@ const categoriesWithBags = allCategories.filter((category: any) => {
     </div>
     <ul class="hidden justify-center gap-4 sm:flex">
       {
-        categoriesWithBags.map((category: any) => (
+        categoriesWithProducts.map((category: any) => (
           <li class="flex flex-1">
             <a class="flex flex-1" href={`#${category.frontmatter.name}`}>
               <button class="flex flex-1 cursor-pointer justify-center rounded-lg bg-gray-100 p-4 uppercase">
