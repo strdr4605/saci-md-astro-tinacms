@@ -1,19 +1,19 @@
 ---
-import CategoryBag from "./CategoryBag.astro";
+import CategoryProduct from "./CategoryProduct.astro";
 
-const allBags = Object.values(
-  import.meta.glob("../../content/bags/*.md", { eager: true }),
+const allProducts = Object.values(
+  import.meta.glob("../../content/products/*.md", { eager: true }),
 );
 
 const { category } = Astro.props;
 
-const categoryBags = allBags.filter((bag: any) =>
-  category.file.includes(bag.frontmatter.categoryPath),
+const categoryProducts = allProducts.filter((product: any) =>
+  category.file.includes(product.frontmatter.categoryPath),
 );
 ---
 
 {
-  categoryBags.length > 0 && (
+  categoryProducts.length > 0 && (
     <section id={category.frontmatter.name}>
       <h2 class="flex items-center gap-6 text-3xl">
         <a href={`#${category.frontmatter.name}`}>
@@ -22,9 +22,9 @@ const categoryBags = allBags.filter((bag: any) =>
         <div class="h-[1px] flex-1 bg-gray-200" />
       </h2>
       <ul class="flex flex-col flex-wrap items-center md:flex-row md:items-stretch">
-        {categoryBags.map((bag: any) => (
+        {categoryProducts.map((product: any) => (
           <li class="p-2">
-            <CategoryBag bag={bag} />
+            <CategoryProduct product={product} />
           </li>
         ))}
       </ul>

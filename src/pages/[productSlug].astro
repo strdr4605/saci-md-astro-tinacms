@@ -1,0 +1,32 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+
+export async function getStaticPaths() {
+  const products = await getCollection("products");
+
+  return products.map((product: any) => ({
+    params: { productSlug: product.data.slug },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+
+const categories = await getCollection("categories");
+
+const category = categories.find(
+  (c) => c.filePath === product.data.categoryPath,
+);
+---
+
+<Layout>
+  <main class="flex flex-col items-center">
+    <h1>{product.data.name}</h1>
+    <h2 class="italic">{category && category.data.name}</h2>
+    <img class="h-96" src={product.data.imgSrc} />
+    <article>
+      {product.body}
+    </article>
+  </main>
+</Layout>

@@ -6,7 +6,7 @@ const productsCollection = defineCollection({
   schema: z.object({
     name: z.string(),
     imgSrc: z.string(),
-    specs: z.string().array(),
+    specs: z.string().array().optional(),
     categoryPath: z.string(),
     slug: z.string(),
   }),
