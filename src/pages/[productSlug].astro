@@ -37,7 +37,7 @@ const category = categories.find(
         <ul
           class="flex list-disc flex-col gap-2 pl-5 leading-6 text-neutral-600 md:text-lg"
         >
-          {product.data.specs.map((spec: any) => <li>{spec}</li>)}
+          {product.data.specs?.map((spec: any) => <li>{spec}</li>)}
         </ul>
       </div>
     </article>
