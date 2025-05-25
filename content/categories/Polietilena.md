@@ -1,4 +1,4 @@
 ---
-name: Polietilenă (new)
+name: Polietilenă
 ---
 

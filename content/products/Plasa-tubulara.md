@@ -1,8 +1,7 @@
 ---
-name: Plasa tubulara
-categoryPath: ''
-size: '-'
-slug: Plasa tubulara
+name: Plasă tubulară
+categoryPath: content/categories/Plasa-tubulara-si-stretch.md
+slug: plasa-tubulara
 imgSrc: /plasa_tubulara.jpg
 ---
 
