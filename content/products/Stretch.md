@@ -1,8 +1,7 @@
 ---
 name: Stretch
-categoryPath: content/categories/Pelicula-stratch.md
-size: '-'
-slug: Stretch
+categoryPath: content/categories/Plasa-tubulara-si-stretch.md
+slug: stretch
 imgSrc: /folie_paletizat_1kg-2.jpg
 ---
 
