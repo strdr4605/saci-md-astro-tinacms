@@ -19,9 +19,9 @@ const bandClass = isAlt ? "bg-[#F6F5F3]" : "bg-[#F0F0F0]";
   categoryProducts.length > 0 && (
     <section
       id={category.frontmatter.name}
-      class={`w-full ${bandClass} border-t border-neutral-200/70`}
+      class={`w-full ${bandClass} border-t border-neutral-200/70 `}
     >
-      <div class="w-full px-6 py-10 sm:px-10 lg:px-14">
+      <div class="w-full px-6 py-10 sm:px-10 lg:px-14 ">
         <h2 class="flex items-center gap-6 text-3xl text-neutral-700">
           <a href={`#${category.frontmatter.name}`}>
             {category.frontmatter.name}

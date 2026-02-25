@@ -1,5 +1,7 @@
-<header class="sticky top-0 z-10 bg-white/80 pt-2 pb-2 backdrop-blur-[10px] transition-shadow duration-300 -mx-4 sm:-mx-16">
-  <div 
+<header
+  class="sticky top-0 z-10 -mx-4 bg-white/80 pt-2 pb-2 backdrop-blur-[10px] transition-shadow duration-300 sm:-mx-16"
+>
+  <div
     class="flex w-full items-center justify-between px-4 text-center text-neutral-600 sm:px-36"
   >
     <a href="/">
@@ -10,22 +12,55 @@
       />
     </a>
     <div class="flex items-center gap-4">
-      <div class="flex flex-col items-end">
-        <a
-          href="tel:069149730"
-          class="flex items-center gap-3 text-2xl font-bold"
+      <div class="flex-line flex items-end gap-4">
+        <div
+          class="rounded-lg border-1 border-[#51544D] pt-2 pr-6 pb-2 pl-4 text-[#51544D] flex"
         >
-          <img src="/phone.svg" alt="Phone Icon" class="w-6 object-contain" />
-          <span>069 149 730</span>
-        </a>
-        <a
-          href="https://www.google.com/maps/search/?api=1&query=str.+Nicolae+Dimo+17/1"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="mt-1 text-sm font-medium underline"
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M5.25 10C5.25 6.27208 8.27208 3.25 12 3.25C15.7279 3.25 18.75 6.27208 18.75 10C18.75 12.8727 17.378 15.328 15.7892 17.2045C14.326 18.9326 12.7249 20.1141 12 20.6059C11.2751 20.1141 9.67404 18.9326 8.21082 17.2045C6.62195 15.328 5.25 12.8727 5.25 10ZM12 1.75C7.44365 1.75 3.75 5.44365 3.75 10C3.75 13.3632 5.35406 16.1518 7.06606 18.1738C8.78095 20.1991 10.6588 21.5211 11.3395 21.9685C11.7439 22.2342 12.2561 22.2342 12.6605 21.9685C13.3412 21.5211 15.2191 20.1991 16.9339 18.1738C18.6459 16.1518 20.25 13.3632 20.25 10C20.25 5.44365 16.5563 1.75 12 1.75ZM9.75 10C9.75 8.75736 10.7574 7.75 12 7.75C13.2426 7.75 14.25 8.75736 14.25 10C14.25 11.2426 13.2426 12.25 12 12.25C10.7574 12.25 9.75 11.2426 9.75 10ZM12 6.25C9.92893 6.25 8.25 7.92893 8.25 10C8.25 12.0711 9.92893 13.75 12 13.75C14.0711 13.75 15.75 12.0711 15.75 10C15.75 7.92893 14.0711 6.25 12 6.25Z"
+              fill="#51544D"></path>
+          </svg>
+
+          <a
+            href="https://www.google.com/maps/search/?api=1&query=str.+Nicolae+Dimo+17/1"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-1 text-sm font-medium"
+          >
+            Locatie
+          </a>
+        </div>
+        <div
+          class="rounded-lg border-1 border-[#51544D] bg-[#51544D] pt-1 pb-1 pl-2"
         >
-          str. Nicolae Dimo 17/1
-        </a>
+          <a href="tel:069149730" class="flex items-center gap-3 pr-2 text-2xl">
+            <svg
+              width="19"
+              height="22"
+              viewBox="0 0 19 22"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M1.5 7.6875C1.5 3.44181 4.94181 0 9.1875 0C13.4332 0 16.875 3.44181 16.875 7.6875V7.98283C17.7758 8.54605 18.375 9.5468 18.375 10.6875V12.1875C18.375 13.9479 16.9479 15.375 15.1875 15.375C13.4271 15.375 12 13.9479 12 12.1875V10.6875C12 8.99098 13.3254 7.60403 14.9972 7.50559C14.9011 4.37961 12.3368 1.875 9.1875 1.875C6.03821 1.875 3.47389 4.37961 3.37779 7.50559C5.04961 7.60402 6.375 8.99098 6.375 10.6875V12.1875C6.375 13.885 5.04813 15.2725 3.375 15.3696V15.9375C3.375 17.905 4.96999 19.5 6.9375 19.5H7.5103C7.60357 18.6563 8.3189 18 9.1875 18H10.6875C11.6195 18 12.375 18.7555 12.375 19.6875C12.375 20.6195 11.6195 21.375 10.6875 21.375H9.9375H9.1875H6.9375C3.93445 21.375 1.5 18.9405 1.5 15.9375V14.8922C0.599193 14.3289 0 13.3282 0 12.1875V10.6875C0 9.5468 0.599193 8.54605 1.5 7.98283V7.6875ZM15.1875 9.375C14.4626 9.375 13.875 9.96263 13.875 10.6875V12.1875C13.875 12.9124 14.4626 13.5 15.1875 13.5C15.9124 13.5 16.5 12.9124 16.5 12.1875V10.6875C16.5 9.96263 15.9124 9.375 15.1875 9.375ZM1.875 10.6875C1.875 9.96263 2.46263 9.375 3.1875 9.375C3.91237 9.375 4.5 9.96263 4.5 10.6875V12.1875C4.5 12.9124 3.91237 13.5 3.1875 13.5C2.46263 13.5 1.875 12.9124 1.875 12.1875V10.6875Z"
+                fill="white"
+                class="w-6 object-contain"></path>
+            </svg>
+
+            <span class="text-white">069 149 730</span>
+          </a>
+        </div>
       </div>
     </div>
   </div>
