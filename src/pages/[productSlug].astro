@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
-
+import Map from "../components/Map.astro";
 
 export async function getStaticPaths() {
   const products = await getCollection("products");
@@ -45,4 +45,5 @@ const category = categories.find(
       </div>
     </article>
   </main>
+  <Map />
 </Layout>
