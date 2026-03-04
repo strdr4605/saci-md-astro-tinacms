@@ -22,3 +22,107 @@ import mascot from "../assets/mascot.png";
   />
 </div>
 
+<style>
+  #mascot-wrapper {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  #mascot {
+    transform-origin: 60% 85%;
+    animation:
+      floatTilt 3.2s infinite ease-in-out,
+      wiggle 7.5s infinite ease-in-out,
+      squish 4.6s infinite ease-in-out;
+    will-change: transform;
+  }
+
+  #mascot-message {
+    position: relative;
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 14px;
+    padding: 12px 14px;
+    width: min(260px, calc(100vw - 48px));
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    transition:
+      opacity 0.2s ease,
+      transform 0.25s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  #mascot-message::after {
+    content: "";
+    position: absolute;
+    right: 18px;
+    bottom: -8px;
+    width: 16px;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.92);
+    transform: rotate(45deg);
+    border-radius: 3px;
+  }
+
+  #mascot-wrapper:hover #mascot-message {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+  }
+
+  #mascot-message .text {
+    font-size: 14px;
+    line-height: 1.25rem;
+    color: #404040;
+    margin-bottom: 10px;
+  }
+
+  #mascot-message .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 10px;
+    background: #525252;
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 10px 14px;
+    text-decoration: none;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+    transition:
+      transform 0.12s ease,
+      box-shadow 0.12s ease,
+      opacity 0.12s ease;
+  }
+
+  #mascot-message .cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+  }
+
+  #mascot-message .cta:active {
+    transform: translateY(0px) scale(0.99);
+    opacity: 0.95;
+  }
+
+  #mascot-message .arrow {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+  }
+
+
+</style>
+
+<script>
+  setTimeout(() => {
+    const wrapper = document.getElementById("mascot-wrapper");
+    if (wrapper) wrapper.style.display = "flex";
+  }, 3500);
+</script>
+
