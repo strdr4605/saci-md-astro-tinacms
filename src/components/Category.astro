@@ -12,7 +12,7 @@ const categoryProducts = allProducts.filter((product: any) =>
 );
 
 const isAlt = index % 2 === 1;
-const bandClass = isAlt ? "bg-[#F6F5F3]" : "bg-[#F0F0F0]";
+const bandClass = isAlt ? "bg-[#F6F5F3]" : "bg-[#FFF]";
 ---
 
 {
@@ -26,7 +26,6 @@ const bandClass = isAlt ? "bg-[#F6F5F3]" : "bg-[#F0F0F0]";
           <a href={`#${category.frontmatter.name}`}>
             {category.frontmatter.name}
           </a>
-          <div class="h-[1px] flex-1 bg-neutral-300/80" />
         </h2>
 
         <ul class="mt-6 flex flex-col flex-wrap items-center md:flex-row md:items-stretch">
