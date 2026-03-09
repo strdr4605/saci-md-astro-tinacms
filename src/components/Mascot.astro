@@ -1,0 +1,210 @@
+---
+import mascot from "../assets/mascot.png";
+---
+
+<div id="mascot-wrapper">
+  <div id="mascot-message">
+    <div class="text">
+      👋 Bun venit! Vrei să vezi rapid produsele disponibile?
+    </div>
+
+    <a class="cta" href="#categories-nav">
+      <span>Vezi produsele</span>
+      <img src="/arrowDown.svg" alt="Arrow Icon" class="arrow" />
+    </a>
+  </div>
+
+  <img
+    src={mascot.src}
+    alt="Mascot"
+    id="mascot"
+    class="w-24 cursor-pointer select-none"
+  />
+</div>
+
+<style>
+  #mascot-wrapper {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999;   
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    animation: mascotAppear 0.6s ease forwards;
+    animation-delay: 3.5s;
+  }
+
+  #mascot {
+    display: flex;
+    align-self: flex-end;
+    transform-origin: 60% 85%;
+    animation:
+      floatTilt 2.5s infinite ease-in-out,
+      wiggle 5s infinite ease-in-out,
+      squish 3s infinite ease-in-out;
+    will-change: transform;
+  }
+
+  #mascot-message {
+    position: relative;
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 14px;
+    padding: 12px 14px;
+    width: min(260px, calc(100vw - 48px));
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    transition:
+      opacity 0.2s ease,
+      transform 0.25s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  #mascot-message::after {
+    content: "";
+    position: absolute;
+    right: 32px;
+    bottom: -8px;
+    width: 16px;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.92);
+    transform: rotate(45deg);
+    border-radius: 3px;
+  }
+
+  #mascot-wrapper:hover #mascot-message {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+  }
+
+  #mascot-message .text {
+    font-size: 14px;
+    line-height: 1.25rem;
+    color: #404040;
+    margin-bottom: 10px;
+  }
+
+  #mascot-message .cta {
+    display: inline-flex;
+    align-items: right;
+    gap: 10px;
+    border-radius: 10px;
+    background: #525252;
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 10px 14px;
+    text-decoration: none;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+    transition:
+      transform 0.12s ease,
+      box-shadow 0.12s ease,
+      opacity 0.12s ease;
+  }
+
+  #mascot-message .cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+  }
+
+  #mascot-message .cta:active {
+    transform: translateY(0px) scale(0.99);
+    opacity: 0.95;
+  }
+
+  #mascot-message .arrow {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+  }
+
+  /* #mascot.fallen {
+    animation: mascotFall 0.6s ease forwards;
+    transform-origin: bottom center;
+  } */
+
+  @keyframes floatTilt {
+    0% {
+      transform: translateY(0px) rotate(-4deg);
+    }
+    25% {
+      transform: translateY(-10px) rotate(3deg);
+    }
+    50% {
+      transform: translateY(-6px) rotate(-2deg);
+    }
+    75% {
+      transform: translateY(-12px) rotate(4deg);
+    }
+    100% {
+      transform: translateY(0px) rotate(-4deg);
+    }
+  }
+
+  @keyframes wiggle {
+    0%,
+    72%,
+    100% {
+      transform: none;
+    }
+    74% {
+      transform: rotate(6deg);
+    }
+    76% {
+      transform: rotate(-6deg);
+    }
+    78% {
+      transform: rotate(4deg);
+    }
+    80% {
+      transform: rotate(-3deg);
+    }
+    82% {
+      transform: rotate(0deg);
+    }
+  }
+
+  @keyframes squish {
+    0%,
+    60%,
+    100% {
+      transform: none;
+    }
+    62% {
+      transform: scaleX(1.05) scaleY(0.95) rotate(1deg);
+    }
+    66% {
+      transform: scaleX(0.95) scaleY(1.05) rotate(-1deg);
+    }
+    70% {
+      transform: scaleX(1) scaleY(1) rotate(0deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #mascot {
+      animation: none;
+    }
+    #mascot-message {
+      transition: none;
+    }
+  }
+
+
+  @keyframes mascotAppear {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+</style>
+
