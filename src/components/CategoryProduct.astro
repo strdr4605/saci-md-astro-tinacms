@@ -2,13 +2,25 @@
 const { product } = Astro.props;
 ---
 
-<a href={product.frontmatter.slug}>
-  <div class="flex w-78 flex-col gap-3 rounded-xl bg-gray-100 p-4">
-    <img class="h-72 w-72 object-contain" src={product.frontmatter.imgSrc} />
-    <div class="">
+<a href={product.frontmatter.slug} class="block">
+  <div class="flex w-78 flex-col gap-3 pt-8">
+    <img
+      class="h-72 w-72 rounded-2xl object-contain"
+      src={product.frontmatter.imgSrc}
+      alt={product.frontmatter.name}
+    />
+    <div >
       <h3 class="text-xl">
         {product.frontmatter.name}
       </h3>
+
+      {
+        product.frontmatter.price && (
+          <p class="text-body font-semibold text-green-700/90">
+            {product.frontmatter.price/100} lei/buc
+          </p>
+        )
+      }
     </div>
   </div>
 </a>

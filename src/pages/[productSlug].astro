@@ -1,6 +1,8 @@
 ---
 import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Map from "../components/Map.astro";
 
 export async function getStaticPaths() {
   const products = await getCollection("products");
@@ -21,6 +23,7 @@ const category = categories.find(
 ---
 
 <Layout>
+  <Header />
   <main class="flex flex-col items-center md:flex-row md:gap-14">
     <img class="h-96 md:h-[560px]" src={product.data.imgSrc} />
     <article class="flex flex-col gap-5">
@@ -42,4 +45,5 @@ const category = categories.find(
       </div>
     </article>
   </main>
+  <Map />
 </Layout>

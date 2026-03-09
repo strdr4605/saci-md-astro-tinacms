@@ -7,5 +7,5 @@ const allCategories = Object.values(
 ---
 
 <main id="catalog">
-  {allCategories.map((category) => <Category category={category} />)}
+    {allCategories.map((category, index) => <Category category={category} index={index} />)}
 </main>
