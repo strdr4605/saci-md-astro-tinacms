@@ -12,6 +12,15 @@
       />
     </a>
     <div class="flex items-center gap-4">
+      <!-- Language Switcher -->
+      <div class="flex items-center gap-0.5 text-sm font-semibold text-[#51544D]">
+        <button class="lang-btn active" data-lang="ro">RO</button>
+        <span class="opacity-25 select-none">|</span>
+        <button class="lang-btn" data-lang="en">EN</button>
+        <span class="opacity-25 select-none">|</span>
+        <button class="lang-btn" data-lang="ru">RU</button>
+      </div>
+
       <div class="flex-line flex items-center gap-4">
         <div
           class="rounded-lg border-1 border-[#51544D] pt-2 pr-6 pb-2 pl-4 text-[#51544D] flex"
@@ -36,7 +45,9 @@
             rel="noopener noreferrer"
             class="mt-1 text-sm font-medium"
           >
-            Locație
+            <span class="lang-ro">Locatie</span>
+            <span class="lang-en">Location</span>
+            <span class="lang-ru">Местоположение</span>
           </a>
         </div>
         <div

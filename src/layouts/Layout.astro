@@ -1,22 +1,45 @@
 ---
-import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import background from "../assets/background.svg";
 import "../styles/global.css";
 ---
 
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang="ro" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/gif" href="/favicon.gif" />
     <meta name="generator" content={Astro.generator} />
     <title>Saci.md</title>
+    <script is:inline>
+      (function () {
+        var lang = localStorage.getItem("saci-lang") || "ro";
+        document.documentElement.setAttribute("data-lang", lang);
+      })();
+    </script>
   </head>
   <body class="pb-12">
     <slot />
     <Footer />
+    <script is:inline>
+      document.addEventListener("DOMContentLoaded", function () {
+        var currentLang = localStorage.getItem("saci-lang") || "ro";
+
+        document.querySelectorAll(".lang-btn").forEach(function (btn) {
+          if (btn.dataset.lang === currentLang) btn.classList.add("active");
+
+          btn.addEventListener("click", function () {
+            currentLang = this.dataset.lang;
+            localStorage.setItem("saci-lang", currentLang);
+            document.documentElement.setAttribute("data-lang", currentLang);
+
+            document.querySelectorAll(".lang-btn").forEach(function (b) {
+              b.classList.toggle("active", b.dataset.lang === currentLang);
+            });
+          });
+        });
+      });
+    </script>
   </body>
 </html>
 

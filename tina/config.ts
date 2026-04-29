@@ -1,18 +1,57 @@
 import { defineConfig } from "tinacms";
 
-// Your hosting provider likely exposes this as an environment variable
 const branch =
   process.env.GITHUB_BRANCH ||
   process.env.VERCEL_GIT_COMMIT_REF ||
   process.env.HEAD ||
   "master";
 
+const categoryFields = [
+  {
+    name: "name",
+    label: "Category Name",
+    type: "string" as const,
+    isTitle: true,
+    required: true,
+  },
+];
+
+const productFields = [
+  {
+    type: "string" as const,
+    name: "name",
+    label: "Name",
+    isTitle: true,
+    required: true,
+  },
+  {
+    type: "image" as const,
+    label: "Product Image",
+    name: "imgSrc",
+  },
+  {
+    type: "string" as const,
+    name: "description",
+    label: "Description",
+    ui: { component: "textarea" },
+  },
+  {
+    type: "string" as const,
+    name: "specs",
+    label: "Specifications",
+    list: true,
+  },
+  {
+    type: "string" as const,
+    name: "slug",
+    label: "Slug",
+    description: "Example: sac-polipropilena-50x80",
+  },
+];
+
 export default defineConfig({
   branch,
-
-  // Get this from tina.io
   clientId: process.env.TINA_CLIENT_ID,
-  // Get this from tina.io
   token: process.env.TINA_TOKEN,
 
   build: {
@@ -25,61 +64,75 @@ export default defineConfig({
       publicFolder: "public",
     },
   },
-  // See docs on content modeling for more info on how to setup new content models: https://tina.io/docs/schema/
+
   schema: {
     collections: [
       {
-        name: "categories",
-        label: "Categorii",
-        path: "content/categories",
+        name: "categories_ro",
+        label: "🇷🇴 Categorii",
+        path: "content/ro/categories",
         format: "md",
-        fields: [{ name: "name", label: "Category Name", type: "string" }],
+        fields: categoryFields,
       },
-
       {
-        name: "products",
-        label: "Produse",
-        path: "content/products",
+        name: "products_ro",
+        label: "🇷🇴 Produse",
+        path: "content/ro/products",
+        format: "md",
         fields: [
+          ...productFields,
           {
-            type: "string",
-            name: "name",
-            label: "Nume",
-            description: "Numele produsului",
-            isTitle: true,
-            required: true,
+            name: "categoryPath",
+            label: "Categorie",
+            description: "Categoria din care face parte",
+            type: "reference" as const,
+            collections: ["categories_ro"],
           },
-          {
-            type: "image",
-            label: "Imagine produs",
-            name: "imgSrc",
-          },
-          {
-            type: "string",
-            name: "body",
-            label: "Descriere",
-            description: "Descrierea produsului",
-            isBody: true,
-          },
-          {
-            type: "string",
-            name: "specs",
-            label: "Specs",
-            description: "Specificații produs. Listă caracteristici",
-            list: true,
-          },
-          {
-            type: "string",
-            name: "slug",
-            label: "Link",
-            description: "Exemplu: /big-bag-50x50-100mk",
-          },
+        ],
+      },
+      {
+        name: "categories_en",
+        label: "🇬🇧 Categories",
+        path: "content/en/categories",
+        format: "md",
+        fields: categoryFields,
+      },
+      {
+        name: "products_en",
+        label: "🇬🇧 Products",
+        path: "content/en/products",
+        format: "md",
+        fields: [
+          ...productFields,
           {
             name: "categoryPath",
             label: "Category",
-            description: "Categoria din care face parte",
-            type: "reference",
-            collections: ["categories"],
+            description: "The category this product belongs to",
+            type: "reference" as const,
+            collections: ["categories_en"],
+          },
+        ],
+      },
+      {
+        name: "categories_ru",
+        label: "🇷🇺 Категории",
+        path: "content/ru/categories",
+        format: "md",
+        fields: categoryFields,
+      },
+      {
+        name: "products_ru",
+        label: "🇷🇺 Товары",
+        path: "content/ru/products",
+        format: "md",
+        fields: [
+          ...productFields,
+          {
+            name: "categoryPath",
+            label: "Категория",
+            description: "Категория, к которой относится товар",
+            type: "reference" as const,
+            collections: ["categories_ru"],
           },
         ],
       },
