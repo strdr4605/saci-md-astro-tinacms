@@ -49,6 +49,31 @@ const productFields = [
   },
 ];
 
+const settingsFields = [
+  {
+    name: "heroTitle",
+    type: "string" as const,
+    isTitle: true,
+    required: true,
+  },
+  {
+    name: "heroSubtitle",
+    type: "string" as const,
+  },
+  {
+    name: "heroButton",
+    type: "string" as const,
+  },
+  {
+    name: "headerLocation",
+    type: "string" as const,
+  },
+  {
+    name: "phone",
+    type: "string" as const,
+  },
+];
+
 export default defineConfig({
   branch,
   clientId: process.env.TINA_CLIENT_ID,
@@ -67,6 +92,45 @@ export default defineConfig({
 
   schema: {
     collections: [
+      {
+        name: "settings_ro",
+        label: "🇷🇴 Setări pagină",
+        path: "content/ro/settings",
+        format: "md",
+        fields: [
+          { ...settingsFields[0], label: "Hero – Titlu principal" },
+          { ...settingsFields[1], label: "Hero – Subtitlu" },
+          { ...settingsFields[2], label: "Hero – Text buton" },
+          { ...settingsFields[3], label: "Header – Etichetă locație" },
+          { ...settingsFields[4], label: "Număr de telefon" },
+        ],
+      },
+      {
+        name: "settings_en",
+        label: "🇬🇧 Page settings",
+        path: "content/en/settings",
+        format: "md",
+        fields: [
+          { ...settingsFields[0], label: "Hero – Main title" },
+          { ...settingsFields[1], label: "Hero – Subtitle" },
+          { ...settingsFields[2], label: "Hero – Button text" },
+          { ...settingsFields[3], label: "Header – Location label" },
+          { ...settingsFields[4], label: "Phone number" },
+        ],
+      },
+      {
+        name: "settings_ru",
+        label: "🇷🇺 Настройки страницы",
+        path: "content/ru/settings",
+        format: "md",
+        fields: [
+          { ...settingsFields[0], label: "Hero – Главный заголовок" },
+          { ...settingsFields[1], label: "Hero – Подзаголовок" },
+          { ...settingsFields[2], label: "Hero – Текст кнопки" },
+          { ...settingsFields[3], label: "Header – Метка местоположения" },
+          { ...settingsFields[4], label: "Номер телефона" },
+        ],
+      },
       {
         name: "categories_ro",
         label: "🇷🇴 Categorii",
