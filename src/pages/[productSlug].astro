@@ -1,48 +1,97 @@
 ---
-import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Map from "../components/Map.astro";
 
 export async function getStaticPaths() {
-  const products = await getCollection("products");
+  const roProducts = Object.values(
+    import.meta.glob("../../content/ro/products/*.md", { eager: true }),
+  ) as any[];
 
-  return products.map((product: any) => ({
-    params: { productSlug: product.data.slug },
-    props: { product },
+  return roProducts.map((product) => ({
+    params: { productSlug: product.frontmatter.slug },
+    props: { slug: product.frontmatter.slug },
   }));
 }
 
-const { product } = Astro.props;
+const { slug } = Astro.props;
 
-const categories = await getCollection("categories");
+const allRoProducts = Object.values(
+  import.meta.glob("../../content/ro/products/*.md", { eager: true }),
+) as any[];
+const allEnProducts = Object.values(
+  import.meta.glob("../../content/en/products/*.md", { eager: true }),
+) as any[];
+const allRuProducts = Object.values(
+  import.meta.glob("../../content/ru/products/*.md", { eager: true }),
+) as any[];
 
-const category = categories.find(
-  (c) => c.filePath === product.data.categoryPath,
-);
+function getKey(filepath: string) {
+  return (
+    filepath
+      .replace(/\\/g, "/")
+      .split("/")
+      .pop()
+      ?.replace(".md", "") ?? ""
+  );
+}
+
+const productRo = allRoProducts.find((p) => p.frontmatter.slug === slug);
+const productKey = productRo ? getKey(productRo.file) : "";
+const productEn = allEnProducts.find((p) => getKey(p.file) === productKey);
+const productRu = allRuProducts.find((p) => getKey(p.file) === productKey);
+
+const hasSpecs =
+  (productRo?.frontmatter.specs?.length ?? 0) > 0 ||
+  (productEn?.frontmatter.specs?.length ?? 0) > 0 ||
+  (productRu?.frontmatter.specs?.length ?? 0) > 0;
 ---
 
 <Layout>
   <Header />
   <main class="flex flex-col items-center md:flex-row md:gap-14">
-    <img class="h-96 md:h-[560px]" src={product.data.imgSrc} />
+    <img class="h-96 md:h-[560px]" src={productRo?.frontmatter.imgSrc} />
     <article class="flex flex-col gap-5">
       <div class="flex flex-col gap-3 border-b border-b-neutral-300 pb-5">
         <h1 class="text-3xl font-bold text-neutral-600 md:text-4xl">
-          {product.data.name}
+          <span class="lang-ro">{productRo?.frontmatter.name}</span>
+          <span class="lang-en">{productEn?.frontmatter.name}</span>
+          <span class="lang-ru">{productRu?.frontmatter.name}</span>
         </h1>
-        <p class="leading-6 text-neutral-600 md:text-xl md:leading-9">
-          {product.body}
-        </p>
+        <div class="leading-6 text-neutral-600 md:text-xl md:leading-9">
+          <div class="lang-ro">{productRo?.frontmatter.description}</div>
+          <div class="lang-en">{productEn?.frontmatter.description}</div>
+          <div class="lang-ru">{productRu?.frontmatter.description}</div>
+        </div>
       </div>
 
-      <div class="flex flex-col gap-3 border-b border-b-neutral-300 pb-5">
-        <ul
-          class="flex list-disc flex-col gap-2 pl-5 leading-6 text-neutral-600 md:text-lg"
-        >
-          {product.data.specs?.map((spec: any) => <li>{spec}</li>)}
-        </ul>
-      </div>
+      {
+        hasSpecs && (
+          <div class="flex flex-col gap-3 border-b border-b-neutral-300 pb-5">
+            <div class="lang-ro">
+              <ul class="flex list-disc flex-col gap-2 pl-5 leading-6 text-neutral-600 md:text-lg">
+                {productRo?.frontmatter.specs?.map((spec: string) => (
+                  <li>{spec}</li>
+                ))}
+              </ul>
+            </div>
+            <div class="lang-en">
+              <ul class="flex list-disc flex-col gap-2 pl-5 leading-6 text-neutral-600 md:text-lg">
+                {productEn?.frontmatter.specs?.map((spec: string) => (
+                  <li>{spec}</li>
+                ))}
+              </ul>
+            </div>
+            <div class="lang-ru">
+              <ul class="flex list-disc flex-col gap-2 pl-5 leading-6 text-neutral-600 md:text-lg">
+                {productRu?.frontmatter.specs?.map((spec: string) => (
+                  <li>{spec}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )
+      }
     </article>
   </main>
   <Map />

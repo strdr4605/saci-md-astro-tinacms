@@ -1,11 +1,44 @@
 ---
 import Category from "./Category.astro";
 
-const allCategories = Object.values(
-  import.meta.glob("../../content/categories/*.md", { eager: true }),
-);
+const roCategories = Object.values(
+  import.meta.glob("../../content/ro/categories/*.md", { eager: true }),
+) as any[];
+const enCategories = Object.values(
+  import.meta.glob("../../content/en/categories/*.md", { eager: true }),
+) as any[];
+const ruCategories = Object.values(
+  import.meta.glob("../../content/ru/categories/*.md", { eager: true }),
+) as any[];
+
+function getKey(filepath: string) {
+  return (
+    filepath
+      .replace(/\\/g, "/")
+      .split("/")
+      .pop()
+      ?.replace(".md", "") ?? ""
+  );
+}
+
+const categories = roCategories.map((roCat) => {
+  const key = getKey(roCat.file);
+  const enCat = enCategories.find((c) => getKey(c.file) === key);
+  const ruCat = ruCategories.find((c) => getKey(c.file) === key);
+  return { ro: roCat, en: enCat, ru: ruCat, key };
+});
 ---
 
 <main id="catalog">
-    {allCategories.map((category, index) => <Category category={category} index={index} />)}
+  {
+    categories.map(({ ro, en, ru, key }, index) => (
+      <Category
+        categoryRo={ro}
+        categoryEn={en}
+        categoryRu={ru}
+        categoryKey={key}
+        index={index}
+      />
+    ))
+  }
 </main>
