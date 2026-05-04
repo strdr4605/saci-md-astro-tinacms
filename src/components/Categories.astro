@@ -21,12 +21,20 @@ function getKey(filepath: string) {
   );
 }
 
-const categories = roCategories.map((roCat) => {
-  const key = getKey(roCat.file);
-  const enCat = enCategories.find((c) => getKey(c.file) === key);
-  const ruCat = ruCategories.find((c) => getKey(c.file) === key);
-  return { ro: roCat, en: enCat, ru: ruCat, key };
-});
+const allKeys = [
+  ...new Set(
+    [...roCategories, ...enCategories, ...ruCategories].map((c) =>
+      getKey(c.file),
+    ),
+  ),
+];
+
+const categories = allKeys.map((key) => ({
+  ro: roCategories.find((c) => getKey(c.file) === key),
+  en: enCategories.find((c) => getKey(c.file) === key),
+  ru: ruCategories.find((c) => getKey(c.file) === key),
+  key,
+}));
 ---
 
 <main id="catalog">

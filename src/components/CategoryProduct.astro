@@ -1,25 +1,26 @@
 ---
 const { productRo, productEn, productRu } = Astro.props;
+const primary = productRo ?? productEn ?? productRu;
 ---
 
-<a href={productRo.frontmatter.slug} class="block">
+<a href={primary.frontmatter.slug} class="block">
   <div class="flex w-78 flex-col gap-3 pt-8">
     <img
       class="h-72 w-72 rounded-2xl object-contain"
-      src={productRo.frontmatter.imgSrc}
-      alt={productRo.frontmatter.name}
+      src={primary.frontmatter.imgSrc}
+      alt={primary.frontmatter.name}
     />
     <div>
       <h3 class="text-xl">
-        <span class="lang-ro">{productRo.frontmatter.name}</span>
+        <span class="lang-ro">{productRo?.frontmatter.name}</span>
         <span class="lang-en">{productEn?.frontmatter.name}</span>
         <span class="lang-ru">{productRu?.frontmatter.name}</span>
       </h3>
 
       {
-        productRo.frontmatter.price && (
+        primary.frontmatter.price && (
           <p class="text-body font-semibold text-green-700/90">
-            {productRo.frontmatter.price / 100} lei/buc
+            {primary.frontmatter.price / 100} lei/buc
           </p>
         )
       }

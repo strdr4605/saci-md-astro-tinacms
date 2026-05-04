@@ -23,16 +23,32 @@ function getKey(filepath: string) {
   );
 }
 
-const categoriesWithPreview = roCategories
-  .map((roCategory) => {
-    const key = getKey(roCategory.file);
+const allCatKeys = [
+  ...new Set(
+    [...roCategories, ...enCategories, ...ruCategories].map((c) =>
+      getKey(c.file),
+    ),
+  ),
+];
+
+const enProducts = Object.values(
+  import.meta.glob("../../content/en/products/*.md", { eager: true }),
+) as any[];
+const ruProducts = Object.values(
+  import.meta.glob("../../content/ru/products/*.md", { eager: true }),
+) as any[];
+
+const categoriesWithPreview = allCatKeys
+  .map((key) => {
+    const roCategory = roCategories.find((c) => getKey(c.file) === key);
     const enCategory = enCategories.find((c) => getKey(c.file) === key);
     const ruCategory = ruCategories.find((c) => getKey(c.file) === key);
 
-    const product = roProducts.find((p) => {
-      const catPath: string = p.frontmatter.categoryPath ?? "";
-      return getKey(catPath) === key;
-    });
+    const findProduct = (list: any[]) =>
+      list.find((p) => getKey(p.frontmatter.categoryPath ?? "") === key);
+
+    const product =
+      findProduct(roProducts) ?? findProduct(enProducts) ?? findProduct(ruProducts);
 
     if (!product) return null;
     return { roCategory, enCategory, ruCategory, product, key };
@@ -57,7 +73,7 @@ const categoriesWithPreview = roCategories
                       class="h-30 w-30 object-contain mb-2 rounded-lg"
                     />
                     <span class="uppercase text-sm font-medium">
-                      <span class="lang-ro">{roCategory.frontmatter.name}</span>
+                      <span class="lang-ro">{roCategory?.frontmatter.name}</span>
                       <span class="lang-en">{enCategory?.frontmatter.name}</span>
                       <span class="lang-ru">{ruCategory?.frontmatter.name}</span>
                     </span>
@@ -82,7 +98,7 @@ const categoriesWithPreview = roCategories
                     class="h-40 w-40 object-contain mb-3 rounded-lg"
                   />
                   <span class="uppercase font-medium">
-                    <span class="lang-ro">{roCategory.frontmatter.name}</span>
+                    <span class="lang-ro">{roCategory?.frontmatter.name}</span>
                     <span class="lang-en">{enCategory?.frontmatter.name}</span>
                     <span class="lang-ru">{ruCategory?.frontmatter.name}</span>
                   </span>

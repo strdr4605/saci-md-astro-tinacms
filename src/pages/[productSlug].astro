@@ -4,13 +4,17 @@ import Header from "../components/Header.astro";
 import Map from "../components/Map.astro";
 
 export async function getStaticPaths() {
-  const roProducts = Object.values(
-    import.meta.glob("../../content/ro/products/*.md", { eager: true }),
-  ) as any[];
+  const allProducts = [
+    ...Object.values(import.meta.glob("../../content/ro/products/*.md", { eager: true })),
+    ...Object.values(import.meta.glob("../../content/en/products/*.md", { eager: true })),
+    ...Object.values(import.meta.glob("../../content/ru/products/*.md", { eager: true })),
+  ] as any[];
 
-  return roProducts.map((product) => ({
-    params: { productSlug: product.frontmatter.slug },
-    props: { slug: product.frontmatter.slug },
+  const slugs = [...new Set(allProducts.map((p) => p.frontmatter.slug).filter(Boolean))];
+
+  return slugs.map((slug) => ({
+    params: { productSlug: slug },
+    props: { slug },
   }));
 }
 
@@ -37,9 +41,9 @@ function getKey(filepath: string) {
 }
 
 const productRo = allRoProducts.find((p) => p.frontmatter.slug === slug);
-const productKey = productRo ? getKey(productRo.file) : "";
-const productEn = allEnProducts.find((p) => getKey(p.file) === productKey);
-const productRu = allRuProducts.find((p) => getKey(p.file) === productKey);
+const productEn = allEnProducts.find((p) => p.frontmatter.slug === slug);
+const productRu = allRuProducts.find((p) => p.frontmatter.slug === slug);
+const primaryProduct = productRo ?? productEn ?? productRu;
 
 const hasSpecs =
   (productRo?.frontmatter.specs?.length ?? 0) > 0 ||
@@ -50,7 +54,7 @@ const hasSpecs =
 <Layout>
   <Header />
   <main class="flex flex-col items-center md:flex-row md:gap-14">
-    <img class="h-96 md:h-[560px]" src={productRo?.frontmatter.imgSrc} />
+    <img class="h-96 md:h-[560px]" src={primaryProduct?.frontmatter.imgSrc} />
     <article class="flex flex-col gap-5">
       <div class="flex flex-col gap-3 border-b border-b-neutral-300 pb-5">
         <h1 class="text-3xl font-bold text-neutral-600 md:text-4xl">
