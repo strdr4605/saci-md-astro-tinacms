@@ -1,3 +1,25 @@
+---
+const roSettings = (
+  Object.values(
+    import.meta.glob("../../content/ro/settings/*.md", { eager: true }),
+  ) as any[]
+)[0];
+const enSettings = (
+  Object.values(
+    import.meta.glob("../../content/en/settings/*.md", { eager: true }),
+  ) as any[]
+)[0];
+const ruSettings = (
+  Object.values(
+    import.meta.glob("../../content/ru/settings/*.md", { eager: true }),
+  ) as any[]
+)[0];
+
+const ro = roSettings?.frontmatter ?? {};
+const en = enSettings?.frontmatter ?? {};
+const ru = ruSettings?.frontmatter ?? {};
+---
+
 <section
   class="-mx-4 flex flex-wrap items-center gap-10 pt-6 pb-16 sm:-mx-16 px-6 py-16 sm:px-12 lg:px-24"
   style="background: linear-gradient(#FFF 14.8%, #C1B9AE 116.9%);"
@@ -9,17 +31,23 @@
       <h1
         class="text-[40px] leading-[64px] font-bold max-md:leading-[52px] sm:text-[48px] md:text-[52px] lg:text-[56px]"
       >
-        Saci din rafie și polietilenă pentru gunoi și materiale de construcții
+        <span class="lang-ro">{ro.heroTitle}</span>
+        <span class="lang-en">{en.heroTitle}</span>
+        <span class="lang-ru">{ru.heroTitle}</span>
       </h1>
       <p class="mt-6 text-2xl">
-        Rezistenți. Accesibili. Disponibili în multiple dimensiuni.
+        <span class="lang-ro">{ro.heroSubtitle}</span>
+        <span class="lang-en">{en.heroSubtitle}</span>
+        <span class="lang-ru">{ru.heroSubtitle}</span>
       </p>
     </div>
     <button
       class="mt-12 flex items-center gap-2 self-start overflow-hidden rounded-lg bg-neutral-600 px-6 py-4 text-xl font-semibold text-white shadow-sm max-md:mt-10 max-md:px-5"
     >
       <a href="#categories-nav" class="flex">
-        <span>Vezi produsele</span>
+        <span class="lang-ro">{ro.heroButton}</span>
+        <span class="lang-en">{en.heroButton}</span>
+        <span class="lang-ru">{ru.heroButton}</span>
         <img
           src="/arrowDown.svg"
           alt="Arrow Icon"
@@ -36,4 +64,3 @@
     />
   </div>
 </section>
-

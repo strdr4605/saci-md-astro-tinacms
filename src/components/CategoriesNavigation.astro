@@ -1,73 +1,113 @@
 ---
-const allCategories = Object.values(
-  import.meta.glob("../../content/categories/*.md", { eager: true }),
-);
+const roCategories = Object.values(
+  import.meta.glob("../../content/ro/categories/*.md", { eager: true }),
+) as any[];
+const enCategories = Object.values(
+  import.meta.glob("../../content/en/categories/*.md", { eager: true }),
+) as any[];
+const ruCategories = Object.values(
+  import.meta.glob("../../content/ru/categories/*.md", { eager: true }),
+) as any[];
 
-const allProducts = Object.values(
-  import.meta.glob("../../content/products/*.md", { eager: true }),
-);
+const roProducts = Object.values(
+  import.meta.glob("../../content/ro/products/*.md", { eager: true }),
+) as any[];
 
-// Map categories to a product for preview in the navigation
-const categoriesWithPreview = allCategories
-  .map((category: any) => {
-    const product = allProducts.find((p: any) =>
-      category.file.includes(p.frontmatter.categoryPath),
-    );
+function getKey(filepath: string) {
+  return (
+    filepath
+      .replace(/\\/g, "/")
+      .split("/")
+      .pop()
+      ?.replace(".md", "") ?? ""
+  );
+}
+
+const allCatKeys = [
+  ...new Set(
+    [...roCategories, ...enCategories, ...ruCategories].map((c) =>
+      getKey(c.file),
+    ),
+  ),
+];
+
+const enProducts = Object.values(
+  import.meta.glob("../../content/en/products/*.md", { eager: true }),
+) as any[];
+const ruProducts = Object.values(
+  import.meta.glob("../../content/ru/products/*.md", { eager: true }),
+) as any[];
+
+const categoriesWithPreview = allCatKeys
+  .map((key) => {
+    const roCategory = roCategories.find((c) => getKey(c.file) === key);
+    const enCategory = enCategories.find((c) => getKey(c.file) === key);
+    const ruCategory = ruCategories.find((c) => getKey(c.file) === key);
+
+    const findProduct = (list: any[]) =>
+      list.find((p) => getKey(p.frontmatter.categoryPath ?? "") === key);
+
+    const product =
+      findProduct(roProducts) ?? findProduct(enProducts) ?? findProduct(ruProducts);
 
     if (!product) return null;
-
-    return {
-      category,
-      product,
-    };
+    return { roCategory, enCategory, ruCategory, product, key };
   })
   .filter(Boolean);
 ---
 
-{categoriesWithPreview.length > 0 && (
-  <nav id="categories-nav" class="mt-16">
+{
+  categoriesWithPreview.length > 0 && (
+    <nav id="categories-nav" class="mt-16">
+      {/* Mobile scrollable navigation */}
+      <div class="relative overflow-x-auto pb-2 md:hidden">
+        <ul class="flex gap-4 px-4 whitespace-nowrap">
+          {categoriesWithPreview.map(
+            ({ roCategory, enCategory, ruCategory, product, key }: any) => (
+              <li class="flex-shrink-0">
+                <a href={`#${key}`}>
+                  <div class="flex flex-col items-center rounded-lg bg-gray-100 px-4 py-3 hover:bg-gray-200 transition">
+                    <img
+                      src={product.frontmatter.imgSrc}
+                      alt={product.frontmatter.name}
+                      class="h-30 w-30 object-contain mb-2 rounded-lg"
+                    />
+                    <span class="uppercase text-sm font-medium">
+                      <span class="lang-ro">{roCategory?.frontmatter.name}</span>
+                      <span class="lang-en">{enCategory?.frontmatter.name}</span>
+                      <span class="lang-ru">{ruCategory?.frontmatter.name}</span>
+                    </span>
+                  </div>
+                </a>
+              </li>
+            ),
+          )}
+        </ul>
+      </div>
 
-    {<!-- Mobile scrollable navigation (visible on small screens) -->}
-    <div class="relative overflow-x-auto pb-2 md:hidden">
-      <ul class="flex gap-4 px-4 whitespace-nowrap">
-        {categoriesWithPreview.map(({ category, product }: any) => (
-          <li class="flex-shrink-0">
-            <a href={`#${category.frontmatter.name}`}>
-              <div class="flex flex-col items-center rounded-lg bg-gray-100 px-4 py-3 hover:bg-gray-200 transition">
-                <img
-                  src={product.frontmatter.imgSrc}
-                  alt={product.frontmatter.name}
-                  class="h-30 w-30 object-contain mb-2 rounded-lg"
-                />
-                <span class="uppercase text-sm font-medium">
-                  {category.frontmatter.name}
-                </span>
-              </div>
-            </a>
-          </li>
-        ))}
+      {/* Desktop grid */}
+      <ul class="hidden justify-center gap-4 sm:flex">
+        {categoriesWithPreview.map(
+          ({ roCategory, enCategory, ruCategory, product, key }: any) => (
+            <li class="flex flex-1">
+              <a class="flex flex-1" href={`#${key}`}>
+                <div class="flex flex-1 flex-col items-center rounded-lg bg-gray-100 p-4 hover:bg-gray-200 transition">
+                  <img
+                    src={product.frontmatter.imgSrc}
+                    alt={product.frontmatter.name}
+                    class="h-40 w-40 object-contain mb-3 rounded-lg"
+                  />
+                  <span class="uppercase font-medium">
+                    <span class="lang-ro">{roCategory?.frontmatter.name}</span>
+                    <span class="lang-en">{enCategory?.frontmatter.name}</span>
+                    <span class="lang-ru">{ruCategory?.frontmatter.name}</span>
+                  </span>
+                </div>
+              </a>
+            </li>
+          ),
+        )}
       </ul>
-    </div>
-
-    {/* Desktop grid */}
-    <ul class="hidden justify-center gap-4 sm:flex">
-      {categoriesWithPreview.map(({ category, product }: any) => (
-        <li class="flex flex-1">
-          <a class="flex flex-1" href={`#${category.frontmatter.name}`}>
-            <div class="flex flex-1 flex-col items-center rounded-lg bg-gray-100 p-4 hover:bg-gray-200 transition">
-              <img
-                src={product.frontmatter.imgSrc}
-                alt={product.frontmatter.name}
-                class="h-40 w-40 object-contain mb-3 rounded-lg"
-              />
-              <span class="uppercase font-medium">
-                {category.frontmatter.name}
-              </span>
-            </div>
-          </a>
-        </li>
-      ))}
-    </ul>
-
-  </nav>
-)}
+    </nav>
+  )
+}
