@@ -9,7 +9,7 @@
 - **Telefon**: +373 69 149 730
 - **Adresă**: str. Nicolae Dimo 17/1, Chișinău, Republica Moldova
 
-**Descriere principală**: Saci albi din propilenă pentru cereale, mărfuri industriale, mărfuri de uz gospodăresc și polietilenă pentru gunoi și material de construcții.
+**Descriere principală**: Saci albi din polipropilenă pentru cereale, mărfuri industriale, mărfuri de uz gospodăresc și polietilenă pentru gunoi și material de construcții.
 
 Compania oferă o gamă largă de saci și soluții de ambalare pentru diverse industrii: construcții, agricultură și uz casnic.
 
@@ -25,8 +25,8 @@ Saci din polietilenă pentru transportul și depozitarea materialelor de constru
 **Specificații**: capacitate 15-40 kg
 **Dimensiuni disponibile**: 32x62, 35x65, 38x68, 43x70, 50x80, 50x92 cm
 
-### 2. Saci Propilenă (Saci PP / Rafie / Big Bags)
-Saci din propilenă (polipropilenă) țesută, albi, pentru cereale, mărfuri industriale și mărfuri de uz gospodăresc. Cu durabilitate ridicată și posibilitate de reutilizare.
+### 2. Saci Polipropilenă (Saci PP / Rafie / Big Bags)
+Saci din polipropilenă țesută, albi, pentru cereale, mărfuri industriale și mărfuri de uz gospodăresc. Cu durabilitate ridicată și posibilitate de reutilizare.
 
 **Specificații**: capacitate 20-60 kg
 **Dimensiuni disponibile**: 35x65, 50x80, 50x90, 50x100, 55x100, 55x105, 60x110, 100x150 cm
@@ -37,7 +37,7 @@ Saci cu ochiuri pentru o circulație optimă a aerului, menținând prospețimea
 **Dimensiuni disponibile**: 30x34, 40x58, 52x72 cm
 
 ### 4. Big Bags (Saci Jumbo / FIBC)
-Containere flexibile de mare capacitate din propilenă ranforsată, pentru transportul și depozitarea până la 1 tonă de materiale. Echipate cu 4 mâneri, tub de încărcare și descărcare, reutilizabile.
+Containere flexibile de mare capacitate din polipropilenă ranforsată, pentru transportul și depozitarea până la 1 tonă de materiale. Echipate cu 4 mâneri, tub de încărcare și descărcare, reutilizabile.
 
 **Utilizări**: industria alimentară (făină, zahăr, cereale, furaje), industria chimică, materiale de construcții (nisip, rumeguș, pelete)
 
@@ -60,7 +60,7 @@ Folie stretch din polietilenă LDPE pentru înfășurarea produselor pe paleți,
 - Culoare fumurie sau albă
 - Grosime măsurată în microni (80-120 mk)
 
-### Propilenă (PP / Polipropilenă)
+### Polipropilenă (PP)
 - Saci albi pentru cereale și mărfuri industriale
 - Țesătură țesută (rafie)
 - Pentru cereale, mărfuri de uz gospodăresc
@@ -79,7 +79,7 @@ Folie stretch din polietilenă LDPE pentru înfășurarea produselor pe paleți,
 
 ## Informații despre ambalare
 
-- Sacii din **propilenă** se vând de obicei în seturi de 100-500 bucăți
+- Sacii din **polipropilenă** se vând de obicei în seturi de 100-500 bucăți
 - **Big bags** se vând la bucată
 - **Prețurile** variază în funcție de dimensiune și specificații
 
@@ -114,7 +114,7 @@ Site-ul este organizat astfel:
 ## English Summary / Rezumat în Engleză
 
 **Sim Construct Grup S.R.L.** is a Moldovan company selling packaging products including:
-- White polypropylene (raffia) bags for grains, industrial goods, and household items
+- White polypropylene bags for grains, industrial goods, and household items
 - Polyethylene bags for trash and construction materials
 - Big Bags (FIBC) up to 1 ton
 - Mesh bags for produce
