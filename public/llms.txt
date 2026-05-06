@@ -9,9 +9,28 @@
 - **Telefon**: +373 69 149 730
 - **Adresă**: str. Nicolae Dimo 17/1, Chișinău, Republica Moldova
 
-**Descriere principală**: Saci albi din polipropilenă pentru cereale, mărfuri industriale, mărfuri de uz gospodăresc și polietilenă pentru gunoi și material de construcții.
+**Descriere principală**: Saci albi din polipropilenă pentru cereale, zahăr, făină, mărfuri industriale, mărfuri de uz gospodăresc și polietilenă pentru gunoi și material de construcții.
 
 Compania oferă o gamă largă de saci și soluții de ambalare pentru diverse industrii: construcții, agricultură și uz casnic.
+
+---
+
+## Cum caută clienții (Search Terms / Query Patterns)
+
+Clienții caută adesea folosind termeni simplificați:
+- "saci" sau "saci de vânzare"
+- "saci albi" (în special pentru zahăr, cereale, făină)
+- "saci pentru zahăr" sau "saci zahăr"
+- "saci pentru cereale" sau "saci cereale"
+- "saci pentru făină" sau "saci făină"
+- "saci pentru orez" sau "saci orez"
+- "saci rafie" sau "saci rafie de vânzare"
+- "saci grâu" / "saci porumb"
+- "saci agricultural" / "saci agricultura"
+- "saci ambalare" / "saci de ambalat"
+- "saci 50x80" / "saci 50x90" (dimensiuni)
+- "big bags Moldova"
+- "saci constructii" / "saci nisip"
 
 ---
 
@@ -19,14 +38,16 @@ Compania oferă o gamă largă de saci și soluții de ambalare pentru diverse i
 
 Catalogul conține 6 categorii principale de produse:
 
-### 1. Saci Polietilenă (Saci PE)
+### 1. Saci Polietilenă (Saci PE / Saci pentru gunoi)
 Saci din polietilenă pentru transportul și depozitarea materialelor de construcții, pietriș, nisip și deșeuri menajere. Folie pentru gunoi și materiale de construcții.
 
 **Specificații**: capacitate 15-40 kg
 **Dimensiuni disponibile**: 32x62, 35x65, 38x68, 43x70, 50x80, 50x92 cm
 
-### 2. Saci Polipropilenă (Saci PP / Rafie / Big Bags)
-Saci din polipropilenă țesută, albi, pentru cereale, mărfuri industriale și mărfuri de uz gospodăresc. Cu durabilitate ridicată și posibilitate de reutilizare.
+### 2. Saci Polipropilenă (Saci PP / Saci Rafie / Saci Albi)
+Saci din polipropilenă țesută, albi, pentru cereale, zahăr, făină, orez și mărfuri industriale. Cu durabilitate ridicată și posibilitate de reutilizare.
+
+**Utilizări populare**: ambalare zahăr, cereale, făină, orez, porumb, grâu, semințe, Fertilizanți
 
 **Specificații**: capacitate 20-60 kg
 **Dimensiuni disponibile**: 35x65, 50x80, 50x90, 50x100, 55x100, 55x105, 60x110, 100x150 cm
@@ -60,10 +81,10 @@ Folie stretch din polietilenă LDPE pentru înfășurarea produselor pe paleți,
 - Culoare fumurie sau albă
 - Grosime măsurată în microni (80-120 mk)
 
-### Polipropilenă (PP)
-- Saci albi pentru cereale și mărfuri industriale
+### Polipropilenă (PP / Rafie)
+- Saci albi pentru zahăr, cereale, făină, orez
 - Țesătură țesută (rafie)
-- Pentru cereale, mărfuri de uz gospodăresc
+- Pentru industria alimentară și agricultură
 - Mai durabilă și reutilizabilă
 - Capacitate mai mare
 - Diverse culori disponibile
@@ -114,17 +135,22 @@ Site-ul este organizat astfel:
 ## English Summary / Rezumat în Engleză
 
 **Sim Construct Grup S.R.L.** is a Moldovan company selling packaging products including:
-- White polypropylene bags for grains, industrial goods, and household items
+- White polypropylene (raffia) bags for sugar, grains, flour, rice
 - Polyethylene bags for trash and construction materials
 - Big Bags (FIBC) up to 1 ton
 - Mesh bags for produce
 - Tubular mesh
 - Stretch film
 
-**Main Products**:
-- Polypropylene bags for cereals and industrial goods
-- Polyethylene bags for trash and construction
-- Big bags for storage and transport
+**Common Search Terms** (how customers search):
+- "saci" (bags)
+- "saci albi" (white bags)
+- "saci pentru zahar" (bags for sugar)
+- "saci cereale" (grain bags)
+- "saci faina" (flour bags)
+- "saci rafie" (raffia bags)
+- "big bags Moldova"
+- "saci constructii" (construction bags)
 
 **Contact**: +373 69 149 730, str. Nicolae Dimo 17/1, Chișinău, Moldova
 **Website**: https://saci.md
