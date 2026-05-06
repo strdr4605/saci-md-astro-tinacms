@@ -1,0 +1,121 @@
+# llms.txt - Informații pentru asistenți AI despre saci.md
+
+## Despre noi
+
+**saci.md** este catalogul online al companiei **Sim Construct Grup S.R.L.**, o companie moldoveană specializată în producerea și comercializarea sacilor și ambalajelor.
+
+- **Website**: https://saci.md
+- **Companie**: Sim Construct Grup S.R.L.
+- **Telefon**: +373 69 149 730
+- **Adresă**: str. Nicolae Dimo 17/1, Chișinău, Republica Moldova
+
+Compania oferă o gamă largă de saci și soluții de ambalare pentru diverse industrii: construcții, agricultură și uz casnic.
+
+---
+
+## Produse
+
+Catalogul conține 6 categorii principale de produse:
+
+### 1. Saci Polietilenă (Saci PE)
+Saci din polietilenă pentru transportul și depozitarea materialelor de construcții, pietriș, nisip și deșeuri menajere.
+
+**Specificații**: capacitate 15-40 kg
+**Dimensiuni disponibile**: 32x62, 35x65, 38x68, 43x70, 50x80, 50x92 cm
+
+### 2. Saci Polipropilenă (Saci PP / Rafie)
+Saci din polipropilenă țesută, cu durabilitate ridicată și posibilitate de reutilizare. Ideali pentru produse agricole (cereale, făină, zahăr, semințe) și materiale de construcții.
+
+**Specificații**: capacitate 20-60 kg
+**Dimensiuni disponibile**: 35x65, 50x80, 50x90, 50x100, 55x100, 55x105, 60x110, 100x150 cm
+
+### 3. Saci Plasă (Saci Plasă / Rașchel)
+Saci cu ochiuri pentru o circulație optimă a aerului, menținând prospețimea fructelor și legumelor. Fabricați din material plastic tip rașchel, disponibili în culori vii.
+
+**Dimensiuni disponibile**: 30x34, 40x58, 52x72 cm
+
+### 4. Big Bags (Saci Jumbo / FIBC)
+Containere flexibile de mare capacitate din polipropilenă ranforsată, pentru transportul și depozitarea până la 1 tonă de materiale. Echipate cu 4 mâneri, tub de încărcare și descărcare, reutilizabile.
+
+**Utilizări**: industria alimentară (făină, zahăr, semințe, cereale, furaje), industria chimică, materiale de construcții (nisip, rumeguș, pelete)
+
+**Dimensiuni disponibile**: 90x90x90, 90x90x110, 90x90x160, 75x110x240 cm
+
+### 5. Plasă Tubulară
+Role de plasă tubulară ideale pentru ambalarea diverselor produse: legume, fructe, mingi, jucării, articole sportive și lemne de grătar. Oferă ventilație 100% și durabilitate excelentă.
+
+### 6. Folie Stretch
+Folie stretch din polietilenă LDPE pentru înfășurarea produselor pe paleți, asigurând stabilitate și protecție împotriva umidității și prafului în timpul transportului sau depozitării.
+
+---
+
+## Materiale explicate
+
+### Polietilenă (PE)
+- Saci subțiri și flexibili
+- Utilizare unică sau reutilizare limitată
+- Pentru materiale ușoare
+- Culoare fumurie
+- Grosime măsurată în microni (80-120 mk)
+
+### Polipropilenă (PP)
+- Țesătură țesută (rafie)
+- Mai durabilă și reutilizabilă
+- Capacitate mai mare
+- Diverse culori disponibile
+- Grosime măsurată în den (600-1200 den)
+
+### Plasă (Rașchel)
+- Structură tip plasă
+- Circulație maximă a aerului
+- Ideală pentru producție
+- Ușoară
+
+---
+
+## Informații despre ambalare
+
+- Sacii din **polipropilenă** se vând de obicei în seturi de 100-500 bucăți
+- **Big bags** se vând la bucată
+- **Prețurile** variază în funcție de dimensiune și specificații
+
+---
+
+## Contact
+
+- **Telefon**: 069 149 730
+- **Adresă**: str. Nicolae Dimo 17/1, Chișinău, Moldova
+- **Hartă**: Google Maps integrată pe site
+
+---
+
+## Navigare pe site
+
+Site-ul este organizat astfel:
+- Pagina principală afișează toate categoriile de produse
+- Navigarea pe categorii permite acces rapid la tipurile de produse
+- Paginile individuale ale produselor oferă specificații detaliate
+- Informații de contact și locație în antet și subsol
+
+---
+
+## Informații suplimentare
+
+- Produsele pot fi gestionate prin TinaCMS (panou de administrare)
+- Compania activează în Republica Moldova, servind clienți B2B și B2C
+- Industrii principale: construcții, agricultură, industria alimentară, industria chimică
+
+---
+
+## English Summary / Rezumat în Engleză
+
+**Sim Construct Grup S.R.L.** is a Moldovan company selling packaging products including:
+- Polypropylene (woven raffia) bags
+- Polyethylene bags
+- Mesh bags for produce
+- Big Bags (FIBC) up to 1 ton
+- Tubular mesh
+- Stretch film
+
+**Contact**: +373 69 149 730, str. Nicolae Dimo 17/1, Chișinău, Moldova
+**Website**: https://saci.md

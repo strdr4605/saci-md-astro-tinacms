@@ -1,18 +1,183 @@
 ---
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import background from "../assets/background.svg";
 import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  keywords?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  ogType?: string;
+  canonical?: string;
+  jsonLd?: object;
+}
+
+const {
+  title = "Saci.md - Saci din polipropilenă, polietilenă și rafie | Sim Construct Grup",
+  description = "Sim Construct Grup S.R.L. oferă saci din polipropilenă, polietilenă și rafie pentru construcții, agricultură și uz gospodăresc. Big bags, plasă, stretch film. Chișinău, Moldova.",
+  keywords = "saci, polipropilenă, polietilenă, rafie, big bags, plasa, stretch, ambalare, Moldova, Chișinău, saci gunoi, saci construcții",
+  ogTitle = "Saci.md - Saci din polipropilenă, polietilenă și rafie",
+  ogDescription = "Sim Construct Grup S.R.L. oferă saci din polipropilenă, polietilenă și rafie pentru construcții, agricultură și uz gospodăresc.",
+  ogImage = "https://saci.md/poster.png",
+  ogType = "website",
+  canonical = "https://saci.md/",
+  jsonLd,
+} = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang="ro" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/gif" href="/favicon.gif" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
-    <title>Saci.md</title>
+
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta name="author" content="Sim Construct Grup S.R.L." />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="Romanian" />
+    <meta name="revisit-after" content="7 days" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={ogDescription} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="ro_RO" />
+    <meta property="og:site_name" content="Saci.md" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonical} />
+    <meta name="twitter:title" content={ogTitle} />
+    <meta name="twitter:description" content={ogDescription} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- LLMs.txt - AI Discovery -->
+    <link rel="llms" type="text/plain" title="Information for AI assistants" href="/llms.txt" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/gif" href="/favicon.gif" />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Geo Tags -->
+    <meta name="geo.region" content="MD" />
+    <meta name="geo.placename" content="Chișinău" />
+    <meta name="geo.position" content="47.0400;28.8690" />
+    <meta name="ICBM" content="47.0400, 28.8690" />
+
+    <!-- Schema.org Structured Data - Organization -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Sim Construct Grup S.R.L.",
+        "url": "https://saci.md",
+        "logo": "https://saci.md/Logo.svg",
+        "description": "Producător și distribuitor de saci din polipropilenă, polietilenă și rafie în Moldova.",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "str. Nicolae Dimo 17/1",
+          "addressLocality": "Chișinău",
+          "addressCountry": "MD"
+        },
+        "telephone": "+37369149730",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+37369149730",
+          "contactType": "sales"
+        },
+        "sameAs": []
+      }
+    </script>
+
+    <!-- Schema.org - WebSite -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Saci.md",
+        "url": "https://saci.md",
+        "description": "Catalog online de saci și ambalaje pentru construcții și agricultură",
+        "publisher": {
+          "@type": "Organization",
+          "name": "Sim Construct Grup S.R.L."
+        }
+      }
+    </script>
+
+    <!-- Schema.org - WebPage -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Saci.md - Catalog produse",
+        "url": "https://saci.md",
+        "description": "Saci din polipropilenă, polietilenă, rafie, big bags, plasa, stretch film pentru Moldova",
+        "keywords": "saci Moldova, polipropilena, polietilena, big bags, ambalaje"
+      }
+    </script>
+
+    <!-- Schema.org - ItemList for Categories -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Categorii de produse",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Saci Polietilenă",
+            "description": "Saci pentru construcții și uz gospodăresc"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Saci Polipropilenă",
+            "description": "Saci rafie pentru agricultură și construcții"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Saci Plasă",
+            "description": "Saci mesh pentru fructe și legume"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "name": "Big Bags",
+            "description": "Containere flexibile pentru transport și depozitare"
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "name": "Plasă Tubulară",
+            "description": "Role plasa pentru ambalare diverse produse"
+          },
+          {
+            "@type": "ListItem",
+            "position": 6,
+            "name": "Stretch Film",
+            "description": "Folie stretch pentru paletizare"
+          }
+        ]
+      }
+    </script>
+
+    <!-- Custom JSON-LD from props -->
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+
+    <!-- Custom head content slot -->
+    <slot name="head" />
   </head>
   <body class="pb-12">
     <slot />

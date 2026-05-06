@@ -20,12 +20,52 @@ const categories = await getCollection("categories");
 const category = categories.find(
   (c) => c.filePath === product.data.categoryPath,
 );
+
+// Product-specific data
+const pageTitle = `${product.data.name} | Saci.md - Sim Construct Grup`;
+const pageDescription = product.body.substring(0, 160);
+const pageUrl = `https://saci.md/${product.data.slug}`;
+const pageImage = `https://saci.md${product.data.imgSrc}`;
+
+// Generate Product structured data
+const productJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": product.data.name,
+  "description": product.body,
+  "image": pageImage,
+  "brand": {
+    "@type": "Brand",
+    "name": "Sim Construct Grup"
+  },
+  "manufacturer": {
+    "@type": "Organization",
+    "name": "Sim Construct Grup S.R.L.",
+    "url": "https://saci.md"
+  },
+  "category": category?.body || "Saci",
+  "offers": {
+    "@type": "Offer",
+    "availability": "https://schema.org/InStock",
+    "priceCurrency": "MDL"
+  }
+};
 ---
 
-<Layout>
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  keywords={`${product.data.name}, ${category?.body || 'saci'}, Moldova, Chișinău, saci.md`}
+  ogTitle={product.data.name}
+  ogDescription={pageDescription}
+  ogImage={pageImage}
+  ogType="product"
+  canonical={pageUrl}
+  jsonLd={productJsonLd}
+>
   <Header />
   <main class="flex flex-col items-center md:flex-row md:gap-14">
-    <img class="h-96 md:h-[560px]" src={product.data.imgSrc} />
+    <img class="h-96 md:h-[560px]" src={product.data.imgSrc} alt={product.data.name} />
     <article class="flex flex-col gap-5">
       <div class="flex flex-col gap-3 border-b border-b-neutral-300 pb-5">
         <h1 class="text-3xl font-bold text-neutral-600 md:text-4xl">
