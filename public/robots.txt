@@ -1,0 +1,24 @@
+# robots.txt for saci.md
+# Last updated: 2025-05-06
+
+User-agent: *
+Allow: /
+
+# Block admin and CMS areas
+Disallow: /admin/
+Disallow: /tina/
+Disallow: /.astro/
+Disallow: /content/
+Disallow: /__tinacms__
+Disallow: /__generated__
+
+# Block common non-content paths
+Disallow: /assets/
+Disallow: /dist/
+
+# Sitemap location (both index and main sitemap)
+Sitemap: https://saci.md/sitemap-index.xml
+Sitemap: https://saci.md/sitemap-0.xml
+
+# Crawl delay (be nice to crawlers)
+Crawl-delay: 1
