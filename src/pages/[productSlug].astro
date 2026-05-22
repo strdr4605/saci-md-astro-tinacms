@@ -68,9 +68,16 @@ const productJsonLd = {
     <img class="h-96 md:h-[560px]" src={product.data.imgSrc} alt={product.data.name} />
     <article class="flex flex-col gap-5">
       <div class="flex flex-col gap-3 border-b border-b-neutral-300 pb-5">
-        <h1 class="text-3xl font-bold text-neutral-600 md:text-4xl">
-          {product.data.name}
-        </h1>
+        <div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-2">
+          <h1 class="text-3xl font-bold text-neutral-600 md:text-4xl">
+            {product.data.name}
+          </h1>
+          {product.data.outOfStock && (
+            <span class="w-fit rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-700">
+              Stoc temporar epuizat
+            </span>
+          )}
+        </div>
         <p class="leading-6 text-neutral-600 md:text-xl md:leading-9">
           {product.body}
         </p>
