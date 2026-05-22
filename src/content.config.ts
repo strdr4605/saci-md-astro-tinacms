@@ -9,6 +9,7 @@ const productsCollection = defineCollection({
     specs: z.string().array().optional(),
     categoryPath: z.string(),
     slug: z.string(),
+    outOfStock: z.boolean().optional(),
   }),
 });
 

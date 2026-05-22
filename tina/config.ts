@@ -81,6 +81,12 @@ export default defineConfig({
             type: "reference",
             collections: ["categories"],
           },
+          {
+            type: "boolean",
+            name: "outOfStock",
+            label: "Stoc temporar epuizat",
+            description: "Marchează produsul ca fiind temporar epuizat",
+          },
         ],
       },
     ],

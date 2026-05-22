@@ -4,15 +4,24 @@ const { product } = Astro.props;
 
 <a href={product.frontmatter.slug} class="block">
   <div class="flex w-78 flex-col gap-3 pt-8">
-    <img
-      class="h-72 w-72 rounded-2xl object-contain"
-      src={product.frontmatter.imgSrc}
-      alt={product.frontmatter.name}
-    />
+    <div class="relative">
+      <img
+        class="h-72 w-72 rounded-2xl object-contain"
+        src={product.frontmatter.imgSrc}
+        alt={product.frontmatter.name}
+      />
+      {product.frontmatter.outOfStock && (
+        <span class="absolute right-2 top-2 rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
+          Stoc temporar epuizat
+        </span>
+      )}
+    </div>
     <div >
-      <h3 class="text-xl">
-        {product.frontmatter.name}
-      </h3>
+      <div class="flex items-center gap-2">
+        <h3 class="text-xl">
+          {product.frontmatter.name}
+        </h3>
+      </div>
 
       {
         product.frontmatter.price && (
