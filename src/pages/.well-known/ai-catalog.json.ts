@@ -87,6 +87,16 @@ export const GET: APIRoute = async () => {
           "contact Sim Construct Grup",
         ],
       },
+      {
+        identifier: "urn:air:saci.md:resource:catalog-markdown",
+        displayName: "Catalog saci.md în Markdown",
+        type: "text/markdown",
+        url: `${SITE}/index.md`,
+        representativeQueries: [
+          "catalog saci.md în markdown",
+          "lista produselor cu dimensiuni",
+        ],
+      },
       ...categoryEntries,
       ...productEntries,
     ],

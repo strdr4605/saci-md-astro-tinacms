@@ -26,6 +26,10 @@ const {
   canonical = "https://saci.md/",
   jsonLd,
 } = Astro.props;
+
+// Markdown version of this page, for agents
+const pagePath = Astro.url.pathname.replace(/\/$/, "");
+const markdownHref = pagePath === "" ? "/index.md" : `${pagePath}.md`;
 ---
 
 <!doctype html>
@@ -66,6 +70,9 @@ const {
 
     <!-- ARD agent capability manifest -->
     <link rel="ai-catalog" type="application/json" title="Agent capability manifest" href="/.well-known/ai-catalog.json" />
+
+    <!-- Markdown version of this page, for agents -->
+    <link rel="alternate" type="text/markdown" title="Markdown version" href={markdownHref} />
 
     <!-- Favicon -->
     <link rel="icon" type="image/gif" href="/favicon.gif" />

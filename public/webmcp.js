@@ -115,6 +115,7 @@
             category: product.category,
             specs: product.specs,
             url: product.url,
+            markdownUrl: product.markdownUrl,
             outOfStock: product.outOfStock,
           })),
         });

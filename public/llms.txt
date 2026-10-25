@@ -5,6 +5,7 @@
 **saci.md** este catalogul online al companiei **Sim Construct Grup S.R.L.**, o companie moldoveană specializată în producerea și comercializarea sacilor și ambalajelor.
 
 - **Website**: https://saci.md
+- **Catalog în Markdown**: https://saci.md/index.md (fiecare produs are varianta `/<slug>.md`)
 - **Companie**: Sim Construct Grup S.R.L.
 - **Telefon**: +373 69 149 730
 - **Adresă**: str. Nicolae Dimo 17/1, Chișinău, Republica Moldova

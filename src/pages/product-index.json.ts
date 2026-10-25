@@ -33,6 +33,7 @@ export const GET: APIRoute = async () => {
       name: product.data.name,
       slug: product.data.slug,
       url: `${SITE}/${encodeURIComponent(product.data.slug)}`,
+      markdownUrl: `${SITE}/${encodeURIComponent(product.data.slug)}.md`,
       category: categoryName(product.data.categoryPath),
       specs: product.data.specs ?? [],
       description: product.body.trim(),
