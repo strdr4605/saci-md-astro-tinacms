@@ -16,6 +16,12 @@ Disallow: /__generated__
 Disallow: /assets/
 Disallow: /dist/
 
+# AI usage preferences (Content Signals, contentsignals.org)
+Content-Signal: ai-train=no, search=yes, ai-input=yes
+
+# Agent discovery manifest
+Agentmap: https://saci.md/.well-known/ai-catalog.json
+
 # Sitemap location (both index and main sitemap)
 Sitemap: https://saci.md/sitemap-index.xml
 Sitemap: https://saci.md/sitemap-0.xml

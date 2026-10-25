@@ -1,0 +1,8 @@
+/*
+  Link: </llms.txt>; rel="describedby"
+  Link: </.well-known/ai-catalog.json>; rel="api-catalog"
+  Link: </sitemap-index.xml>; rel="sitemap"
+
+/.well-known/ai-catalog.json
+  Content-Type: application/json
+  Access-Control-Allow-Origin: *
