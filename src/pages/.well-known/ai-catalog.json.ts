@@ -97,6 +97,16 @@ export const GET: APIRoute = async () => {
           "lista produselor cu dimensiuni",
         ],
       },
+      {
+        identifier: "urn:air:saci.md:resource:agent-skills",
+        displayName: "Skills pentru agenți AI",
+        type: "application/json",
+        url: `${SITE}/.well-known/agent-skills/index.json`,
+        representativeQueries: [
+          "skills pentru agenți saci.md",
+          "cum caut un sac potrivit",
+        ],
+      },
       ...categoryEntries,
       ...productEntries,
     ],
