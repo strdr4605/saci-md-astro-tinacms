@@ -50,6 +50,8 @@ const markdownAlternates = {
         const links = [
           `  Link: </llms.txt>; rel="describedby"`,
           `  Link: </.well-known/ai-catalog.json>; rel="api-catalog"`,
+          `  Link: </.well-known/agent-skills/index.json>; rel="describedby"`,
+          `  Link: </sitemap-index.xml>; rel="sitemap"`,
           `  Link: <${href}>; rel="alternate"; type="text/markdown"`,
         ];
 
