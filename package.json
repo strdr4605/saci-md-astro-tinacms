@@ -8,7 +8,8 @@
     "predeploy:local": "source .env && netlify build",
     "deploy:local": "source .env && netlify deploy",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check:webmcp": "node scripts/check-webmcp.mjs"
   },
   "dependencies": {
     "@astrojs/netlify": "^6.2.0",
