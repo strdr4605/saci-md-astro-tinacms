@@ -17,6 +17,8 @@ const categoriesCollection = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./content/categories" }),
   schema: z.object({
     name: z.string(),
+    order: z.number().optional(),
+    hidden: z.boolean().optional(),
   }),
 });
 
