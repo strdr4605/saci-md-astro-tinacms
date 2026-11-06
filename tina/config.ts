@@ -33,7 +33,22 @@ export default defineConfig({
         label: "Categorii",
         path: "content/categories",
         format: "md",
-        fields: [{ name: "name", label: "Category Name", type: "string" }],
+        fields: [
+          { name: "name", label: "Category Name", type: "string" },
+          {
+            name: "order",
+            label: "Ordine",
+            type: "number",
+            description: "Ordinea afișării categoriei. Numerele mai mici apar primele.",
+          },
+          {
+            name: "hidden",
+            label: "Ascunsă",
+            type: "boolean",
+            description:
+              "Dacă este activat, categoria nu apare în site (navigare și catalog).",
+          },
+        ],
       },
 
       {

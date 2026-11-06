@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+@theme {
+  /* Olive-lime green measured from the logo, darkened for text and buttons. */
+  --color-brand: #9cb46c;
+  --color-brand-dark: #5e7a2e;
+  --color-ink: #51544d;
+}

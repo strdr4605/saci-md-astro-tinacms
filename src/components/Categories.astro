@@ -1,8 +1,11 @@
 ---
 import Category from "./Category.astro";
+import { selectCategories } from "../lib/categories";
 
-const allCategories = Object.values(
-  import.meta.glob("../../content/categories/*.md", { eager: true }),
+const allCategories = selectCategories(
+  Object.values(
+    import.meta.glob("../../content/categories/*.md", { eager: true }),
+  ) as any[],
 );
 ---
 
