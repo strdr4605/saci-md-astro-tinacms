@@ -1,39 +1,45 @@
 <section
-  class="-mx-4 flex flex-wrap items-center gap-8 px-6 py-10 sm:-mx-16 sm:px-12 lg:px-24"
-  style="background: linear-gradient(#FFF 20%, #C1B9AE 125%);"
+  class="relative isolate overflow-hidden"
 >
+  <img
+    src="/hero-warehouse.webp"
+    alt="Saci din polipropilenă și Big Bag pe palet în depozit"
+    class="absolute inset-0 -z-20 h-full w-full object-cover object-[78%_center] sm:object-center"
+    fetchpriority="high"
+  />
+  <div class="absolute inset-0 -z-10 bg-[#232619]/70 sm:hidden"></div>
   <div
-    class="my-auto flex min-w-[60px] flex-1 flex-col justify-center px-4 sm:px-16"
+    class="absolute inset-0 -z-10 hidden bg-gradient-to-r from-[#232619]/90 via-[#232619]/55 to-[#232619]/10 sm:block"
   >
-    <div class="w-full max-w-[680px] text-ink">
+  </div>
+
+  <div class="flex min-h-[440px] items-center sm:min-h-[520px] lg:min-h-[560px]">
+    <div
+      class="w-full max-w-[680px] px-6 py-12 text-white sm:px-10 sm:py-16 lg:px-24"
+    >
       <h1
         class="text-[40px] leading-[64px] font-bold max-md:leading-[52px] sm:text-[48px] md:text-[52px] lg:text-[56px]"
       >
-        Saci din polipropilenă și polietilenă
+        Saci și Big Bag-uri
       </h1>
-      <p class="mt-4 text-xl">
-        Pentru cereale, construcții și uz gospodăresc
+      <p class="mt-4 text-xl text-white sm:text-2xl">
+        Polipropilenă, polietilenă și plasă pentru agricultură, construcții și
+        uz gospodăresc
       </p>
+
+      <div class="mt-8 flex flex-wrap items-center gap-3">
+        <a
+          href="#categories-nav"
+          class="flex items-center gap-2 rounded-lg bg-brand-dark px-6 py-3.5 text-lg font-semibold text-white shadow-sm transition hover:bg-brand"
+        >
+          <span>Vezi produsele</span>
+          <img
+            src="/arrowDown.svg"
+            alt=""
+            class="w-5 shrink-0 object-contain"
+          />
+        </a>
+      </div>
     </div>
-    <div class="mt-8 flex flex-wrap items-center gap-3">
-      <a
-        href="#categories-nav"
-        class="flex items-center gap-2 rounded-lg bg-brand-dark px-6 py-3.5 text-lg font-semibold text-white shadow-sm transition hover:bg-brand"
-      >
-        <span>Vezi produsele</span>
-        <img
-          src="/arrowDown.svg"
-          alt=""
-          class="w-5 shrink-0 object-contain"
-        />
-      </a>
-    </div>
-  </div>
-  <div class="flex w-full justify-end px-4 sm:px-16 md:w-1/2">
-    <img
-      src="/hero.png"
-      alt="Hero Image"
-      class="my-auto w-full max-w-[520px] object-contain md:max-w-[560px]"
-    />
   </div>
 </section>
