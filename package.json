@@ -5,6 +5,9 @@
   "scripts": {
     "dev": "tinacms dev -c \"astro dev\"",
     "build": "tinacms build && astro build",
+    "build:astro": "astro build",
+    "check:seo": "node scripts/seo-check.mjs",
+    "check:ctx": "node scripts/agent-ctx.mjs",
     "predeploy:local": "source .env && netlify build",
     "deploy:local": "source .env && netlify deploy",
     "preview": "astro preview",
