@@ -73,7 +73,7 @@ export const GUIDE_SECTIONS: GuideSection[] = [
   {
     heading: "Cum aleg mărimea sacului",
     paragraphs: [
-      "Mărimea se alege în funcție de produs și de greutatea pe care o vindeați la kilogram. Cartofii și ceapa se vând în cantități mari și se manipulează des, deci au nevoie de saci cu fund și cu o țesătură mai groasă. Morcovul, roșii și ardeiul gras sunt legume delicate, care nu suportă mult timp fără aer.",
+      "Mărimea se alege în funcție de produs și de greutatea pe care o vindeați la kilogram. Cartofii și ceapa se vând în cantități mari și se manipulează des, deci au nevoie de saci rezistenți. Morcovul și ardeiul gras sunt legume delicate, care nu suportă mult timp fără aer.",
       "Capacitatea de încărcare a fiecărui model este cea mai bună referință. Sacul de plasă de 30x34 cm ține 7 kg. Sacul de plasă de 40x58 cm ține 20 kg. Sacul de plasă de 52x72 cm ține 35 kg. Sacul de rafie de 50x80 cm ține 20–30 kg, iar sacul de rafie de 50x100 cm ține 40 kg.",
       "Dacă vindeați la kilogram și deschideți sacul la piață, sacul de 30x34 cm este suficient pentru o cantitate mică. Pentru o ladă de cartofi, sacul de 40x58 cm este potrivit. Pentru morcov și ceapă vândute la kilogram, sacul de 52x72 cm oferă loc pentru marfă fără să se deformeze. Pentru cereale și pentru cantități mari, folosiți sacul de rafie de 50x80 cm sau de 50x100 cm.",
       "Nu umpleți sacul până la capacitatea maximă. Sacul plin până la limită se deformează, iar transportul pe paleți devine greu. Lăsați spațiu liber la gură, pentru legare.",
@@ -83,9 +83,9 @@ export const GUIDE_SECTIONS: GuideSection[] = [
     heading: "Când folosesc saci din plasă",
     paragraphs: [
       "Sacii din plasă sunt făcuți din material plastic tip rașchel, cu ochiuri rare. Aerul circulă liber prin ochiuri, iar umiditatea legumelor se evaporă. Astfel legumele rămân proaspete mai mult timp, iar cumpărătorul vede clar ce este în sac.",
-      "Plasa este alegerea obișnuită pentru morcov, roșii, ceapă, cartofi, ardei gras, varză și fructe. Sacul se leagă ușor la gură cu șnurul de legare, iar culorile vii ale plaselor pun în valoare marfa la piață și în magazin.",
-      "Cele trei mărimi de plasă sunt 30x34 cm, cu 7 kg, 40x58 cm, cu 20 kg, și 52x72 cm, cu 35 kg. Pentru o livrare mică, de exemplu un lot de roșii de casă, sacul de 30x34 cm este suficient. Pentru un depozit care primește marfă de la mai mulți producători, sacul de 52x72 cm reduce numărul de transporturi.",
-      "Plasa nu oprește apa. Dacă transportați legume umede sau murdare, folosiți sacul de rafie sau o ladă, iar plasă pentru marfa curată.",
+      "Plasa este alegerea obișnuită pentru morcov, ceapă, cartofi, ardei gras, varză și fructe. Sacul se leagă ușor la gură cu șnurul de legare, iar culorile vii ale plaselor pun în valoare marfa la piață și în magazin.",
+      "Cele trei mărimi de plasă sunt 30x34 cm, cu 7 kg, 40x58 cm, cu 20 kg, și 52x72 cm, cu 35 kg. Pentru o livrare mică, sacul de 30x34 cm este suficient. Pentru un depozit care primește marfă de la mai mulți producători, sacul de 52x72 cm ține 35 kg și este alegerea uzuală.",
+      "Dacă transportați legume umede sau murdare, folosiți sacul de rafie sau o ladă, iar plasă pentru marfa curată.",
     ],
   },
   {
@@ -109,7 +109,7 @@ export const GUIDE_SECTIONS: GuideSection[] = [
   {
     heading: "Cât costă sacii pentru legume",
     paragraphs: [
-      "Prețul depinde de patru lucruri: mărimea sacului, grosimea materialului, cantitatea comandată și condiția de cumpărare. Un sac mai mare costă mai mult decât unul mic. Un material mai gros costă mai mult decât unul subțire. O comandă mare se negociază mai bine decât o bucată singulară.",
+      "Prețul depinde de mărimea sacului, de grosimea materialului și de cantitatea comandată. Sacii se vând cu bucata și angro, iar pentru comenzi mari discutăm prețul individual.",
       "Sacii se vând cu bucata și angro. Pentru ferme, depozite de legume și piețe, discutăm prețul de angro individual, în funcție de cantitate, de mărime și de frecvența comenzilor.",
       "Prețul se discută la telefon. Sunați la 069 149 730 și spuneți ce mărime, ce tip de sac și ce cantitate doriți. La telefon aflați prețul pentru comanda dumneavoastră și cereți livrarea.",
     ],
@@ -118,8 +118,8 @@ export const GUIDE_SECTIONS: GuideSection[] = [
     heading: "Cum se depozitează și se refolosesc sacii",
     paragraphs: [
       "Sacii de rafie se curăță și se refolosesc. Țesătura de polipropilenă rezistă la apă și la lumină, iar după curățare sacii pot fi reciclați. Păstrați sacii uscați și la loc uscat, cu gura în sus, ca să nu rămână apă în fund.",
-      "Sacii din plasă se spală cu jet de apă și se lasă la soare. Plasa se usucă repede, pentru că aerul circulă prin ochiuri. După uscare, sacul este gata de o nouă utilizare.",
-      "Sacii din polietilenă se curăță și se refolosesc pentru gunoi și pentru materiale de construcții. Nu folosiți sacii de polietilenă pentru legume.",
+      "Sacii din plasă au ochiuri rare, prin care aerul circulă. După folosire, uscați sacii la loc aerisit.",
+      "Sacii din polietilenă țin lucrurile curate și uscate în gospodărie. Nu folosiți sacii de polietilenă pentru legume.",
     ],
   },
   {
@@ -185,7 +185,7 @@ export const GUIDE_FAQ: LegumeFaq[] = [
   {
     question: "Cum se calculează prețul sacilor?",
     answer:
-      "Prețul depinde de mărime, de grosimea materialului, de cantitatea comandată și de condiția de cumpărare. Sacii se vând cu bucata și angro. Sunați la 069 149 730 și cereți prețul pentru mărimea și cantitatea dorite.",
+      "Prețul depinde de mărime, de grosimea materialului și de cantitatea comandată. Sacii se vând cu bucata și angro. Sunați la 069 149 730 și cereți prețul pentru mărimea și cantitatea dorite.",
   },
   {
     question: "Livrați sacii pentru legume în Chișinău și în Moldova?",
