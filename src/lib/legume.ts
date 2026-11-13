@@ -34,7 +34,7 @@ export const LEGUME_PARAGRAPHS = [
   "Saci din plasă, de tip rașchel, sunt făcuți pentru legume delicate. Plasa rară lasă aerul să circule, iar produsele rămân proaspete mai mult timp. Cumpărătorul vede clar ce este în sac, iar sacul se leagă ușor cu șnurul de la gură. Sacul de 30x34 cm ține aproximativ 7 kg, sacul de 40x58 cm aproximativ 20 kg, iar sacul de 52x72 cm aproximativ 35 kg. Plasa este alegerea obișnuită pentru morcov, ceapă, roșii și ardei gras.",
   "Saci din polietilenă sunt folosiți pentru nisip, pietriș, pământ, resturi din construcții, gunoi și pentru mutări. Folia densă nu lasă să treacă apa și praful. Acești saci nu sunt aerisiți, de aceea nu se țin mult timp pentru legume, dar sunt utili pentru transport.",
   "Alegeți mărimea după produs și după greutatea pe care o vindeați. Pentru cantități mici, sacul de 30x34 cm este suficient. Pentru o ladă de cartofi, sacul de 40x58 cm este cel mai potrivit. Pentru morcov și ceapă vândute la kilogram, folosiți sacul de 52x72 cm. Pentru cereale și cantități mari, folosiți sacii de polipropilenă de 50x80 cm și 50x100 cm.",
-  "Prețul se discută în funcție de mărime, de cantitate și de tipul de material. Prețul curent apare la fiecare produs din listă. Sunați la 069 149 730 și cereți prețul. Pentru ferme și depozite de legume pregătim și oferte de angro.",
+  "Prețul se discută în funcție de mărime, de cantitate și de tipul de material. Prețul fiecărui produs este afișat pe pagina produsului. Sunați la 069 149 730 și cereți prețul. Pentru ferme și depozite de legume pregătim și oferte de angro.",
   "Depozitul este la str. Nicolae Dimo 17/1, Chișinău. Ridicați comanda de acolo sau cereți livrare în Chișinău și în Moldova. Pentru alte localități din Republica Moldova, cereți la 069 149 730 posibilitatea livrării.",
 ];
 
@@ -57,7 +57,7 @@ export const LEGUME_FAQ: LegumeFaq[] = [
   {
     question: "Cât costă sacii pentru legume?",
     answer:
-      "Prețul depinde de mărime, de grosime și de cantitatea comandată. Prețul curent apare la fiecare produs din listă. Sunați la 069 149 730 și cereți prețul. Pentru comenzi de angro, discutăm prețul individual.",
+      "Prețul depinde de mărime, de grosime și de cantitatea comandată. Prețul fiecărui produs este afișat pe pagina produsului. Sunați la 069 149 730 și cereți prețul. Pentru comenzi de angro, discutăm prețul individual.",
   },
   {
     question: "Livrați sacii în Chișinău?",
