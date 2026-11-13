@@ -32,9 +32,9 @@ export const LEGUME_PARAGRAPHS = [
   "Dacă vindeți cartofi, ceapă sau morcov și căutați saci pentru legume în Chișinău, la Sim Construct Grup găsiți trei familii de saci: rafie din polipropilenă, saci din plasă și saci din polietilenă. Sacii se vând cu bucata și angro. Depozitul este la str. Nicolae Dimo 17/1, Chișinău.",
   "Saci de rafie, adică saci țesuți din polipropilenă, au fundul cusut și gura deschisă. Sacul de 50x80 cm ține 20–30 kg, iar sacul de 50x100 cm ține până la 40 kg. Țesătura de polipropilenă este rezistentă la apă și la lumină, iar după curățare sacii pot fi reciclați. Pentru legume, rafie este alegerea bună când transportați cantități mari de cartofi sau ceapă, pe paleți sau în remorcă.",
   "Saci din plasă, de tip rașchel, sunt făcuți pentru legume delicate. Plasa rară lasă aerul să circule, iar produsele rămân proaspete mai mult timp. Cumpărătorul vede clar ce este în sac, iar sacul se leagă ușor cu șnurul de la gură. Sacul de 30x34 cm ține aproximativ 7 kg, sacul de 40x58 cm aproximativ 20 kg, iar sacul de 52x72 cm aproximativ 35 kg. Plasa este alegerea obișnuită pentru morcov, ceapă, roșii și ardei gras.",
-  "Saci din polietilenă sunt folosiți pentru nisip, pietriș, pământ, resturi din construcții, gunoi și pentru mutări. Folia densă nu lasă să treacă apa și praful. Acești saci nu sunt aerisiți, de aceea nu se țin mult timp pentru legume, dar sunt utili pentru transport și pentru acoperirea paletilor.",
-  "Alegeți mărimea după produs și după greutatea pe care o vindeați. Pentru cantități mici, sacul de 30x34 cm este suficient. Pentru o ladă de cartofi, sacul de 40x58 cm este cel mai potrivit. Pentru morcov și ceapă vândute la kilogram, folosiți sacul de 52x72 cm. Pentru cereale și cantități mari, sacii de polipropilenă de 50x80 cm și 50x100 cm sunt cei mai potriviți.",
-  "Prețul se discută în funcție de mărime, de cantitate și de tipul de material. Fiecare produs din listă afișează «Preț la cerere». Sunați la 069 149 730 și cereți prețul. Pentru ferme și depozite de legume pregătim și oferte de angro.",
+  "Saci din polietilenă sunt folosiți pentru nisip, pietriș, pământ, resturi din construcții, gunoi și pentru mutări. Folia densă nu lasă să treacă apa și praful. Acești saci nu sunt aerisiți, de aceea nu se țin mult timp pentru legume, dar sunt utili pentru transport.",
+  "Alegeți mărimea după produs și după greutatea pe care o vindeați. Pentru cantități mici, sacul de 30x34 cm este suficient. Pentru o ladă de cartofi, sacul de 40x58 cm este cel mai potrivit. Pentru morcov și ceapă vândute la kilogram, folosiți sacul de 52x72 cm. Pentru cereale și cantități mari, folosiți sacii de polipropilenă de 50x80 cm și 50x100 cm.",
+  "Prețul se discută în funcție de mărime, de cantitate și de tipul de material. Prețul curent apare la fiecare produs din listă. Sunați la 069 149 730 și cereți prețul. Pentru ferme și depozite de legume pregătim și oferte de angro.",
   "Depozitul este la str. Nicolae Dimo 17/1, Chișinău. Ridicați comanda de acolo sau cereți livrare în Chișinău și în Moldova. Pentru alte localități din Republica Moldova, cereți la 069 149 730 posibilitatea livrării.",
 ];
 
@@ -57,7 +57,7 @@ export const LEGUME_FAQ: LegumeFaq[] = [
   {
     question: "Cât costă sacii pentru legume?",
     answer:
-      "Prețul depinde de mărime, de grosime și de cantitatea comandată, de aceea fiecare produs din listă arată «Preț la cerere». Sunați la 069 149 730 și cereți prețul. Pentru comenzi de angro, discutăm prețul individual.",
+      "Prețul depinde de mărime, de grosime și de cantitatea comandată. Prețul curent apare la fiecare produs din listă. Sunați la 069 149 730 și cereți prețul. Pentru comenzi de angro, discutăm prețul individual.",
   },
   {
     question: "Livrați sacii în Chișinău?",

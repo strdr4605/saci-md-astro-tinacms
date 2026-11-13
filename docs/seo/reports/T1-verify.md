@@ -1,36 +1,38 @@
-# T1 verification (round 3)
+# T1 verification (round 4)
 
 Task: T1 — landing page `/saci-pentru-legume/`.
-Workspace: `/Users/strdr4605/P/saci-md-seo`, jj working copy `@` = `rsunpwnkkvrw`, parent `tvonlkluporr` (`fix(seo): landing page shows the product price`).
-Task commits: `lzksmvlqlxnv` → `nnmwzvpunxyy` → `tvonlkluporr`. Parent of the task: `e4e97529830c`.
+Workspace: `/Users/strdr4605/P/saci-md-seo`, jj `@` = `xulnllqtnxow` (empty), parent `ylwkvvkmlsvn` (`fix(seo): landing page copy matches the product facts`), before that `rsunpwnkkvrw` (`docs(seo): the landing page links the four category pages`).
 Build: `npm run build:astro` OK. Checker: `npm run check:seo` → `30 pages, 0 failures, 0 notes`.
 
 ## Criteria
 
-1. PASS — `dist/saci-pentru-legume/index.html` (HTTP 200 via static server) and `dist/saci-pentru-legume.md` (200, `text/markdown`). Own route file `src/pages/saci-pentru-legume.md.ts:16` (`prerender = true`).
-2. PASS — `dist/saci-pentru-legume/index.html:105` `<h1 …>Saci pentru legume în Chișinău</h1>`; source `src/lib/legume.ts:17`.
-3. PASS — 790 words in `<main>` (limit 300). All terms found: rafie 8, polipropilenă 11, plasă 12, polietilenă 4, cartofi 6, ceapă 7, morcov 6, roșii 3, 30x34/40x58/52x72/50x80/50x100 each 6, `Nicolae Dimo 17/1` 4, `069 149 730` 4, `livrare în Chișinău` 3, price `Preț la cerere` on every card. Text `src/lib/legume.ts:31-39`.
-4. PASS — five links in `dist/saci-pentru-legume/index.html:105-109`: `/saci-plasa-30x34/`, `/saci-plasa-40x58/`, `/saci-plasa-52x72/`, `/sac-polipropilena-50x80/`, `/sac-polipropilena-50x100/`. Slug list `src/lib/legume.ts:20-26`.
-5. PASS — 6 `<details>` questions in the FAQ block (`index.html:118`); FAQPage node has the same 6 `Question` items with the same names (JSON-LD `index.html:88`). Source of truth `src/lib/legume.ts:41-72`.
-6. PASS — JSON-LD `index.html:88`: `CollectionPage`, `ItemList` with `numberOfItems: 5` and the five `saci.md/…` URLs, `FAQPage`, plus `BreadcrumbList`.
-7. PASS — `dist/sitemap-0.xml` holds `/saci-pentru-legume/`; `public/llms.txt:134` `- [Saci pentru legume în Chișinău](https://saci.md/saci-pentru-legume/)`.
-8. PASS — home `dist/index.html` has `href="/saci-pentru-legume/"` (Hero, `src/components/Hero.astro:43`); each of `dist/categorie/{polipropilena,plasa,polietilena,big-bags}/index.html` has 1 link (source `src/pages/categorie/[slug].astro:86`); the landing page links all four category pages (`index.html` §"Mai multe tipuri de saci"). See finding F7 for the twin.
-9. PASS — no `price` in the five front matters (`content/products/Saci-Plasa-30x34.md` … `Sac-Polipropilena-50x100.md`); every card shows `Preț la cerere` (5× in `index.html:105-109`). Page reads `product.data.price` / `product.data.unit` and calls `formatPriceBlock` from `src/lib/pricing.ts` (`src/pages/saci-pentru-legume.astro:7,123`). No own formatter. See finding F6.
-10. PASS — `jj diff --from e4e97529830c --to tvonlkluporr --summary` touches only: `docs/seo/PLAN-saci-pentru-legume.md`, `docs/seo/reports/T1-build.md`, `docs/seo/reports/T1-verify.md`, `public/llms.txt`, `scripts/seo-check.mjs`, `src/components/Hero.astro`, `src/lib/legume.ts`, `src/pages/categorie/[slug].astro`, `src/pages/saci-pentru-legume.astro`, `src/pages/saci-pentru-legume.md.ts`. No price feature file touched.
-11. PASS — `diff` of `scripts/seo-check.mjs` (603 → 810 lines) is additions only: new keys `productSlugs`, `faqMin`, `textMentions`, `twinMentions`, helper `productsBySlug`, new expectation block for `/saci-pentru-legume/`, new price rule. The only removed line is the placeholder comment `// T1: "/saci-pentru-legume/": { ... }`. No rule deleted, relaxed or stubbed.
-12. FAIL — copy holds claims the site does not support and one that the site contradicts. Findings F1-F5.
+1. PASS — `dist/saci-pentru-legume/index.html` and `dist/saci-pentru-legume.md` built; `src/pages/saci-pentru-legume.md.ts:12` `prerender = true`; `dist/_headers:307` `Link: </saci-pentru-legume.md>; rel="alternate"`.
+2. PASS — `dist/saci-pentru-legume/index.html` `<h1 …>Saci pentru legume în Chișinău</h1>`; source `src/lib/legume.ts:19`.
+3. PASS — 823 words in `<main>` (limit 300), 637 in `<p>`. All terms found: rafie 7, polipropilenă 8, plasă 6, polietilenă 4, cartofi 6, ceapă 7, morcov 6, roșii 3, each size 6, `Nicolae Dimo 17/1` 4, `069 149 730` 5, `livrare în Chișinău` 3, `Preț la cerere` 8.
+4. PASS — five product links in the built HTML: `/saci-plasa-30x34/`, `/saci-plasa-40x58/`, `/saci-plasa-52x72/`, `/sac-polipropilena-50x80/`, `/sac-polipropilena-50x100/`.
+5. PASS — 6 `<details>` in the FAQ block, names equal to the 6 `FAQPage` questions in the JSON-LD; source `src/lib/legume.ts:41-72`.
+6. PASS — JSON-LD `@graph`: `CollectionPage`, `ItemList` (`numberOfItems: 5`, the five `saci.md/…` URLs), `FAQPage` (6 questions), `BreadcrumbList` (2 items).
+7. PASS — `dist/sitemap-0.xml` holds `/saci-pentru-legume/`; `public/llms.txt:134` lists it.
+8. PASS — `dist/index.html` has `href="/saci-pentru-legume/"`; each of the four `dist/categorie/*/index.html` has 1; the landing page links all four category pages (`/categorie/{polipropilena,plasa,polietilena,big-bags}/`), and the Markdown twin lists the same four (`src/pages/saci-pentru-legume.md.ts:35-38`).
+9. PASS — no `price` in the five front matters; every card shows `Preț la cerere`; the page reads `product.data.price` / `product.data.unit` and calls `formatPriceBlock` from `src/lib/pricing.ts` (`src/pages/saci-pentru-legume.astro:123-129`), no own formatter.
+10. PASS — `jj diff --from uqtnroypoqxx (T6) --to @ --summary` touches only `docs/seo/PLAN-saci-pentru-legume.md`, `docs/seo/handoff/`, `docs/seo/reports/`, `public/llms.txt`, `scripts/seo-check.mjs`, `src/components/Hero.astro`, `src/lib/legume.ts`, `src/pages/categorie/[slug].astro`, `src/pages/saci-pentru-legume.astro`, `src/pages/saci-pentru-legume.md.ts`. No price-owned file touched.
+11. PASS — `scripts/seo-check.mjs` diff from the task parent `e4e97529830c` to `@`: 183 added lines, the only removed line is the placeholder `// T1: "/saci-pentru-legume/": { ... }`. No rule deleted or relaxed. The new commits do not touch the checker.
+12. FAIL — F1, F3, F4, F5, F6, F7, F8 fixed. F2 only partly fixed: `src/lib/legume.ts:35` still claims the polietilenă use `acoperirea paletilor` (finding F11).
 
 ## Findings
 
-- F1 (high) Contradiction. `src/lib/legume.ts:33` "Saci de rafie … sunt cei mai rezistenți" and FAQ answer 2 "Ei sunt mai rezistenți". The site says the opposite: `content/products/Saci-Plasa-40x58.md:10` "aceștia oferă o rezistență superioară față de sacii țesuți". Rafie = țesuți. Fix: drop the ranking claim, or fix the plasă body copy.
-- F2 (medium) Unsupported. `src/lib/legume.ts:35` and FAQ 1: polietilenă "utili pentru transportul scurt, pentru acoperirea paletilor și pentru ambalarea produselor deja uscate" / "Sacul din polietilenă este pentru transport scurt și acoperire". The site (`src/lib/categories.ts:63-67`) lists only nisip, pietriș, pământ, construcții, gunoi, depozitare, mutări. `transport scurt` and `acoperire` are new.
-- F3 (medium) Unsupported. `src/lib/legume.ts:38` "Depozitul și birourile sunt la str. Nicolae Dimo 17/1". The site only ever says `depozitul` (`src/lib/categories.ts:34`); no office is mentioned anywhere.
-- F4 (medium) Unsupported. FAQ 3: "Primele două numere sunt lățimea și lungimea sacului". No site text defines the order of the two numbers. Also the site data is inconsistent: the card of `saci-plasa-40x58` shows `Dimensiuni sac: 40 x 50 cm` (`content/products/Saci-Plasa-40x58.md:6`) while the copy says 40x58. Ask the owner for the order, then fix both.
-- F5 (low) Soft. `src/lib/legume.ts:36` "sacii de polipropilenă de 50x80 cm și 50x100 cm sunt cei mai eficienți" for "produse voluminoase"; the site reserves "produse voluminoase" for 100x150 (`src/lib/categories.ts:33`). Also "roșii" (`legume.ts:34,43`) appears in no site text, and "se spală și se refolosește" (`legume.ts:33`) softens "După curățare, sacii pot fi reciclați".
-- F6 (low) Missing topic. The site states `livrare în Chișinău și în Moldova` in four category pages (`src/lib/categories.ts:34,48,62,76`). The landing page downgrades this to "cereți … posibilitatea livrării" (`legume.ts:38`), losing the `Moldova` delivery topic of the query.
-- F7 (low) The Markdown twin lists only three category pages; `big-bags` is missing (`src/pages/saci-pentru-legume.md.ts:38-41`). The HTML page has four.
-- F8 (low) `.split("\n")[0]` on `formatPriceBlock` (`saci-pentru-legume.astro:123`, `saci-pentru-legume.md.ts:30`) drops the line `Preț angro: se discută individual.` for a product that has a price. Not a custom formatter; no product has a price today.
-- F9 (process) The builder edited the acceptance criteria of its own task: `docs/seo/PLAN-saci-pentru-legume.md:102` "The landing page links to the three category pages." → "four category pages". The count is right (four pages exist), but the spec must not be changed by the builder.
-- F10 (low) The builder committed the round-1 verifier report `docs/seo/reports/T1-verify.md` inside the fix commit. This report replaces it.
+- F11 (medium, open) Unsupported use. `src/lib/legume.ts:35` "dar sunt utili pentru transport și pentru acoperirea paletilor". `src/lib/categories.ts:60` lists only nisip, pietriș, pământ, resturi din construcții, gunoi, depozitare, mutări. `transport` is supported by the product pages (`content/products/Saci-Polietilena-32x62.md:8` "transportului"), `acoperirea paletilor` is nowhere on the site; the only pallet-covering text belongs to the stretch film (`content/products/Stretch.md:8`). Fix: drop the clause.
+- F12 (low, follow-up) Self-invalidating copy. `src/lib/legume.ts:37` and `:60` say every product shows `«Preț la cerere»`. True today, false as soon as the price feature lands (T2 wave). Fix in the T2 wave, not now.
+- F13 (low, open, not T1's file) Data mismatch. The copy says `40x58 cm` (`src/lib/legume.ts:34,36,54`) while the card prints `Dimensiuni sac: 40 x 50 cm` (`content/products/Saci-Plasa-40x58.md:6`). The file is owned by the price agent; the owner must confirm the size.
+- F14 (low, soft) `src/lib/legume.ts:36` "sacii de polipropilenă de 50x80 cm și 50x100 cm sunt cei mai potriviți" for "cereale și cantități mari". The site reserves the big size for voluminoase (`src/lib/categories.ts:33`). Not a contradiction, but the ranking is editorial.
+- F9 (closed) The spec line was fixed by the orchestrator commit `rsunpwnkkvrw` (`docs/seo/PLAN-saci-pentru-legume.md:102` now says four category pages), not by the builder.
+- F10 (repeated) The builder commit `ylwkvvkmlsvn` contains `docs/seo/reports/T1-verify.md` (the round-3 report) and a new `docs/seo/handoff/seo-verify-T1.md`. The builder sweeps verifier files into its commit. This report replaces the round-3 file.
+- F1 (closed) "cei mai rezistenți" gone; the page claims no ranking against `content/products/Saci-Plasa-40x58.md:10` ("rezistență superioară față de sacii țesuți").
+- F3 (closed) no office claim: `birouri` 0 in the built page.
+- F4 (closed) no order of the two numbers: `Primele două` 0. The 40x58/40x50 mismatch is F13.
+- F5 (closed) no `produse voluminoase` for 50x80/50x100, no `cei mai eficienți`, no `se spală și se refolosește`; "roșii" stays, and `după curățare sacii pot fi reciclați` matches `content/products/Sac-Polipropilena-50x100.md:8`.
+- F6 (closed) `src/lib/legume.ts:38,65` say delivery in Chișinău and in Moldova, like `src/lib/categories.ts:34,48,62,76`.
+- F7 (closed) The twin lists the four category pages (`src/pages/saci-pentru-legume.md.ts:38` big-bags added).
+- F8 (closed) `src/pages/saci-pentru-legume.astro:125-129` renders `formatPriceBlock(...).split("\n")[1]` (`Preț angro: se discută individual.`) when a price exists; the twin joins the lines (`src/pages/saci-pentru-legume.md.ts:30`). Checked `formatPriceBlock(12345,"buc")` → line 0 `123.45 lei / buc · cu TVA inclus`, line 1 `Preț angro: se discută individual.`; without a price there is no line 1.
 
 VERDICT: FAIL
