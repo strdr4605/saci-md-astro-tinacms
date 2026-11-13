@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Map from "../components/Map.astro";
+import { formatPriceBlock, formatPriceValue } from "../lib/pricing";
 
 export async function getStaticPaths() {
   const products = await getCollection("products");
@@ -27,6 +28,11 @@ const pageDescription = product.body.substring(0, 160);
 const pageUrl = `https://saci.md/${product.data.slug}`;
 const pageImage = `https://saci.md${product.data.imgSrc}`;
 
+const price = product.data.price;
+const unit = product.data.unit;
+
+const [priceLine, wholesaleNote] = formatPriceBlock(price, unit).split("\n");
+
 // Generate Product structured data
 const productJsonLd = {
   "@context": "https://schema.org",
@@ -44,11 +50,19 @@ const productJsonLd = {
     "url": "https://saci.md"
   },
   "category": category?.body || "Saci",
-  "offers": {
-    "@type": "Offer",
-    "availability": "https://schema.org/InStock",
-    "priceCurrency": "MDL"
-  }
+  ...(price
+    ? {
+        "offers": {
+          "@type": "Offer",
+          "price": formatPriceValue(price),
+          "priceCurrency": "MDL",
+          "availability": product.data.outOfStock
+            ? "https://schema.org/OutOfStock"
+            : "https://schema.org/InStock",
+          "url": pageUrl
+        }
+      }
+    : {})
 };
 ---
 
@@ -78,6 +92,12 @@ const productJsonLd = {
             </span>
           )}
         </div>
+        <div class="flex flex-col gap-1">
+          <p class="text-xl font-semibold text-green-700/90">{priceLine}</p>
+          {wholesaleNote && (
+            <p class="text-sm text-neutral-500">{wholesaleNote}</p>
+          )}
+        </div>
         <p class="leading-6 text-neutral-600 md:text-xl md:leading-9">
           {product.body}
         </p>
@@ -89,6 +109,7 @@ const productJsonLd = {
         >
           {product.data.specs?.map((spec: any) => <li>{spec}</li>)}
         </ul>
+        <p class="text-neutral-600 md:text-lg">Prețuri și comenzi: 069 149 730</p>
       </div>
     </article>
   </main>

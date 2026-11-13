@@ -10,6 +10,8 @@ const productsCollection = defineCollection({
     categoryPath: z.string(),
     slug: z.string(),
     outOfStock: z.boolean().optional(),
+    price: z.number().int().optional(),
+    unit: z.string().optional(),
   }),
 });
 
