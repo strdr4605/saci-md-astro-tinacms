@@ -84,7 +84,7 @@ export const GUIDE_SECTIONS: GuideSection[] = [
     paragraphs: [
       "Sacii din plasă sunt făcuți din material plastic tip rașchel, cu ochiuri rare. Aerul circulă liber prin ochiuri, iar umiditatea legumelor se evaporă. Astfel legumele rămân proaspete mai mult timp, iar cumpărătorul vede clar ce este în sac.",
       "Plasa este alegerea obișnuită pentru morcov, ceapă, cartofi, ardei gras, varză și fructe. Sacul se leagă ușor la gură cu șnurul de legare, iar culorile vii ale plaselor pun în valoare marfa la piață și în magazin.",
-      "Cele trei mărimi de plasă sunt 30x34 cm, cu 7 kg, 40x58 cm, cu 20 kg, și 52x72 cm, cu 35 kg. Pentru o livrare mică, sacul de 30x34 cm este suficient. Pentru un depozit care primește marfă de la mai mulți producători, sacul de 52x72 cm ține 35 kg și este alegerea uzuală.",
+      "Cele trei mărimi de plasă sunt 30x34 cm, cu 7 kg, 40x58 cm, cu 20 kg, și 52x72 cm, cu 35 kg. Pentru o livrare mică, sacul de 30x34 cm este suficient. Pentru cantități mai mari, sacul de 52x72 cm ține 35 kg.",
       "Dacă transportați legume umede sau murdare, folosiți sacul de rafie sau o ladă, iar plasă pentru marfa curată.",
     ],
   },
@@ -110,7 +110,7 @@ export const GUIDE_SECTIONS: GuideSection[] = [
     heading: "Cât costă sacii pentru legume",
     paragraphs: [
       "Prețul depinde de mărimea sacului, de grosimea materialului și de cantitatea comandată. Sacii se vând cu bucata și angro, iar pentru comenzi mari discutăm prețul individual.",
-      "Sacii se vând cu bucata și angro. Pentru ferme, depozite de legume și piețe, discutăm prețul de angro individual, în funcție de cantitate, de mărime și de frecvența comenzilor.",
+      "Pentru ferme, depozite de legume și piețe, discutăm prețul de angro în funcție de cantitate și de mărime.",
       "Prețul se discută la telefon. Sunați la 069 149 730 și spuneți ce mărime, ce tip de sac și ce cantitate doriți. La telefon aflați prețul pentru comanda dumneavoastră și cereți livrarea.",
     ],
   },
@@ -118,7 +118,7 @@ export const GUIDE_SECTIONS: GuideSection[] = [
     heading: "Cum se depozitează și se refolosesc sacii",
     paragraphs: [
       "Sacii de rafie se curăță și se refolosesc. Țesătura de polipropilenă rezistă la apă și la lumină, iar după curățare sacii pot fi reciclați. Păstrați sacii uscați și la loc uscat, cu gura în sus, ca să nu rămână apă în fund.",
-      "Sacii din plasă au ochiuri rare, prin care aerul circulă. După folosire, uscați sacii la loc aerisit.",
+      "Sacii din plasă au ochiuri rare, prin care aerul circulă.",
       "Sacii din polietilenă țin lucrurile curate și uscate în gospodărie. Nu folosiți sacii de polietilenă pentru legume.",
     ],
   },
