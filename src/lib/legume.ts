@@ -12,7 +12,7 @@ export const LEGUME_TITLE =
   "Saci pentru legume în Chișinău: rafie, plasă, polietilenă | Saci.md";
 
 export const LEGUME_DESCRIPTION =
-  "Saci pentru legume în Chișinău: rafie din polipropilenă, saci din plasă și polietilenă pentru cartofi, ceapă, morcov. Preț la cerere, livrare în Chișinău.";
+  "Saci pentru legume în Chișinău: rafie din polipropilenă, saci din plasă și polietilenă pentru cartofi, ceapă, morcov. Livrare în Chișinău și în Moldova.";
 
 export const LEGUME_H1 = "Saci pentru legume în Chișinău";
 
