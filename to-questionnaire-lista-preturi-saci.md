@@ -63,6 +63,22 @@ _De ce contează: zecimale mereu două, fără separator de mii. Alternativa: �
 >
 Acceptabil / Prefer alt format: \_\_\_\_\_\_\_\_\_\_\_\_\_
 
+## A2. Dimensiuni
+
+### Sacii Plasă 40x58: care sunt dimensiunile corecte?
+
+_De ce contează: pe site, numele produsului, linkul și fotografia spun 40x58, dar textul de mai jos spune 40 x 50 cm. Nu putem afișa două variante. Prețul se dă pentru un produs concret._
+
+>
+40 x 58 cm / 40 x 50 cm / altceva: \_\_\_\_\_\_\_\_\_\_\_\_\_
+
+### Cum se scriu dimensiunile: lățime × lungime sau lungime × lățime?
+
+_De ce contează: site-ul nu spune nicăieri ordinea numerelor. Fără această regulă, „50 x 80 cm” înseamnă două lucruri diferite și clientul poate primi sacul greșit._
+
+>
+Lățime × lungime / Lungime × lățime
+
 ## B. Lista de prețuri
 
 Completați prețul în lei și unitatea de vânzare. Unități posibile: buc, set, rolă, kg, m², palet. Dacă un produs are preț diferit în funcție de cantitate, scrieți-l în coloana Observații.
