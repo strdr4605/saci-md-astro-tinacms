@@ -76,25 +76,31 @@ The price feature owns the price. These rules come from `PLAN-preturi.md`.
 
 ### T1 — Landing page `/saci-pentru-legume/`
 
-Files: `src/pages/saci-pentru-legume.astro`, `content/pages/saci-pentru-legume.md`, `src/content.config.ts`, `tina/config.ts`.
+Files: `src/pages/saci-pentru-legume.astro`, `src/pages/saci-pentru-legume.md.ts`,
+`src/lib/legume.ts`, `public/llms.txt`, `scripts/seo-check.mjs`.
 
 Acceptance criteria:
 
-- The URL `/saci-pentru-legume/` returns 200. The URL `/saci-pentru-legume/index.md` returns the markdown twin.
+- The URL `/saci-pentru-legume/` returns 200. The URL `/saci-pentru-legume.md`
+  returns the Markdown twin.
 - The `h1` contains "saci pentru legume" and "Chișinău".
 - The page has at least 300 words of Romanian text. The text covers: rafie (polipropilenă), plasă, polietilenă; cartofi, ceapă, morcov; sizes; price; the address `str. Nicolae Dimo 17/1`; the phone `069 149 730`; delivery in Chișinău.
-- The page shows all four relevant products with links: `saci-plasa-30x34`, `saci-plasa-40x58`, `saci-plasa-52x72`, `sac-polipropilena-50x80`, `sac-polipropilena-50x100`.
+- The page shows these five products with links: `saci-plasa-30x34`, `saci-plasa-40x58`, `saci-plasa-52x72`, `sac-polipropilena-50x80`, `sac-polipropilena-50x100`.
 - The page has a FAQ block with at least 5 questions and answers.
 - The page shows the price of every product when the product holds a `price`
   value. It uses `formatPrice` from `src/lib/pricing.ts` when that file is on
   master. It shows `Preț la cerere` when the product holds no price.
-- The page adds no field to `src/content.config.ts`. It reads the fields of
-  the price feature.
+- The page adds no field and no collection to `src/content.config.ts`. It reads
+  the fields of the price feature.
+- The copy lives in `src/lib/legume.ts`. The page and the Markdown twin import
+  it. They do not repeat the text.
 - The Markdown twin is the file `src/pages/saci-pentru-legume.md.ts`. It has
   its own builder. It does not change `src/lib/markdown.ts`.
 - Schema: `CollectionPage` and `ItemList` with all product URLs. Schema: `FAQPage` with the same questions.
 - The page is in `dist/sitemap-0.xml`.
-- `public/llms.txt` and `public/.well-known/ai-catalog.json` mention the new page.
+- `public/llms.txt` mentions the new page. The entry of
+  `public/.well-known/ai-catalog.json` comes in the T2 wave, because the
+  price agent owns that file.
 
 ### T2 — Price check (verification only)
 

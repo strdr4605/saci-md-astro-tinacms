@@ -16,9 +16,13 @@ const SITE = "https://saci.md";
 
 // ---------------------------------------------------------------- contract
 
-// Routes that skip the universal rules. /old/ is a leftover duplicate page.
-// Task T6 removes this entry and adds the opposite rule.
-const EXEMPT = new Set(["/old/"]);
+// Routes that skip the universal rules. Keep this set empty if you can.
+const EXEMPT = new Set();
+
+// T6: pages that stay online but must not be indexed. Each one must exist in
+// dist/, carry a robots noindex meta tag, and stay out of the sitemap.
+// /old/ is a leftover duplicate of the old site.
+const NOINDEX = new Set(["/old/"]);
 
 // Rules per route. Filled in by each task. Keys are site paths.
 //   titleMentions     words that must appear in the <title>
@@ -122,6 +126,15 @@ const pageFile = (path) => {
   return clean === "/"
     ? join(distDir, "index.html")
     : join(distDir, clean, "index.html");
+};
+
+// T6: every <url> entry must hold a valid <lastmod>.
+const sitemapEntries = async () => {
+  const xml = await readFile(join(distDir, "sitemap-0.xml"), "utf8");
+  return [...xml.matchAll(/<url>([\s\S]*?)<\/url>/g)].map((match) => ({
+    loc: match[1].match(/<loc>([^<]+)<\/loc>/)?.[1] ?? "",
+    lastmod: match[1].match(/<lastmod>([^<]+)<\/lastmod>/)?.[1] ?? null,
+  }));
 };
 
 const sitemapPaths = async () => {
@@ -446,16 +459,57 @@ const checkPage = async (path) => {
     }
   }
 
-  for (const href of links) {
-    if (/^(#|mailto:|tel:|https?:)/i.test(href)) continue;
+  checkInternalLinks(path, html);
+};
+
+// Every internal <a> and <link> target must exist in dist/. A path with a
+// file extension (/categorie/plasa.md, /llms.txt) is a file. Any other path
+// is a page folder with an index.html. Slugs with spaces arrive as %20.
+const checkInternalLinks = (path, html) => {
+  const hrefs = [
+    ...html.matchAll(/<(?:a|link) [^>]*href="([^"]+)"/g),
+  ].map((match) => match[1].replace(/&amp;/g, "&"));
+
+  for (const href of hrefs) {
+    if (/^(#|mailto:|tel:|https?:|\/\/)/i.test(href)) continue;
     const target = decodeURIComponent(
       new URL(href, `https://saci.md${path}`).pathname,
     );
     if (target.startsWith("/_astro") || target.startsWith("/admin")) continue;
-    if (!existsSync(pageFile(target))) {
+    if (!existsSync(distTarget(target))) {
       fail(path, "internal-link-exists", `${href} -> ${target}`);
     }
   }
+};
+
+const distTarget = (target) => {
+  const last = target.split("/").pop();
+  return /\.[a-z0-9]+$/i.test(last)
+    ? join(distDir, target.replace(/^\//, ""))
+    : pageFile(target);
+};
+
+// T6: a noindex page must exist, carry noindex, and stay out of the sitemap.
+const checkNoindexPage = async (path, paths) => {
+  const file = pageFile(path);
+
+  if (!existsSync(file)) {
+    fail(path, "noindex-page-exists", `no file at ${file}`);
+    return;
+  }
+
+  const html = await readFile(file, "utf8");
+  const robots = html.match(/<meta[^>]*name="robots"[^>]*>/i)?.[0] ?? "";
+
+  if (!/content="[^"]*noindex/i.test(robots)) {
+    fail(path, "noindex-meta", "no robots noindex meta tag");
+  }
+
+  if (paths.some((sitemapPath) => normalizePath(sitemapPath) === normalizePath(path))) {
+    fail(path, "noindex-not-in-sitemap", "page is in sitemap-0.xml");
+  }
+
+  checkInternalLinks(path, html);
 };
 
 // ---------------------------------------------------------------- run
@@ -465,6 +519,7 @@ if (!existsSync(join(distDir, "sitemap-0.xml"))) {
 }
 
 const paths = await sitemapPaths();
+const entries = await sitemapEntries();
 const productIndex = productsByCategory();
 const seenTitles = [];
 const seenDescriptions = [];
@@ -476,6 +531,21 @@ for (const route of Object.keys(EXPECTATIONS)) {
   if (!existsSync(pageFile(route))) {
     fail(route, "expected-route-exists", `no file at ${pageFile(route)}`);
   }
+}
+
+for (const { loc, lastmod } of entries) {
+  if (!lastmod) {
+    fail(loc, "sitemap-lastmod", "no <lastmod> in sitemap-0.xml");
+  } else if (Number.isNaN(Date.parse(lastmod))) {
+    fail(loc, "sitemap-lastmod", `invalid date "${lastmod}"`);
+  }
+}
+if (entries.length !== paths.length) {
+  fail("sitemap-0.xml", "sitemap-lastmod", `${entries.length} <url> entries, ${paths.length} <loc> entries`);
+}
+
+for (const path of NOINDEX) {
+  await checkNoindexPage(path, paths);
 }
 
 for (const path of paths) {
@@ -513,7 +583,7 @@ const walk = async (dir, prefix = "") => {
 await walk(distDir);
 
 for (const page of distPages) {
-  if (EXEMPT.has(page)) continue;
+  if (EXEMPT.has(page) || NOINDEX.has(page)) continue;
   if (!paths.some((path) => normalizePath(path) === normalizePath(page))) {
     note(page, "page is not in the sitemap");
   }

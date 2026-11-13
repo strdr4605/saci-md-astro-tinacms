@@ -132,12 +132,21 @@ const agentSkillsIndex = {
   },
 };
 
+// /old/ is a duplicate of the old site. It stays online with noindex.
+const EXCLUDED_FROM_SITEMAP = ["/old/"];
+
+// The content has no date field. Every URL gets the build date as lastmod.
+const BUILD_DATE = new Date().toISOString();
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://saci.md",
   integrations: [
     react(),
-    sitemap(),
+    sitemap({
+      filter: (page) => !EXCLUDED_FROM_SITEMAP.includes(new URL(page).pathname),
+      serialize: (item) => ({ ...item, lastmod: BUILD_DATE }),
+    }),
     yeskunallumami({ id: "66be9a3f-6a8b-4cc7-9104-bf59fbf772d2" }),
     markdownAlternates,
     agentSkillsIndex,
