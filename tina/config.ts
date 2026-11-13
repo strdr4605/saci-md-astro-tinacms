@@ -1,4 +1,5 @@
 import { defineConfig } from "tinacms";
+import { UNIT_OPTIONS } from "../src/lib/pricing";
 
 // Your hosting provider likely exposes this as an environment variable
 const branch =
@@ -95,6 +96,21 @@ export default defineConfig({
             description: "Categoria din care face parte",
             type: "reference",
             collections: ["categories"],
+          },
+          {
+            type: "number",
+            name: "price",
+            label: "Preț (bani)",
+            description: "Ex: 4500 = 45 lei / buc",
+            required: false,
+          },
+          {
+            type: "string",
+            name: "unit",
+            label: "Unitate",
+            description: "Unitatea de vânzare a produsului",
+            required: false,
+            options: UNIT_OPTIONS,
           },
           {
             type: "boolean",
