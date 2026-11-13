@@ -79,6 +79,7 @@ const EXPECTATIONS = {
       "/categorie/polipropilena/",
       "/categorie/plasa/",
       "/categorie/polietilena/",
+      "/categorie/big-bags/",
     ],
     textMentions: [
       "rafie",
@@ -93,7 +94,6 @@ const EXPECTATIONS = {
       "52x72",
       "50x80",
       "50x100",
-      "Preț la cerere",
       "Nicolae Dimo 17/1",
       "069 149 730",
       "livrare în Chișinău",
@@ -243,6 +243,35 @@ const productsByCategory = async () => {
     if (!category || !slug) continue;
 
     map.set(category, [...(map.get(category) ?? []), slug]);
+  }
+
+  return map;
+};
+
+// Price and unit per product slug, read from the content front matter.
+const productsBySlug = async () => {
+  const map = new Map();
+
+  for (const name of await readdir(productsDir)) {
+    if (!name.endsWith(".md")) continue;
+
+    const text = await readFile(join(productsDir, name), "utf8");
+    const front = text.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? "";
+    const field = (key) =>
+      front
+        .match(new RegExp(`^${key}:\\s*(.+)$`, "m"))?.[1]
+        ?.trim()
+        .replace(/^["']|["']$/g, "");
+
+    const slug = field("slug");
+    if (!slug) continue;
+
+    const price = Number(field("price"));
+
+    map.set(slug, {
+      price: Number.isFinite(price) && price > 0 ? price : undefined,
+      unit: field("unit"),
+    });
   }
 
   return map;
@@ -463,6 +492,27 @@ const checkPage = async (path) => {
         fail(path, "markdown-twin-product", `no /${slug}/ in ${twin}`);
       }
     }
+
+    // The price of the product must be on the page and in the Markdown twin.
+    const pageText = stripTags(html);
+    for (const slug of expectations.productSlugs) {
+      const { price, unit } = (await productPrices).get(slug) ?? {};
+      const expectedPrice = price
+        ? `${(price / 100).toFixed(2)} lei / ${unit?.trim() || "buc"}`
+        : "Preț la cerere";
+
+      if (!pageText.includes(expectedPrice)) {
+        fail(path, "product-price", `${slug}: no "${expectedPrice}" on the page`);
+      }
+
+      if (!twinText.includes(expectedPrice)) {
+        fail(
+          path,
+          "markdown-twin-price",
+          `${slug}: no "${expectedPrice}" in ${twin}`,
+        );
+      }
+    }
   }
 
   if (expectations.faqMin) {
@@ -677,6 +727,7 @@ if (!existsSync(join(distDir, "sitemap-0.xml"))) {
 const paths = await sitemapPaths();
 const entries = await sitemapEntries();
 const productIndex = productsByCategory();
+const productPrices = productsBySlug();
 const seenTitles = [];
 const seenDescriptions = [];
 

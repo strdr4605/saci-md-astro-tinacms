@@ -69,12 +69,25 @@ formatter was written. When `src/lib/pricing.ts` lands, one task swaps this cons
 
 ## Open points
 
-1. The landing page is not linked from the home page. The plan gives the navigation to T4
-   and T5, so the page is reachable from `llms.txt`, the sitemap and the category pages only.
-2. `public/.well-known/ai-catalog.json` has no entry for the new page. The plan puts that
+1. `public/.well-known/ai-catalog.json` has no entry for the new page. The plan puts that
    entry in the T2 wave, because the price agent owns the file.
-3. The FAQ answers are hidden in `<details>`. The text is in the HTML, so search engines
+2. The FAQ answers are hidden in `<details>`. The text is in the HTML, so search engines
    can read it. The design may change to an open block.
-4. The five products come from the `products` collection, filtered by the slugs in
+3. The five products come from the `products` collection, filtered by the slugs in
    `src/lib/legume.ts`. A product missing from the collection drops out of the page and
    breaks the `ItemList` rule of the checker.
+
+## Fixes after the first verification
+
+The first verification failed. The fixes are in the commit
+`fix(seo): landing page shows the product price`.
+
+- The page and the Markdown twin read `product.data.price` and `product.data.unit` and
+  use `formatPriceBlock` from `src/lib/pricing.ts`. The constant `PRICE_ON_REQUEST` is gone.
+- The checker has a price rule. It reads the price from the front matter and requires the
+  same price on the page and in the Markdown twin.
+- The copy no longer promises same day delivery, opening hours or a retail pack.
+- The dimension order in the FAQ is width first.
+- The copy names roșii.
+- The landing page links the four category pages.
+- The home page link is in `src/components/Hero.astro`. This report was wrong about it.

@@ -4,6 +4,7 @@ import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Map from "../components/Map.astro";
 import { SITE_URL, productPath } from "../lib/categories";
+import { formatPriceBlock } from "../lib/pricing";
 import {
   LEGUME_DESCRIPTION,
   LEGUME_FAQ,
@@ -11,7 +12,6 @@ import {
   LEGUME_PARAGRAPHS,
   LEGUME_PRODUCT_SLUGS,
   LEGUME_TITLE,
-  PRICE_ON_REQUEST,
 } from "../lib/legume";
 
 const products = (await getCollection("products"))
@@ -119,7 +119,9 @@ const jsonLd = {
                 ))}
               </ul>
             )}
-            <p class="font-medium text-neutral-700">{PRICE_ON_REQUEST}</p>
+            <p class="font-medium text-neutral-700">
+              {formatPriceBlock(product.data.price, product.data.unit).split("\n")[0]}
+            </p>
             <a
               href={productPath(product.data.slug)}
               class="text-sm font-medium text-brand hover:underline"
@@ -147,6 +149,11 @@ const jsonLd = {
         <li>
           <a href="/categorie/polietilena/" class="font-medium text-brand hover:underline">
             Saci din polietilenă pentru nisip, gunoi și construcții
+          </a>
+        </li>
+        <li>
+          <a href="/categorie/big-bags/" class="font-medium text-brand hover:underline">
+            Saci Big Bag pentru recolte și volume mari
           </a>
         </li>
       </ul>

@@ -1,12 +1,12 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 import { SITE_URL, productPath } from "../lib/categories";
+import { formatPriceBlock } from "../lib/pricing";
 import {
   LEGUME_FAQ,
   LEGUME_H1,
   LEGUME_PARAGRAPHS,
   LEGUME_PRODUCT_SLUGS,
-  PRICE_ON_REQUEST,
 } from "../lib/legume";
 
 export const prerender = true;
@@ -27,7 +27,7 @@ export const GET: APIRoute = async () => {
     "## Saci pentru legume: mărimi și preț",
     "",
     ...products.flatMap((product) => [
-      `- [${product.data.name}](${SITE_URL}${productPath(product.data.slug)}) — ${(product.data.specs ?? []).join(", ")} — ${PRICE_ON_REQUEST}`,
+      `- [${product.data.name}](${SITE_URL}${productPath(product.data.slug)}) — ${(product.data.specs ?? []).join(", ")} — ${formatPriceBlock(product.data.price, product.data.unit).split("\n")[0]}`,
     ]),
     "",
     "## Mai multe tipuri de saci",
