@@ -39,6 +39,11 @@ const NOINDEX = new Set(["/old/"]);
 //                     one of them and hold an ItemList with exactly their URLs
 //   faqMin            minimum count of questions in the FAQPage node; every
 //                     question must also be visible in the page text
+//   h2Min             minimum count of <h2> headings in the page
+//   articleSchema     the page must hold an Article or BlogPosting node with a
+//                     headline, a datePublished and the author
+//   productLinks      product slugs the page must link to; the Markdown twin
+//                     must link to them too
 //   textMentions      words that must appear in the page text
 //   twinMentions      words that must appear in the Markdown twin
 //   markdownTwin      the page has a .md twin, an alternate link and a Link
@@ -103,6 +108,70 @@ const EXPECTATIONS = {
       "Nicolae Dimo 17/1",
       "069 149 730",
       "Preț la cerere",
+    ],
+    markdownTwin: true,
+    llmsTxt: true,
+  },
+  // T8: the guide article "Cum alegi sacii pentru legume".
+  "/ghid/cum-alezi-sacii-pentru-legume/": {
+    titleMentions: ["Chișinău"],
+    descriptionMentions: ["Chișinău"],
+    h1Mentions: ["saci pentru legume", "Chișinău"],
+    minWords: 700,
+    minProseWords: 700,
+    jsonLdTypes: ["Article", "FAQPage", "BreadcrumbList"],
+    h2Min: 4,
+    articleSchema: true,
+    productLinks: [
+      "saci-plasa-30x34",
+      "saci-plasa-40x58",
+      "saci-plasa-52x72",
+      "sac-polipropilena-50x80",
+      "sac-polipropilena-50x100",
+    ],
+    links: [
+      "/saci-pentru-legume/",
+      "/categorie/polipropilena/",
+      "/categorie/plasa/",
+      "/categorie/polietilena/",
+      "/categorie/big-bags/",
+    ],
+    textMentions: [
+      "rafie",
+      "polipropilenă",
+      "plasă",
+      "polietilenă",
+      "big bag",
+      "cartofi",
+      "ceapă",
+      "morcov",
+      "roșii",
+      "30x34",
+      "40x58",
+      "52x72",
+      "50x80",
+      "50x100",
+      "7 kg",
+      "20 kg",
+      "35 kg",
+      "20–30 kg",
+      "40 kg",
+      "grosime",
+      "angro",
+      "Nicolae Dimo 17/1",
+      "069 149 730",
+      "livrare în Chișinău",
+      "Moldova",
+    ],
+    twinMentions: [
+      "Cum alegi saci pentru legume în Chișinău",
+      "30x34",
+      "40x58",
+      "52x72",
+      "50x80",
+      "50x100",
+      "Nicolae Dimo 17/1",
+      "069 149 730",
     ],
     markdownTwin: true,
     llmsTxt: true,
@@ -546,6 +615,60 @@ const checkPage = async (path) => {
         if (!pageText.includes(stripTags(name).trim())) {
           fail(path, "faq-question-visible", `question not in page: ${name}`);
         }
+      }
+    }
+  }
+
+  if (expectations.h2Min) {
+    const headings = [...html.matchAll(/<h2[\s>]/g)].length;
+    if (headings < expectations.h2Min) {
+      fail(path, "h2-count", `${headings} h2 headings, need ${expectations.h2Min}`);
+    }
+  }
+
+  if (expectations.articleSchema) {
+    const articles = nodes.filter(
+      (node) => node["@type"] === "Article" || node["@type"] === "BlogPosting",
+    );
+
+    if (articles.length === 0) {
+      fail(path, "article-schema", "no Article or BlogPosting node");
+    } else {
+      const article = articles[0];
+      if (!article.headline) {
+        fail(path, "article-headline", "no headline in the Article node");
+      }
+      if (!article.datePublished) {
+        fail(path, "article-date-published", "no datePublished in the Article node");
+      }
+      const author = article.author;
+      const authorName =
+        typeof author === "string"
+          ? author
+          : (author?.name ?? author?.["@id"] ?? "");
+      if (!String(authorName).includes("Sim Construct Grup")) {
+        fail(path, "article-author", `author is "${authorName}"`);
+      }
+    }
+  }
+
+  if (expectations.productLinks) {
+    const pageLinks = linksOf(html);
+    for (const slug of expectations.productLinks) {
+      if (!pageLinks.some((href) => sameRoute(href, `/${slug}/`))) {
+        fail(path, "product-link", `no link to /${slug}/`);
+      }
+    }
+
+    const twin = `${normalizePath(path).replace(/\/$/, "")}.md`;
+    const twinText = await readFile(
+      join(distDir, twin.replace(/^\//, "")),
+      "utf8",
+    ).catch(() => "");
+
+    for (const slug of expectations.productLinks) {
+      if (!twinText.includes(`/${slug}/`)) {
+        fail(path, "markdown-twin-product", `no /${slug}/ in ${twin}`);
       }
     }
   }

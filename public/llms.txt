@@ -133,6 +133,9 @@ Pagini de categorie, fiecare cu varianta Markdown la adresa cu sufixul `.md`:
 Landing page, cu varianta Markdown la adresa cu sufixul `.md`:
 - [Saci pentru legume în Chișinău](https://saci.md/saci-pentru-legume/)
 
+Ghid, cu varianta Markdown la adresa cu sufixul `.md`:
+- [Cum alegi sacii pentru legume în Chișinău](https://saci.md/ghid/cum-alezi-sacii-pentru-legume/)
+
 ---
 
 ## Informații suplimentare

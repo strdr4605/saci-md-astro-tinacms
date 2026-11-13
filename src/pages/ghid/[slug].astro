@@ -1,0 +1,237 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Map from "../../components/Map.astro";
+import { SITE_URL, productPath } from "../../lib/categories";
+import {
+  GUIDE_AUTHOR,
+  GUIDE_DATE_PUBLISHED,
+  GUIDE_DESCRIPTION,
+  GUIDE_FAQ,
+  GUIDE_H1,
+  GUIDE_LEAD,
+  GUIDE_PATH,
+  GUIDE_PRODUCT_SLUGS,
+  GUIDE_SECTIONS,
+  GUIDE_SIZE_TABLE,
+  GUIDE_SLUG,
+  GUIDE_TITLE,
+} from "../../lib/legume";
+
+export function getStaticPaths() {
+  return [{ params: { slug: GUIDE_SLUG } }];
+}
+
+const products = (await getCollection("products"))
+  .filter((product) => GUIDE_PRODUCT_SLUGS.includes(product.data.slug))
+  .sort(
+    (a, b) =>
+      GUIDE_PRODUCT_SLUGS.indexOf(a.data.slug) -
+      GUIDE_PRODUCT_SLUGS.indexOf(b.data.slug),
+  );
+
+const pageUrl = `${SITE_URL}${GUIDE_PATH}`;
+const pageImage = products[0] ? `${SITE_URL}${products[0].data.imgSrc}` : undefined;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": `${pageUrl}#article`,
+      url: pageUrl,
+      mainEntityOfPage: pageUrl,
+      headline: GUIDE_H1,
+      name: GUIDE_H1,
+      description: GUIDE_DESCRIPTION,
+      datePublished: GUIDE_DATE_PUBLISHED,
+      dateModified: GUIDE_DATE_PUBLISHED,
+      inLanguage: "ro",
+      image: pageImage,
+      author: {
+        "@type": "Organization",
+        name: GUIDE_AUTHOR,
+        url: SITE_URL,
+      },
+      publisher: {
+        "@type": "Organization",
+        name: GUIDE_AUTHOR,
+        url: SITE_URL,
+      },
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${pageUrl}#faq`,
+      mainEntity: GUIDE_FAQ.map((entry) => ({
+        "@type": "Question",
+        name: entry.question,
+        acceptedAnswer: { "@type": "Answer", text: entry.answer },
+      })),
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Saci.md", item: `${SITE_URL}/` },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Saci pentru legume",
+          item: `${SITE_URL}/saci-pentru-legume/`,
+        },
+        { "@type": "ListItem", position: 3, name: GUIDE_H1, item: pageUrl },
+      ],
+    },
+  ],
+};
+---
+
+<Layout
+  title={GUIDE_TITLE}
+  description={GUIDE_DESCRIPTION}
+  ogTitle={GUIDE_H1}
+  ogDescription={GUIDE_DESCRIPTION}
+  ogImage={pageImage}
+  ogType="article"
+  canonical={pageUrl}
+  jsonLd={jsonLd}
+>
+  <Header />
+
+  <main class="flex flex-col gap-10 px-6 py-10 sm:px-10 lg:px-14">
+    <nav aria-label="Breadcrumb" class="text-sm text-neutral-500">
+      <a href="/" class="hover:text-brand">Saci.md</a>
+      <span aria-hidden="true"> / </span>
+      <a href="/saci-pentru-legume/" class="hover:text-brand">Saci pentru legume</a>
+      <span aria-hidden="true"> / </span>
+      <span>{GUIDE_H1}</span>
+    </nav>
+
+    <article class="flex max-w-3xl flex-col gap-4">
+      <h1 class="text-3xl font-bold text-neutral-700 md:text-4xl">{GUIDE_H1}</h1>
+      <p class="text-sm text-neutral-500">
+        {GUIDE_AUTHOR} · {GUIDE_DATE_PUBLISHED}
+      </p>
+      {GUIDE_LEAD.map((paragraph) => (
+        <p class="leading-7 text-neutral-600 md:text-lg">{paragraph}</p>
+      ))}
+    </article>
+
+    <section class="flex max-w-3xl flex-col gap-4">
+      <h2 class="text-2xl text-neutral-700">Mărimile sacilor și capacitatea lor</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse text-left text-sm text-neutral-600">
+          <thead>
+            <tr class="border-b border-neutral-200">
+              <th class="py-2 pr-4">Mărime</th>
+              <th class="py-2 pr-4">Tip</th>
+              <th class="py-2 pr-4">Capacitate</th>
+              <th class="py-2">Pentru ce produs</th>
+            </tr>
+          </thead>
+          <tbody>
+            {GUIDE_SIZE_TABLE.map((row) => (
+              <tr class="border-b border-neutral-100">
+                <td class="py-2 pr-4 font-medium text-neutral-700">{row.size}</td>
+                <td class="py-2 pr-4">{row.type}</td>
+                <td class="py-2 pr-4">{row.capacity}</td>
+                <td class="py-2">{row.use}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    {GUIDE_SECTIONS.map((section) => (
+      <section class="flex max-w-3xl flex-col gap-4">
+        <h2 class="text-2xl text-neutral-700">{section.heading}</h2>
+        {section.paragraphs.map((paragraph) => (
+          <p class="leading-7 text-neutral-600">{paragraph}</p>
+        ))}
+      </section>
+    ))}
+
+    <section class="flex max-w-3xl flex-col gap-4">
+      <h2 class="text-2xl text-neutral-700">Sacii din ghid, cu link la pagina produsului</h2>
+      <ul class="flex flex-col gap-2 text-neutral-600">
+        {products.map((product) => (
+          <li>
+            <a
+              href={productPath(product.data.slug)}
+              class="font-medium text-brand hover:underline"
+            >
+              {product.data.name}
+            </a>
+            {product.data.specs && product.data.specs.length > 0 && (
+              <span> — {product.data.specs.join(", ")}</span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="flex max-w-3xl flex-col gap-4">
+      <h2 class="text-2xl text-neutral-700">Categoriile de saci de pe site</h2>
+      <ul class="flex flex-col gap-2 text-neutral-600">
+        <li>
+          <a
+            href="/categorie/polipropilena/"
+            class="font-medium text-brand hover:underline"
+          >
+            Saci din polipropilenă (rafie) pentru recolte și cereale
+          </a>
+        </li>
+        <li>
+          <a href="/categorie/plasa/" class="font-medium text-brand hover:underline">
+            Saci din plasă pentru cartofi, ceapă, morcov și fructe
+          </a>
+        </li>
+        <li>
+          <a
+            href="/categorie/polietilena/"
+            class="font-medium text-brand hover:underline"
+          >
+            Saci din polietilenă pentru nisip, gunoi și construcții
+          </a>
+        </li>
+        <li>
+          <a href="/categorie/big-bags/" class="font-medium text-brand hover:underline">
+            Saci Big Bag pentru recolte și volume mari
+          </a>
+        </li>
+        <li>
+          <a
+            href="/saci-pentru-legume/"
+            class="font-medium text-brand hover:underline"
+          >
+            Toate sacii pentru legume din catalog
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <section class="flex max-w-3xl flex-col gap-4">
+      <h2 class="text-2xl text-neutral-700">Întrebări frecvente</h2>
+      {GUIDE_FAQ.map((entry) => (
+        <details class="rounded-xl border border-neutral-200 bg-white p-4">
+          <summary class="cursor-pointer font-medium text-neutral-700">
+            {entry.question}
+          </summary>
+          <p class="mt-2 leading-7 text-neutral-600">{entry.answer}</p>
+        </details>
+      ))}
+    </section>
+
+    <section class="flex max-w-3xl flex-col gap-2">
+      <h2 class="text-2xl text-neutral-700">Contact și livrare în Chișinău</h2>
+      <p class="leading-7 text-neutral-600">
+        Sim Construct Grup S.R.L. Telefon: <a href="tel:+37369149730">069 149 730</a>.
+        Adresă: str. Nicolae Dimo 17/1, Chișinău, Republica Moldova. Ridicați comanda
+        de la depozit sau cereți livrare în Chișinău și în Moldova.
+      </p>
+    </section>
+  </main>
+
+  <Map />
+</Layout>
