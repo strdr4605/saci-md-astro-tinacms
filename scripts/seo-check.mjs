@@ -35,6 +35,12 @@ const NOINDEX = new Set(["/old/"]);
 //   productsOf        category file; the page must link to every product of
 //                     it and hold an ItemList with exactly their URLs
 //   navId             id of a <nav>; navLinks must be in it, navForbidden not
+//   productSlugs      fixed list of product slugs; the page must link to every
+//                     one of them and hold an ItemList with exactly their URLs
+//   faqMin            minimum count of questions in the FAQPage node; every
+//                     question must also be visible in the page text
+//   textMentions      words that must appear in the page text
+//   twinMentions      words that must appear in the Markdown twin
 //   markdownTwin      the page has a .md twin, an alternate link and a Link
 //                     header rule for it
 //   llmsTxt           the page URL must be in llms.txt
@@ -49,10 +55,58 @@ const categoryPage = (h1Word, categoryFile) => ({
   productsOf: categoryFile,
   markdownTwin: true,
   llmsTxt: true,
+  links: ["/saci-pentru-legume/"],
 });
 
 const EXPECTATIONS = {
-  // T1: "/saci-pentru-legume/": { ... }
+  // T1: the landing page for "saci pentru legume".
+  "/saci-pentru-legume/": {
+    titleMentions: ["Chișinău"],
+    descriptionMentions: ["Chișinău"],
+    h1Mentions: ["saci pentru legume", "Chișinău"],
+    minWords: 300,
+    minProseWords: 300,
+    jsonLdTypes: ["CollectionPage", "ItemList", "FAQPage"],
+    productSlugs: [
+      "saci-plasa-30x34",
+      "saci-plasa-40x58",
+      "saci-plasa-52x72",
+      "sac-polipropilena-50x80",
+      "sac-polipropilena-50x100",
+    ],
+    faqMin: 5,
+    links: [
+      "/categorie/polipropilena/",
+      "/categorie/plasa/",
+      "/categorie/polietilena/",
+    ],
+    textMentions: [
+      "rafie",
+      "polipropilenă",
+      "plasă",
+      "polietilenă",
+      "cartofi",
+      "ceapă",
+      "morcov",
+      "30x34",
+      "40x58",
+      "52x72",
+      "50x80",
+      "50x100",
+      "Preț la cerere",
+      "Nicolae Dimo 17/1",
+      "069 149 730",
+      "livrare în Chișinău",
+    ],
+    twinMentions: [
+      "Saci pentru legume în Chișinău",
+      "Nicolae Dimo 17/1",
+      "069 149 730",
+      "Preț la cerere",
+    ],
+    markdownTwin: true,
+    llmsTxt: true,
+  },
   // T2: product rules
   // T4: category pages and the home page navigation.
   "/categorie/polipropilena/": categoryPage(
@@ -74,6 +128,7 @@ const EXPECTATIONS = {
       "/categorie/plasa/",
       "/categorie/polietilena/",
       "/categorie/big-bags/",
+      "/saci-pentru-legume/",
     ],
     navId: "categories-nav",
     navLinks: [
@@ -364,6 +419,107 @@ const checkPage = async (path) => {
     for (const slug of slugs) {
       if (!pageLinks.some((href) => sameRoute(href, `/${slug}/`))) {
         fail(path, "category-product-link", `no link to /${slug}/`);
+      }
+    }
+  }
+
+  if (expectations.productSlugs) {
+    const expected = expectations.productSlugs
+      .map((slug) => normalizePath(`/${slug}/`))
+      .sort();
+
+    const lists = nodes.filter((node) => node["@type"] === "ItemList");
+    const matches = lists.some((list) => {
+      const urls = (list.itemListElement ?? [])
+        .map((item) => item.url ?? item.item?.["@id"] ?? item.item)
+        .filter((url) => typeof url === "string")
+        .map((url) => normalizePath(new URL(url, SITE).pathname))
+        .sort();
+      return JSON.stringify(urls) === JSON.stringify(expected);
+    });
+    if (!matches) {
+      fail(
+        path,
+        "itemlist-products",
+        `no ItemList with the ${expected.length} product URLs ${expected.join(", ")}`,
+      );
+    }
+
+    const pageLinks = linksOf(html);
+    for (const slug of expectations.productSlugs) {
+      if (!pageLinks.some((href) => sameRoute(href, `/${slug}/`))) {
+        fail(path, "product-link", `no link to /${slug}/`);
+      }
+    }
+
+    const twin = `${normalizePath(path).replace(/\/$/, "")}.md`;
+    const twinText = await readFile(
+      join(distDir, twin.replace(/^\//, "")),
+      "utf8",
+    ).catch(() => "");
+
+    for (const slug of expectations.productSlugs) {
+      if (!twinText.includes(`/${slug}/`)) {
+        fail(path, "markdown-twin-product", `no /${slug}/ in ${twin}`);
+      }
+    }
+  }
+
+  if (expectations.faqMin) {
+    const faqNodes = nodes.filter((node) => node["@type"] === "FAQPage");
+    const pageText = stripTags(html);
+
+    if (faqNodes.length === 0) {
+      fail(path, "faq-page-node", "no FAQPage node");
+    } else {
+      const questions = (faqNodes[0].mainEntity ?? []).filter(
+        (item) => item?.["@type"] === "Question",
+      );
+
+      if (questions.length < expectations.faqMin) {
+        fail(
+          path,
+          "faq-question-count",
+          `${questions.length} questions, need ${expectations.faqMin}`,
+        );
+      }
+
+      for (const question of questions) {
+        const name = question.name ?? "";
+        const answer = question.acceptedAnswer?.text ?? "";
+
+        if (!name || !answer) {
+          fail(path, "faq-question-complete", `empty question: ${name}`);
+          continue;
+        }
+
+        if (!pageText.includes(stripTags(name).trim())) {
+          fail(path, "faq-question-visible", `question not in page: ${name}`);
+        }
+      }
+    }
+  }
+
+  if (expectations.textMentions) {
+    const pageText = stripTags(html);
+
+    for (const word of expectations.textMentions) {
+      if (!pageText.toLowerCase().includes(word.toLowerCase())) {
+        fail(path, "text-mentions", `"${word}" missing from page text`);
+      }
+    }
+  }
+
+  if (expectations.twinMentions) {
+    const twin = `${normalizePath(path).replace(/\/$/, "")}.md`;
+    const twinText = await readFile(
+      join(distDir, twin.replace(/^\//, "")),
+      "utf8",
+    ).catch(() => "");
+
+    for (const word of expectations.twinMentions) {
+      if (!twinText.toLowerCase().includes(word.toLowerCase())) {
+        fail(path, "markdown-twin-mentions", `"${word}" missing from ${twin}`);
       }
     }
   }

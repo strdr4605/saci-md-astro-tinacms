@@ -130,6 +130,9 @@ Pagini de categorie, fiecare cu varianta Markdown la adresa cu sufixul `.md`:
 - [Saci din polietilenă în Chișinău](https://saci.md/categorie/polietilena/)
 - [Big bags în Chișinău](https://saci.md/categorie/big-bags/)
 
+Landing page, cu varianta Markdown la adresa cu sufixul `.md`:
+- [Saci pentru legume în Chișinău](https://saci.md/saci-pentru-legume/)
+
 ---
 
 ## Informații suplimentare

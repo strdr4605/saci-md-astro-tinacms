@@ -207,11 +207,11 @@ One task at a time. For each task:
 
 ```sh
 # Builder
-hc run --bg --name seo-build --cwd /Users/strdr4605/P/saci-md-seo claude \
+hc run --bg --name seo-build --cwd /Users/strdr4605/P/saci-md-seo /opt/homebrew/bin/pi -p \
   "Read docs/seo/PLAN-saci-pentru-legume.md. Implement task T1 only. Follow the acceptance criteria of T1. Update scripts/seo-check.mjs so the checker covers T1. Run npm run build:astro and npm run check:seo. Commit with jj (description starts with 'feat(seo):'). Report with hc send \$HC_TERMINAL_ID when done or stuck. Do not start other agents."
 
 # Verifier
-hc run --bg --name seo-verify --cwd /Users/strdr4605/P/saci-md-seo claude \
+hc run --bg --name seo-verify --cwd /Users/strdr4605/P/saci-md-seo /opt/homebrew/bin/pi -p \
   "Read docs/seo/PLAN-saci-pentru-legume.md and .agents/skills/seo-verify/SKILL.md. Verify task T1 in the current jj working copy. Do not change any file except your report at docs/seo/reports/T1-verify.md. Run npm run build:astro and npm run check:seo. Report with hc send \$HC_TERMINAL_ID when done or stuck. Do not start other agents."
 ```
 
