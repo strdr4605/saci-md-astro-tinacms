@@ -21,13 +21,24 @@ const encodePath = (path) =>
     .map((segment) => encodeURIComponent(segment))
     .join("/");
 
-// Only top-level pages get a markdown twin (product pages and the index).
+// Every page that has a Markdown twin: products, the index, the categories.
+// The agent skills are files, not pages. They get no twin rule.
 const findMarkdownFiles = async (dir) => {
   const entries = await readdir(dir, { withFileTypes: true });
+  const files = [];
 
-  return entries
-    .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
-    .map((entry) => join(dir, entry.name));
+  for (const entry of entries) {
+    if (entry.name === ".well-known") continue;
+
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...(await findMarkdownFiles(full)));
+    } else if (entry.isFile() && entry.name.endsWith(".md")) {
+      files.push(full);
+    }
+  }
+
+  return files;
 };
 
 // Adds a per-page Link header for the markdown version of that page.

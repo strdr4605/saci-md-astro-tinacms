@@ -27,10 +27,59 @@ const EXEMPT = new Set(["/old/"]);
 //   minWords          minimum count of words in the page text
 //   jsonLdTypes       required @type values in the JSON-LD
 //   links             paths that must appear as internal links
+//   minProseWords     minimum count of words inside <p> tags of <main>
+//   productsOf        category file; the page must link to every product of
+//                     it and hold an ItemList with exactly their URLs
+//   navId             id of a <nav>; navLinks must be in it, navForbidden not
+//   markdownTwin      the page has a .md twin, an alternate link and a Link
+//                     header rule for it
+//   llmsTxt           the page URL must be in llms.txt
+// Every route in EXPECTATIONS must be in the sitemap and in dist/.
+const categoryPage = (h1Word, categoryFile) => ({
+  titleMentions: ["Chișinău"],
+  descriptionMentions: ["Chișinău"],
+  h1Mentions: [h1Word, "Chișinău"],
+  minWords: 120,
+  minProseWords: 120,
+  jsonLdTypes: ["CollectionPage", "ItemList"],
+  productsOf: categoryFile,
+  markdownTwin: true,
+  llmsTxt: true,
+});
+
 const EXPECTATIONS = {
   // T1: "/saci-pentru-legume/": { ... }
   // T2: product rules
-  // T4: "/categorie/<slug>/": { ... }
+  // T4: category pages and the home page navigation.
+  "/categorie/polipropilena/": categoryPage(
+    "polipropilenă",
+    "content/categories/Polipropilena.md",
+  ),
+  "/categorie/plasa/": categoryPage("plasă", "content/categories/Plasa.md"),
+  "/categorie/polietilena/": categoryPage(
+    "polietilenă",
+    "content/categories/Polietilena.md",
+  ),
+  "/categorie/big-bags/": categoryPage(
+    "big bag",
+    "content/categories/Big-bags.md",
+  ),
+  "/": {
+    links: [
+      "/categorie/polipropilena/",
+      "/categorie/plasa/",
+      "/categorie/polietilena/",
+      "/categorie/big-bags/",
+    ],
+    navId: "categories-nav",
+    navLinks: [
+      "/categorie/polipropilena/",
+      "/categorie/plasa/",
+      "/categorie/polietilena/",
+      "/categorie/big-bags/",
+    ],
+    navForbidden: ["#Polipropilenă", "#Plasă", "#Polietilenă", "#Big bags"],
+  },
   // T5: "/": { ... }
 };
 
@@ -103,6 +152,41 @@ const typesOf = (nodes) =>
   nodes.flatMap((node) =>
     Array.isArray(node["@graph"]) ? node["@graph"] : [node],
   );
+
+const productsDir = fileURLToPath(new URL("content/products/", root));
+
+// Product slugs per category file, read from the content front matter.
+const productsByCategory = async () => {
+  const map = new Map();
+
+  for (const name of await readdir(productsDir)) {
+    if (!name.endsWith(".md")) continue;
+
+    const text = await readFile(join(productsDir, name), "utf8");
+    const front = text.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? "";
+    const field = (key) =>
+      front
+        .match(new RegExp(`^${key}:\\s*(.+)$`, "m"))?.[1]
+        ?.trim()
+        .replace(/^["']|["']$/g, "");
+
+    const category = field("categoryPath");
+    const slug = field("slug");
+    if (!category || !slug) continue;
+
+    map.set(category, [...(map.get(category) ?? []), slug]);
+  }
+
+  return map;
+};
+
+const linksOf = (html) =>
+  [...html.matchAll(/<a [^>]*href="([^"]+)"/g)].map((match) =>
+    match[1].replace(/&amp;/g, "&"),
+  );
+
+const sameRoute = (href, path) =>
+  normalizePath(new URL(href, SITE).pathname) === normalizePath(path);
 
 // ---------------------------------------------------------------- checks
 
@@ -224,6 +308,130 @@ const checkPage = async (path) => {
     }
   }
 
+  if (expectations.minProseWords) {
+    const main = html.match(/<main[\s>][\s\S]*?<\/main>/)?.[0] ?? "";
+    const prose = [...main.matchAll(/<p[\s>][\s\S]*?<\/p>/g)]
+      .map((match) => stripTags(match[0]))
+      .join(" ");
+    const words = prose.split(/\s+/).filter(Boolean).length;
+    if (words < expectations.minProseWords) {
+      fail(
+        path,
+        "min-prose-words",
+        `${words} words in <main> paragraphs, need ${expectations.minProseWords}`,
+      );
+    }
+  }
+
+  if (expectations.productsOf) {
+    const slugs = (await productIndex).get(expectations.productsOf) ?? [];
+    if (slugs.length === 0) {
+      fail(path, "category-products", `no products for ${expectations.productsOf}`);
+    }
+    const expected = slugs.map((slug) => normalizePath(`/${slug}/`)).sort();
+
+    const lists = nodes.filter((node) => node["@type"] === "ItemList");
+    const matches = lists.some((list) => {
+      const urls = (list.itemListElement ?? [])
+        .map((item) => item.url ?? item.item?.["@id"] ?? item.item)
+        .filter((url) => typeof url === "string")
+        .map((url) => normalizePath(new URL(url, SITE).pathname))
+        .sort();
+      return JSON.stringify(urls) === JSON.stringify(expected);
+    });
+    if (!matches) {
+      fail(
+        path,
+        "itemlist-products",
+        `no ItemList with the ${expected.length} product URLs of ${expectations.productsOf}`,
+      );
+    }
+
+    const pageLinks = linksOf(html);
+    for (const slug of slugs) {
+      if (!pageLinks.some((href) => sameRoute(href, `/${slug}/`))) {
+        fail(path, "category-product-link", `no link to /${slug}/`);
+      }
+    }
+  }
+
+  if (expectations.markdownTwin) {
+    const twin = `${normalizePath(path).replace(/\/$/, "")}.md`;
+    const twinFile = join(distDir, twin.replace(/^\//, ""));
+
+    if (!existsSync(twinFile)) {
+      fail(path, "markdown-twin-exists", `no file at ${twinFile}`);
+    }
+
+    const alternate = html.match(
+      /<link[^>]*rel="alternate"[^>]*type="[^"]*markdown"[^>]*href="([^"]+)"/,
+    );
+
+    if (!alternate) {
+      fail(path, "markdown-alternate-link", "no alternate markdown link");
+    } else if (
+      normalizePath(new URL(alternate[1], SITE).pathname) !==
+      normalizePath(twin)
+    ) {
+      fail(
+        path,
+        "markdown-alternate-link",
+        `${alternate[1]} vs ${twin}`,
+      );
+    }
+
+    const headers = await readFile(join(distDir, "_headers"), "utf8").catch(
+      () => "",
+    );
+
+    if (
+      !headers.includes(
+        `Link: <${twin}>; rel="alternate"; type="text/markdown"`,
+      )
+    ) {
+      fail(path, "markdown-header-rule", `no Link header for ${twin}`);
+    }
+  }
+
+  if (expectations.llmsTxt) {
+    const llms = await readFile(join(distDir, "llms.txt"), "utf8").catch(
+      () => "",
+    );
+    const url = `${SITE}${path}`;
+
+    if (!llms.includes(url)) {
+      fail(path, "llms-txt-mentions", `${url} missing from llms.txt`);
+    }
+  }
+
+  if (expectations.navId) {
+    const nav =
+      html.match(
+        new RegExp(
+          `<nav[^>]*id="${expectations.navId}"[^>]*>[\\s\\S]*?<\\/nav>`,
+        ),
+      )?.[0] ?? "";
+    if (!nav) {
+      fail(path, "nav-present", `no <nav id="${expectations.navId}">`);
+    }
+    const navLinks = linksOf(nav);
+    for (const required of expectations.navLinks ?? []) {
+      if (!navLinks.some((href) => sameRoute(href, required))) {
+        fail(path, "nav-link", `#${expectations.navId} has no link to ${required}`);
+      }
+    }
+    for (const forbidden of expectations.navForbidden ?? []) {
+      if (navLinks.some((href) => decodeURIComponent(href) === forbidden)) {
+        fail(path, "nav-forbidden-link", `#${expectations.navId} still links to ${forbidden}`);
+      }
+    }
+  }
+
+  if (titles.length === 1) seenTitles.push({ path, value: titles[0][1] });
+  if (descriptions.length === 1) {
+    seenDescriptions.push({ path, value: attr(descriptions[0][0], "content") ?? "" });
+  }
+
   const links = [...html.matchAll(/<a [^>]*href="([^"]+)"/g)].map(
     (match) => match[1],
   );
@@ -257,6 +465,18 @@ if (!existsSync(join(distDir, "sitemap-0.xml"))) {
 }
 
 const paths = await sitemapPaths();
+const productIndex = productsByCategory();
+const seenTitles = [];
+const seenDescriptions = [];
+
+for (const route of Object.keys(EXPECTATIONS)) {
+  if (!paths.some((path) => normalizePath(path) === normalizePath(route))) {
+    fail(route, "expected-route-in-sitemap", "route is not in sitemap-0.xml");
+  }
+  if (!existsSync(pageFile(route))) {
+    fail(route, "expected-route-exists", `no file at ${pageFile(route)}`);
+  }
+}
 
 for (const path of paths) {
   if (EXEMPT.has(path)) {
@@ -265,6 +485,18 @@ for (const path of paths) {
   }
   await checkPage(path);
 }
+
+const reportDuplicates = (seen, check) => {
+  const byValue = new Map();
+  for (const { path, value } of seen) {
+    byValue.set(value, [...(byValue.get(value) ?? []), path]);
+  }
+  for (const [value, owners] of byValue) {
+    if (owners.length > 1) fail(owners.join(", "), check, `"${value}"`);
+  }
+};
+reportDuplicates(seenTitles, "unique-title");
+reportDuplicates(seenDescriptions, "unique-description");
 
 const distPages = [];
 const walk = async (dir, prefix = "") => {

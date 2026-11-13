@@ -124,6 +124,12 @@ Site-ul este organizat astfel:
 - Paginile individuale ale produselor oferă specificații detaliate
 - Informații de contact și locație în antet și subsol
 
+Pagini de categorie, fiecare cu varianta Markdown la adresa cu sufixul `.md`:
+- [Saci din polipropilenă (rafie) în Chișinău](https://saci.md/categorie/polipropilena/)
+- [Saci din plasă pentru legume și fructe în Chișinău](https://saci.md/categorie/plasa/)
+- [Saci din polietilenă în Chișinău](https://saci.md/categorie/polietilena/)
+- [Big bags în Chișinău](https://saci.md/categorie/big-bags/)
+
 ---
 
 ## Informații suplimentare

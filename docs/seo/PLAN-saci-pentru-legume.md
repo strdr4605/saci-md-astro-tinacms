@@ -138,6 +138,9 @@ Acceptance criteria:
 - Each page has an `ItemList` schema with the product URLs of the category.
 - The home page navigation links to these URLs. The old anchor links do not.
 - Every category page is in `dist/sitemap-0.xml`.
+- Every category page has a Markdown twin at `/categorie/<slug>.md`. The
+  alternate link of the page is not a 404.
+- `public/llms.txt` lists the four category pages.
 
 ### T5 — Local entity signals
 
