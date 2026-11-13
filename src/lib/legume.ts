@@ -60,7 +60,7 @@ export const GUIDE_AUTHOR = "Sim Construct Grup S.R.L.";
 export const GUIDE_PRODUCT_SLUGS = LEGUME_PRODUCT_SLUGS;
 
 export const GUIDE_LEAD: string[] = [
-  "Alegerea sacului pentru legume depinde de două lucruri: de produsul pe care îl vindeți și de greutatea pe care o puneți într-un sac. Un sac prea mic se rupe la încărcare, iar un sac prea mare rămâne gol și se deformează în remorcă. La Sim Construct Grup găsiți saci din plasă, saci de rafie din polipropilenă, saci din polietilenă și big bag-uri. Ghidul de mai jos explică mărimile, capacitățile și tipul de sac pentru fiecare situație.",
+  "Alegerea sacului pentru legume depinde de două lucruri: de produsul pe care îl vindeți și de greutatea pe care o puneți într-un sac. Un sac prea mic nu este potrivit la încărcare, iar un sac prea mare rămâne gol și se deformează în remorcă. La Sim Construct Grup găsiți saci din plasă, saci de rafie din polipropilenă, saci din polietilenă și big bag-uri. Ghidul de mai jos explică mărimile, capacitățile și tipul de sac pentru fiecare situație.",
   "Sacii se vând cu bucata și angro. Pentru ferme, depozite de legume și piețe pregătim comenzi mari la preț de angro. Depozitul este la str. Nicolae Dimo 17/1, Chișinău. Livrăm în Chișinău și în Moldova. Pentru preț și stoc sunați la 069 149 730.",
 ];
 
@@ -92,7 +92,7 @@ export const GUIDE_SECTIONS: GuideSection[] = [
     heading: "Când folosesc saci de rafie, adică polipropilenă",
     paragraphs: [
       "Rafie este denumirea comercială pentru sacii țesuți din polipropilenă. Firele sunt țesute într-o pânză, iar grosimea țesăturii este cuprinsă între 600 și 1200 den. Sacul are fundul cusut și gura deschisă, iar un capăt este sigilat. Materialul este rezistent la apă și la lumină.",
-      "Sacul de rafie de 50x80 cm ține 20–30 kg, iar sacul de 50x100 cm ține 40 kg. Folosiți rafie pentru cantități mari de cartofi, ceapă și morcov, pentru recolte, cereale, porumb, făină și zahăr. Sacul se umple cu lopata sau cu o mașină, se leagă la gură și se transportă pe paleți sau în remorcă.",
+      "Sacul de rafie de 50x80 cm ține 20–30 kg, iar sacul de 50x100 cm ține 40 kg. Folosiți rafie pentru cantități mari de cartofi, ceapă și morcov, pentru recolte, cereale, porumb, făină și zahăr. Sacul se umple manual sau cu o mașină, se leagă la gură și se transportă pe paleți sau în remorcă.",
       "Țesătura de polipropilenă rezistă la apă și la razele solare, deci sacul poate sta în curte sau în remorcă. După curățare, sacii pot fi reciclați. Sacul de 50x100 cm se livrează în seturi de câte 100 de bucăți.",
       "Pentru legume delicate, care trebuie să rămână proaspete, rafie nu este prima alegere: pânza nu lasă aerul să circule. Folosiți plasă în acest caz.",
     ],
@@ -115,7 +115,7 @@ export const GUIDE_SECTIONS: GuideSection[] = [
     ],
   },
   {
-    heading: "Cum se depozitează și se refolosesc sacii",
+    heading: "Cum se depozitează sacii și când se refolosesc",
     paragraphs: [
       "Sacii de rafie se curăță și se refolosesc. Țesătura de polipropilenă rezistă la apă și la lumină, iar după curățare sacii pot fi reciclați. Păstrați sacii uscați și la loc uscat, cu gura în sus, ca să nu rămână apă în fund.",
       "Sacii din plasă au ochiuri rare, prin care aerul circulă.",
