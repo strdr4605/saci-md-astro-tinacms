@@ -5,7 +5,7 @@
 // docs/seo/PLAN-saci-pentru-legume.md adds its own rules here in the same
 // commit as the feature. Never delete or weaken a rule to make a check pass.
 
-import { readFile, readdir } from "node:fs/promises";
+import { readFile, readdir, stat } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { join } from "node:path";
@@ -23,6 +23,20 @@ const EXEMPT = new Set();
 // dist/, carry a robots noindex meta tag, and stay out of the sitemap.
 // /old/ is a leftover duplicate of the old site.
 const NOINDEX = new Set(["/old/"]);
+
+// T7: image weight budget. Raster images only. SVG stays vector, so its size
+// is not a page weight.
+const IMAGE_SIZE_MAX = 250 * 1024;
+const PNG_SIZE_MAX = 100 * 1024;
+const RASTER_IMAGE = /\.(png|jpe?g|webp|gif|avif)$/i;
+
+// T7: files owned by other tasks. Their size budget is not decided here.
+// plasa_tubulara.jpg is loaded by content/products/Plasa-tubulara.md.
+// simconstructgrup_poster.jpg is the source JPEG; the page loads the WebP.
+const IMAGE_SIZE_EXEMPT = new Set([
+  "plasa_tubulara.jpg",
+  "simconstructgrup_poster.jpg",
+]);
 
 // Rules per route. Filled in by each task. Keys are site paths.
 //   titleMentions     words that must appear in the <title>
@@ -340,6 +354,7 @@ const productsBySlug = async () => {
     map.set(slug, {
       price: Number.isFinite(price) && price > 0 ? price : undefined,
       unit: field("unit"),
+      imgSrc: field("imgSrc"),
     });
   }
 
@@ -443,12 +458,7 @@ const checkPage = async (path) => {
     fail(path, "lang-ro", "html lang is not ro");
   }
 
-  const images = [...html.matchAll(/<img[^>]*>/g)];
-  for (const image of images) {
-    if (image[0].match(/\balt="/) === null) {
-      fail(path, "img-alt", image[0].slice(0, 80));
-    }
-  }
+  checkImageTags(path, html);
 
   const blocks = jsonLdOf(html);
   blocks.forEach((block, index) => {
@@ -791,6 +801,81 @@ const checkPage = async (path) => {
   checkInternalLinks(path, html);
 };
 
+// T7: every <img> of the built pages needs alt, width and height, and its
+// source must exist in dist/. Product images come from the content front
+// matter. Their size belongs to the product task, so they have no fixed
+// width and height.
+const checkImageTags = (path, html) => {
+  for (const match of html.matchAll(/<img[^>]*>/g)) {
+    const tag = match[0];
+
+    if (tag.match(/\balt="/) === null) {
+      fail(path, "img-alt", tag.slice(0, 80));
+    }
+
+    const src = attr(tag, "src");
+    const isProductImage = src && productImages.has(src);
+
+    if (!isProductImage) {
+      const width = attr(tag, "width");
+      const height = attr(tag, "height");
+
+      if (!width || !Number(width)) {
+        fail(path, "img-width", tag.slice(0, 80));
+      }
+
+      if (!height || !Number(height)) {
+        fail(path, "img-height", tag.slice(0, 80));
+      }
+    }
+
+    if (src && !/^(https?:|data:|\/\/)/i.test(src)) {
+      const target = decodeURIComponent(
+        new URL(src, `https://saci.md${path}`).pathname,
+      );
+
+      if (!existsSync(join(distDir, target.replace(/^\//, "")))) {
+        fail(path, "img-exists", `${src} -> ${target}`);
+      }
+    }
+  }
+};
+
+// T7: every image file in dist/ must stay inside the size budget. No PNG
+// may be larger than the PNG budget.
+const checkImageFiles = async () => {
+  const files = [];
+
+  const walkFiles = async (dir) => {
+    for (const entry of await readdir(dir, { withFileTypes: true })) {
+      const full = join(dir, entry.name);
+
+      if (entry.isDirectory()) {
+        await walkFiles(full);
+      } else if (RASTER_IMAGE.test(entry.name)) {
+        files.push(full);
+      }
+    }
+  };
+
+  await walkFiles(distDir);
+
+  for (const file of files) {
+    const name = file.slice(distDir.length).replace(/^\//, "");
+    const size = (await stat(file)).size;
+
+    if (IMAGE_SIZE_EXEMPT.has(name)) continue;
+
+    if (size >= IMAGE_SIZE_MAX) {
+      fail(name, "image-size", `${size} bytes, limit ${IMAGE_SIZE_MAX}`);
+    }
+
+    if (/\.png$/i.test(name) && size > PNG_SIZE_MAX) {
+      fail(name, "png-size", `${size} bytes, limit ${PNG_SIZE_MAX}`);
+    }
+  }
+};
+
 // Every internal <a> and <link> target must exist in dist/. A path with a
 // file extension (/categorie/plasa.md, /llms.txt) is a file. Any other path
 // is a page folder with an index.html. Slugs with spaces arrive as %20.
@@ -838,6 +923,7 @@ const checkNoindexPage = async (path, paths) => {
     fail(path, "noindex-not-in-sitemap", "page is in sitemap-0.xml");
   }
 
+  checkImageTags(path, html);
   checkInternalLinks(path, html);
 };
 
@@ -851,6 +937,13 @@ const paths = await sitemapPaths();
 const entries = await sitemapEntries();
 const productIndex = productsByCategory();
 const productPrices = productsBySlug();
+
+// T7: the images that come from the content front matter.
+const productImages = new Set(
+  [...(await productPrices).values()]
+    .map((product) => product.imgSrc)
+    .filter(Boolean),
+);
 const seenTitles = [];
 const seenDescriptions = [];
 
@@ -917,6 +1010,20 @@ for (const page of distPages) {
   if (!paths.some((path) => normalizePath(path) === normalizePath(page))) {
     note(page, "page is not in the sitemap");
   }
+}
+
+// T7: the image rules cover every built page, also the ones outside the
+// sitemap.
+await checkImageFiles();
+
+for (const page of distPages) {
+  if (EXEMPT.has(page) || NOINDEX.has(page)) continue;
+  if (paths.some((path) => normalizePath(path) === normalizePath(page))) {
+    continue;
+  }
+
+  const html = await readFile(pageFile(page), "utf8").catch(() => "");
+  if (html) checkImageTags(page, html);
 }
 
 for (const { url, check, detail } of failures) {
