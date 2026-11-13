@@ -1,3 +1,5 @@
+import { WHOLESALE_NOTE, TVA_LABEL, formatPrice } from "./pricing";
+
 export const company = {
   name: "Sim Construct Grup S.R.L.",
   site: "https://saci.md",
@@ -13,11 +15,17 @@ export const buildProductMarkdown = (
   product: any,
   categoryName: string,
 ): string => {
+  const priceLine = product.data.price
+    ? `${formatPrice(product.data.price, product.data.unit)} · ${TVA_LABEL}`
+    : "la cerere";
+
   const lines = [
     `# ${product.data.name}`,
     "",
     `- Categorie: ${categoryName}`,
     ...(product.data.specs ?? []).map((spec: string) => `- ${spec}`),
+    `- Preț: ${priceLine}`,
+    `- ${WHOLESALE_NOTE}`,
     `- Stoc: ${product.data.outOfStock ? "epuizat momentan" : "disponibil"}`,
     `- Pagina produsului: ${productUrl(product.data.slug)}`,
     "",
@@ -66,9 +74,12 @@ export const buildIndexMarkdown = (
 
     for (const product of categoryProducts) {
       const specs = (product.data.specs ?? []).join("; ");
+      const price = product.data.price
+        ? `Preț: ${formatPrice(product.data.price, product.data.unit)}`
+        : "Preț: la cerere";
 
       lines.push(
-        `- [${product.data.name}](${productUrl(product.data.slug)}) — ${specs || categoryName(product.data.categoryPath)}`,
+        `- [${product.data.name}](${productUrl(product.data.slug)}) — ${specs || categoryName(product.data.categoryPath)} · ${price}`,
       );
     }
 
