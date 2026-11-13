@@ -27,7 +27,7 @@ export const GET: APIRoute = async () => {
     "## Saci pentru legume: mărimi și preț",
     "",
     ...products.flatMap((product) => [
-      `- [${product.data.name}](${SITE_URL}${productPath(product.data.slug)}) — ${(product.data.specs ?? []).join(", ")} — ${formatPriceBlock(product.data.price, product.data.unit).split("\n")[0]}`,
+      `- [${product.data.name}](${SITE_URL}${productPath(product.data.slug)}) — ${(product.data.specs ?? []).join(", ")} — ${formatPriceBlock(product.data.price, product.data.unit).split("\n").join(" — ")}`,
     ]),
     "",
     "## Mai multe tipuri de saci",
@@ -35,6 +35,7 @@ export const GET: APIRoute = async () => {
     `- [Saci din polipropilenă (rafie) pentru recolte și cereale](${SITE_URL}/categorie/polipropilena/)`,
     `- [Saci din plasă pentru cartofi, ceapă, morcov și fructe](${SITE_URL}/categorie/plasa/)`,
     `- [Saci din polietilenă pentru nisip, gunoi și construcții](${SITE_URL}/categorie/polietilena/)`,
+    `- [Saci Big Bag pentru recolte și volume mari](${SITE_URL}/categorie/big-bags/)`,
     "",
     "## Întrebări frecvente",
     "",

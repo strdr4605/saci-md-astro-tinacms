@@ -122,6 +122,11 @@ const jsonLd = {
             <p class="font-medium text-neutral-700">
               {formatPriceBlock(product.data.price, product.data.unit).split("\n")[0]}
             </p>
+            {formatPriceBlock(product.data.price, product.data.unit).split("\n")[1] && (
+              <p class="text-sm text-neutral-500">
+                {formatPriceBlock(product.data.price, product.data.unit).split("\n")[1]}
+              </p>
+            )}
             <a
               href={productPath(product.data.slug)}
               class="text-sm font-medium text-brand hover:underline"
