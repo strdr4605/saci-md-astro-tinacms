@@ -99,7 +99,7 @@ Acceptance criteria:
 - Schema: `CollectionPage` and `ItemList` with all product URLs. Schema: `FAQPage` with the same questions.
 - The page is in `dist/sitemap-0.xml`.
 - The home page links to `/saci-pentru-legume/`. Every category page links to
-  it. The landing page links to the three category pages.
+  it. The landing page links to the four category pages.
 - `public/llms.txt` mentions the new page. The entry of
   `public/.well-known/ai-catalog.json` comes in the T2 wave, because the
   price agent owns that file.
