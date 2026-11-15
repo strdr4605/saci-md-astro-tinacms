@@ -9,6 +9,7 @@ import {
   categoryPagePath,
   productPath,
 } from "../../lib/categories";
+import IMAGE_SIZES from "../../lib/image-sizes.json";
 
 export function getStaticPaths() {
   return CATEGORY_PAGES.map((page) => ({
@@ -105,6 +106,8 @@ const jsonLd = {
                   src={product.data.imgSrc}
                   alt={product.data.name}
                   loading="lazy"
+                  width={IMAGE_SIZES[product.data.imgSrc]?.[0]}
+                  height={IMAGE_SIZES[product.data.imgSrc]?.[1]}
                 />
                 {product.data.outOfStock && (
                   <span class="absolute right-2 top-2 rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">

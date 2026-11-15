@@ -1,5 +1,6 @@
 ---
 import { formatPriceBlock } from "../lib/pricing";
+import IMAGE_SIZES from "../lib/image-sizes.json";
 
 const { product } = Astro.props;
 
@@ -17,6 +18,9 @@ const [priceLine, wholesaleNote] = formatPriceBlock(
           class="h-full w-full object-contain"
           src={product.frontmatter.imgSrc}
           alt={product.frontmatter.name}
+          loading="lazy"
+          width={IMAGE_SIZES[product.frontmatter.imgSrc]?.[0]}
+          height={IMAGE_SIZES[product.frontmatter.imgSrc]?.[1]}
         />
       </div>
       {product.frontmatter.outOfStock && (

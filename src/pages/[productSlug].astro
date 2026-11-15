@@ -4,6 +4,7 @@ import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Map from "../components/Map.astro";
 import { formatPriceBlock, formatPriceValue } from "../lib/pricing";
+import IMAGE_SIZES from "../lib/image-sizes.json";
 
 export async function getStaticPaths() {
   const products = await getCollection("products");
@@ -79,7 +80,14 @@ const productJsonLd = {
 >
   <Header />
   <main class="flex flex-col items-center md:flex-row md:gap-14">
-    <img class="h-96 md:h-[560px]" src={product.data.imgSrc} alt={product.data.name} />
+    <img
+      class="h-96 md:h-[560px]"
+      src={product.data.imgSrc}
+      alt={product.data.name}
+      loading="lazy"
+      width={IMAGE_SIZES[product.data.imgSrc]?.[0]}
+      height={IMAGE_SIZES[product.data.imgSrc]?.[1]}
+    />
     <article class="flex flex-col gap-5">
       <div class="flex flex-col gap-3 border-b border-b-neutral-300 pb-5">
         <div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-2">

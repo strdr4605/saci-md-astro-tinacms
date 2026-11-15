@@ -33,10 +33,9 @@ const RASTER_IMAGE = /\.(png|jpe?g|webp|gif|avif)$/i;
 // T7: files owned by other tasks. Their size budget is not decided here.
 // plasa_tubulara.jpg is loaded by content/products/Plasa-tubulara.md.
 // simconstructgrup_poster.jpg is the source JPEG; the page loads the WebP.
-const IMAGE_SIZE_EXEMPT = new Set([
-  "plasa_tubulara.jpg",
-  "simconstructgrup_poster.jpg",
-]);
+// The only image above the budget: the photo of the tubular mesh bag. Its
+// file belongs to the product front matter of the price task.
+const IMAGE_SIZE_EXEMPT = new Set(["plasa_tubulara.jpg"]);
 
 // Rules per route. Filled in by each task. Keys are site paths.
 //   titleMentions     words that must appear in the <title>
@@ -802,9 +801,8 @@ const checkPage = async (path) => {
 };
 
 // T7: every <img> of the built pages needs alt, width and height, and its
-// source must exist in dist/. Product images come from the content front
-// matter. Their size belongs to the product task, so they have no fixed
-// width and height.
+// source must exist in dist/. The width and height must match the real size
+// of the file, so src/lib/image-sizes.json must hold the sizes of public/.
 const checkImageTags = (path, html) => {
   for (const match of html.matchAll(/<img[^>]*>/g)) {
     const tag = match[0];
@@ -814,9 +812,7 @@ const checkImageTags = (path, html) => {
     }
 
     const src = attr(tag, "src");
-    const isProductImage = src && productImages.has(src);
-
-    if (!isProductImage) {
+    {
       const width = attr(tag, "width");
       const height = attr(tag, "height");
 
@@ -826,6 +822,18 @@ const checkImageTags = (path, html) => {
 
       if (!height || !Number(height)) {
         fail(path, "img-height", tag.slice(0, 80));
+      }
+
+      const expected = src ? imageSizes[src] : null;
+
+      if (expected) {
+        if (Number(width) !== expected[0] || Number(height) !== expected[1]) {
+          fail(
+            path,
+            "img-size-matches-file",
+            `${src}: ${width}x${height}, file is ${expected[0]}x${expected[1]}`,
+          );
+        }
       }
     }
 
@@ -944,6 +952,11 @@ const productImages = new Set(
     .map((product) => product.imgSrc)
     .filter(Boolean),
 );
+// T7: the natural size of every image of public/.
+const imageSizes = JSON.parse(
+  await readFile(fileURLToPath(new URL("src/lib/image-sizes.json", root)), "utf8"),
+);
+
 const seenTitles = [];
 const seenDescriptions = [];
 

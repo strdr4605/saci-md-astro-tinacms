@@ -1,5 +1,6 @@
 ---
 import { categoryHref, selectCategories } from "../lib/categories";
+import IMAGE_SIZES from "../lib/image-sizes.json";
 
 const allCategories = selectCategories(
   Object.values(
@@ -45,6 +46,8 @@ const categoriesWithPreview = allCategories
                     alt={product.frontmatter.name}
                     class="h-full w-full object-contain"
                     loading="lazy"
+                    width={IMAGE_SIZES[product.frontmatter.imgSrc]?.[0]}
+                    height={IMAGE_SIZES[product.frontmatter.imgSrc]?.[1]}
                   />
                 </div>
                 <span class="uppercase mt-3 text-center text-sm font-medium">
@@ -69,6 +72,8 @@ const categoriesWithPreview = allCategories
                   alt={product.frontmatter.name}
                   class="h-full w-full object-contain"
                   loading="lazy"
+                  width={IMAGE_SIZES[product.frontmatter.imgSrc]?.[0]}
+                  height={IMAGE_SIZES[product.frontmatter.imgSrc]?.[1]}
                 />
               </div>
               <span class="uppercase mt-3 text-center font-medium">

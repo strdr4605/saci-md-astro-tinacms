@@ -4,6 +4,7 @@ import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Map from "../components/Map.astro";
 import { SITE_URL, productPath } from "../lib/categories";
+import IMAGE_SIZES from "../lib/image-sizes.json";
 import { formatPriceBlock } from "../lib/pricing";
 import {
   LEGUME_DESCRIPTION,
@@ -106,8 +107,8 @@ const jsonLd = {
                   src={product.data.imgSrc}
                   alt={product.data.name}
                   loading="lazy"
-                  width="224"
-                  height="224"
+                  width={IMAGE_SIZES[product.data.imgSrc]?.[0]}
+                  height={IMAGE_SIZES[product.data.imgSrc]?.[1]}
                 />
               </div>
               <h3 class="text-xl">{product.data.name}</h3>
