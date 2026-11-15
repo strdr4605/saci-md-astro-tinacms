@@ -117,6 +117,11 @@
             url: product.url,
             markdownUrl: product.markdownUrl,
             outOfStock: product.outOfStock,
+            price: product.price,
+            priceFormatted: product.priceFormatted,
+            currency: product.currency,
+            unit: product.unit,
+            wholesaleNote: product.wholesaleNote,
           })),
         });
       },

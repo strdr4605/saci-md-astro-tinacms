@@ -1,5 +1,12 @@
 ---
+import { formatPriceBlock } from "../lib/pricing";
+
 const { product } = Astro.props;
+
+const [priceLine, wholesaleNote] = formatPriceBlock(
+  product.frontmatter.price,
+  product.frontmatter.unit,
+).split("\n");
 ---
 
 <a href={product.frontmatter.slug} class="block">
@@ -25,13 +32,12 @@ const { product } = Astro.props;
         </h3>
       </div>
 
-      {
-        product.frontmatter.price && (
-          <p class="text-body font-semibold text-green-700/90">
-            {product.frontmatter.price/100} lei/buc
-          </p>
-        )
-      }
+      <p class="text-body font-semibold text-green-700/90">
+        {priceLine}
+      </p>
+      {wholesaleNote && (
+        <p class="text-sm text-neutral-500">{wholesaleNote}</p>
+      )}
     </div>
   </div>
 </a>
