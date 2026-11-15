@@ -59,6 +59,10 @@ const IMAGE_SIZE_EXEMPT = new Set(["plasa_tubulara.jpg"]);
 //                     must link to them too
 //   textMentions      words that must appear in the page text
 //   twinMentions      words that must appear in the Markdown twin
+//   descriptionMax    maximum count of characters in the meta description
+//   localBusiness     facts that the LocalBusiness node must hold: telephone
+//                     and streetAddress; the node also needs an area, a map
+//                     and the address
 //   markdownTwin      the page has a .md twin, an alternate link and a Link
 //                     header rule for it
 //   llmsTxt           the page URL must be in llms.txt
@@ -203,7 +207,58 @@ const EXPECTATIONS = {
     "big bag",
     "content/categories/Big-bags.md",
   ),
+  // T5: the local entity. The pages carry the company facts: the address,
+  // the phone, the map and the delivery area.
+  "/contact/": {
+    titleMentions: ["Chișinău"],
+    descriptionMentions: ["Chișinău"],
+    h1Mentions: ["Contact", "Chișinău"],
+    minWords: 120,
+    minProseWords: 120,
+    jsonLdTypes: ["ContactPage", "LocalBusiness", "BreadcrumbList"],
+    localBusiness: {
+      telephone: "+373 69 149 730",
+      streetAddress: "str. Nicolae Dimo 17/1",
+    },
+    textMentions: [
+      "Sim Construct Grup S.R.L.",
+      "069 149 730",
+      "Nicolae Dimo 17/1",
+      "Chișinău",
+      "Moldova",
+    ],
+    twinMentions: ["069 149 730", "Nicolae Dimo 17/1", "Chișinău"],
+    markdownTwin: true,
+    llmsTxt: true,
+    links: ["/despre-noi/"],
+  },
+  "/despre-noi/": {
+    titleMentions: ["Chișinău"],
+    descriptionMentions: ["Chișinău"],
+    h1Mentions: ["Despre noi", "Chișinău"],
+    minWords: 120,
+    minProseWords: 120,
+    jsonLdTypes: ["AboutPage", "Organization", "BreadcrumbList"],
+    textMentions: [
+      "Sim Construct Grup S.R.L.",
+      "069 149 730",
+      "Nicolae Dimo 17/1",
+      "Chișinău",
+      "Moldova",
+    ],
+    twinMentions: ["069 149 730", "Nicolae Dimo 17/1", "Chișinău"],
+    markdownTwin: true,
+    llmsTxt: true,
+    links: ["/contact/"],
+  },
   "/": {
+    titleMentions: ["Chișinău"],
+    descriptionMentions: ["Chișinău"],
+    descriptionMax: 160,
+    localBusiness: {
+      telephone: "+373 69 149 730",
+      streetAddress: "str. Nicolae Dimo 17/1",
+    },
     links: [
       "/categorie/polipropilena/",
       "/categorie/plasa/",
@@ -220,7 +275,6 @@ const EXPECTATIONS = {
     ],
     navForbidden: ["#Polipropilenă", "#Plasă", "#Polietilenă", "#Big bags"],
   },
-  // T5: "/": { ... }
 };
 
 const UNIVERSAL = {
@@ -444,9 +498,12 @@ const checkPage = async (path) => {
     fail(path, "single-description", `found ${descriptions.length}`);
   } else {
     const description = attr(descriptions[0][0], "content") ?? "";
+    const descriptionMax =
+      expectations.descriptionMax ?? UNIVERSAL.descriptionMax;
+
     if (
       description.length < UNIVERSAL.descriptionMin ||
-      description.length > UNIVERSAL.descriptionMax
+      description.length > descriptionMax
     ) {
       fail(
         path,
@@ -507,6 +564,44 @@ const checkPage = async (path) => {
   for (const type of expectations.jsonLdTypes ?? []) {
     if (!nodes.some((node) => node["@type"] === type)) {
       fail(path, "jsonld-type", `no ${type} node`);
+    }
+  }
+
+  // T5: the LocalBusiness node carries the facts of the company.
+  if (expectations.localBusiness) {
+    const business = nodes.find((node) => node["@type"] === "LocalBusiness");
+
+    if (!business) {
+      fail(path, "local-business-node", "no LocalBusiness node");
+    } else {
+      const address = business.address ?? {};
+
+      if (business.telephone !== expectations.localBusiness.telephone) {
+        fail(path, "local-business-telephone", `"${business.telephone}"`);
+      }
+      if (address.streetAddress !== expectations.localBusiness.streetAddress) {
+        fail(
+          path,
+          "local-business-address",
+          `streetAddress "${address.streetAddress}"`,
+        );
+      }
+      if (address.addressLocality !== "Chișinău") {
+        fail(
+          path,
+          "local-business-address",
+          `addressLocality "${address.addressLocality}"`,
+        );
+      }
+      if (address.addressCountry !== "MD") {
+        fail(path, "local-business-address", `addressCountry "${address.addressCountry}"`);
+      }
+      if ((business.areaServed ?? []).length < 2) {
+        fail(path, "local-business-area-served", "fewer than 2 areas");
+      }
+      if (!business.hasMap) {
+        fail(path, "local-business-has-map", "no hasMap");
+      }
     }
   }
 

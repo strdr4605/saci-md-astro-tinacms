@@ -136,6 +136,10 @@ Landing page, cu varianta Markdown la adresa cu sufixul `.md`:
 Ghid, cu varianta Markdown la adresa cu sufixul `.md`:
 - [Cum alegi sacii pentru legume în Chișinău](https://saci.md/ghid/cum-alezi-sacii-pentru-legume/)
 
+Pagini ale companiei, fiecare cu varianta Markdown la adresa cu sufixul `.md`:
+- [Contact Sim Construct Grup S.R.L. în Chișinău](https://saci.md/contact/)
+- [Despre noi: Sim Construct Grup S.R.L. în Chișinău](https://saci.md/despre-noi/)
+
 ---
 
 ## Informații suplimentare
