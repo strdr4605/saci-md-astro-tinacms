@@ -1,0 +1,205 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Map from "../components/Map.astro";
+import { SITE_URL, productPath } from "../lib/categories";
+import IMAGE_SIZES from "../lib/image-sizes.json";
+import { formatPriceBlock } from "../lib/pricing";
+import {
+  LEGUME_DESCRIPTION,
+  LEGUME_FAQ,
+  LEGUME_H1,
+  LEGUME_PARAGRAPHS,
+  LEGUME_PRODUCT_SLUGS,
+  LEGUME_TITLE,
+} from "../lib/legume";
+
+const products = (await getCollection("products"))
+  .filter((product) => LEGUME_PRODUCT_SLUGS.includes(product.data.slug))
+  .sort(
+    (a, b) =>
+      LEGUME_PRODUCT_SLUGS.indexOf(a.data.slug) -
+      LEGUME_PRODUCT_SLUGS.indexOf(b.data.slug),
+  );
+
+const pageUrl = `${SITE_URL}/saci-pentru-legume/`;
+const pageImage = products[0] ? `${SITE_URL}${products[0].data.imgSrc}` : undefined;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": `${pageUrl}#page`,
+      url: pageUrl,
+      name: LEGUME_H1,
+      description: LEGUME_DESCRIPTION,
+      inLanguage: "ro",
+      mainEntity: { "@id": `${pageUrl}#products` },
+    },
+    {
+      "@type": "ItemList",
+      "@id": `${pageUrl}#products`,
+      name: LEGUME_H1,
+      numberOfItems: products.length,
+      itemListElement: products.map((product, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: product.data.name,
+        url: `${SITE_URL}${productPath(product.data.slug)}`,
+      })),
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${pageUrl}#faq`,
+      mainEntity: LEGUME_FAQ.map((entry) => ({
+        "@type": "Question",
+        name: entry.question,
+        acceptedAnswer: { "@type": "Answer", text: entry.answer },
+      })),
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Saci.md", item: `${SITE_URL}/` },
+        { "@type": "ListItem", position: 2, name: LEGUME_H1, item: pageUrl },
+      ],
+    },
+  ],
+};
+---
+
+<Layout
+  title={LEGUME_TITLE}
+  description={LEGUME_DESCRIPTION}
+  ogTitle={LEGUME_H1}
+  ogDescription={LEGUME_DESCRIPTION}
+  ogImage={pageImage}
+  canonical={pageUrl}
+  jsonLd={jsonLd}
+>
+  <Header />
+
+  <main class="flex flex-col gap-10 px-6 py-10 sm:px-10 lg:px-14">
+    <nav aria-label="Breadcrumb" class="text-sm text-neutral-500">
+      <a href="/" class="hover:text-brand">Saci.md</a>
+      <span aria-hidden="true"> / </span>
+      <span>{LEGUME_H1}</span>
+    </nav>
+
+    <section class="flex max-w-3xl flex-col gap-4">
+      <h1 class="text-3xl font-bold text-neutral-700 md:text-4xl">{LEGUME_H1}</h1>
+      {LEGUME_PARAGRAPHS.map((paragraph) => (
+        <p class="leading-7 text-neutral-600 md:text-lg">{paragraph}</p>
+      ))}
+    </section>
+
+    <section class="flex flex-col gap-6">
+      <h2 class="text-2xl text-neutral-700">Saci pentru legume: mărimi și preț</h2>
+      <ul class="flex flex-col flex-wrap items-center gap-6 md:flex-row md:items-stretch">
+        {products.map((product) => (
+          <li class="flex w-80 flex-col gap-3 rounded-2xl border border-neutral-200 bg-white p-4">
+            <a href={productPath(product.data.slug)} class="flex flex-col gap-2">
+              <div class="flex h-56 w-full items-center justify-center rounded-xl bg-neutral-50 p-3">
+                <img
+                  class="h-full w-full object-contain"
+                  src={product.data.imgSrc}
+                  alt={product.data.name}
+                  loading="lazy"
+                  width={IMAGE_SIZES[product.data.imgSrc]?.[0]}
+                  height={IMAGE_SIZES[product.data.imgSrc]?.[1]}
+                />
+              </div>
+              <h3 class="text-xl">{product.data.name}</h3>
+            </a>
+            {product.data.specs && (
+              <ul class="text-sm text-neutral-600">
+                {product.data.specs.map((spec) => (
+                  <li>{spec}</li>
+                ))}
+              </ul>
+            )}
+            <p class="font-medium text-neutral-700">
+              {formatPriceBlock(product.data.price, product.data.unit).split("\n")[0]}
+            </p>
+            {formatPriceBlock(product.data.price, product.data.unit).split("\n")[1] && (
+              <p class="text-sm text-neutral-500">
+                {formatPriceBlock(product.data.price, product.data.unit).split("\n")[1]}
+              </p>
+            )}
+            <a
+              href={productPath(product.data.slug)}
+              class="text-sm font-medium text-brand hover:underline"
+            >
+              Vezi {product.data.name}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="flex max-w-3xl flex-col gap-2">
+      <h2 class="text-2xl text-neutral-700">Ghid: cum alegi sacii pentru legume</h2>
+      <p class="leading-7 text-neutral-600">
+        Citiți ghidul cu mărimile, capacitățile în kg și tipul de sac pentru fiecare
+        produs:{" "}
+        <a
+          href="/ghid/cum-alezi-sacii-pentru-legume/"
+          class="font-medium text-brand hover:underline"
+        >
+          Cum alegi saci pentru legume în Chișinău
+        </a>
+      </p>
+    </section>
+
+    <section class="flex max-w-3xl flex-col gap-4">
+      <h2 class="text-2xl text-neutral-700">Mai multe tipuri de saci</h2>
+      <ul class="flex flex-col gap-2 text-neutral-600">
+        <li>
+          <a href="/categorie/polipropilena/" class="font-medium text-brand hover:underline">
+            Saci din polipropilenă (rafie) pentru recolte și cereale
+          </a>
+        </li>
+        <li>
+          <a href="/categorie/plasa/" class="font-medium text-brand hover:underline">
+            Saci din plasă pentru cartofi, ceapă, morcov și fructe
+          </a>
+        </li>
+        <li>
+          <a href="/categorie/polietilena/" class="font-medium text-brand hover:underline">
+            Saci din polietilenă pentru nisip, gunoi și construcții
+          </a>
+        </li>
+        <li>
+          <a href="/categorie/big-bags/" class="font-medium text-brand hover:underline">
+            Saci Big Bag pentru recolte și volume mari
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <section class="flex max-w-3xl flex-col gap-4">
+      <h2 class="text-2xl text-neutral-700">Întrebări frecvente</h2>
+      {LEGUME_FAQ.map((entry) => (
+        <details class="rounded-xl border border-neutral-200 bg-white p-4">
+          <summary class="cursor-pointer font-medium text-neutral-700">
+            {entry.question}
+          </summary>
+          <p class="mt-2 leading-7 text-neutral-600">{entry.answer}</p>
+        </details>
+      ))}
+    </section>
+
+    <section class="flex max-w-3xl flex-col gap-2">
+      <h2 class="text-2xl text-neutral-700">Contact și livrare în Chișinău</h2>
+      <p class="leading-7 text-neutral-600">
+        Sim Construct Grup S.R.L. Telefon: <a href="tel:+37369149730">069 149 730</a>.
+        Adresă: str. Nicolae Dimo 17/1, Chișinău, Republica Moldova. Ridicați comanda
+        de la depozit sau cereți livrare în Chișinău.
+      </p>
+    </section>
+  </main>
+
+  <Map />
+</Layout>

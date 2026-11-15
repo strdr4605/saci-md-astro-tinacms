@@ -1,0 +1,127 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Map from "../../components/Map.astro";
+import {
+  CATEGORY_PAGES,
+  SITE_URL,
+  categoryPagePath,
+  productPath,
+} from "../../lib/categories";
+import IMAGE_SIZES from "../../lib/image-sizes.json";
+
+export function getStaticPaths() {
+  return CATEGORY_PAGES.map((page) => ({
+    params: { slug: page.slug },
+    props: { page },
+  }));
+}
+
+const { page } = Astro.props;
+
+const products = (await getCollection("products"))
+  .filter((product) => product.data.categoryPath === page.categoryPath)
+  .sort((a, b) => a.data.name.localeCompare(b.data.name, "ro", { numeric: true }));
+
+const pageUrl = `${SITE_URL}${categoryPagePath(page.slug)}`;
+const pageImage = products[0] ? `${SITE_URL}${products[0].data.imgSrc}` : undefined;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": `${pageUrl}#page`,
+      url: pageUrl,
+      name: page.h1,
+      description: page.description,
+      inLanguage: "ro",
+      mainEntity: { "@id": `${pageUrl}#products` },
+    },
+    {
+      "@type": "ItemList",
+      "@id": `${pageUrl}#products`,
+      name: page.h1,
+      numberOfItems: products.length,
+      itemListElement: products.map((product, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: product.data.name,
+        url: `${SITE_URL}${productPath(product.data.slug)}`,
+      })),
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Saci.md", item: `${SITE_URL}/` },
+        { "@type": "ListItem", position: 2, name: page.h1, item: pageUrl },
+      ],
+    },
+  ],
+};
+---
+
+<Layout
+  title={page.title}
+  description={page.description}
+  ogTitle={page.h1}
+  ogDescription={page.description}
+  ogImage={pageImage}
+  canonical={pageUrl}
+  jsonLd={jsonLd}
+>
+  <Header />
+
+  <main class="flex flex-col gap-10 px-6 py-10 sm:px-10 lg:px-14">
+    <nav aria-label="Breadcrumb" class="text-sm text-neutral-500">
+      <a href="/" class="hover:text-brand">Saci.md</a>
+      <span aria-hidden="true"> / </span>
+      <span>{page.h1}</span>
+    </nav>
+
+    <section class="flex max-w-3xl flex-col gap-4">
+      <h1 class="text-3xl font-bold text-neutral-700 md:text-4xl">{page.h1}</h1>
+      <p>
+        Nu sunteți sigur ce sac să alegeți? Citiți
+        <a href="/saci-pentru-legume/" class="font-medium text-brand underline">
+          ce sac se potrivește pentru legume
+        </a>
+        și ce mărime trebuie să alegeți.
+      </p>
+      {page.paragraphs.map((paragraph) => (
+        <p class="leading-7 text-neutral-600 md:text-lg">{paragraph}</p>
+      ))}
+    </section>
+
+    <section class="flex flex-col gap-6">
+      <h2 class="text-2xl text-neutral-700">Produse din această categorie</h2>
+      <ul class="flex flex-col flex-wrap items-center gap-6 md:flex-row md:items-stretch">
+        {products.map((product) => (
+          <li>
+            <a href={productPath(product.data.slug)} class="flex w-72 flex-col gap-3">
+              <div class="relative flex h-72 w-72 items-center justify-center rounded-2xl border border-neutral-200 bg-white p-3 transition hover:border-brand">
+                <img
+                  class="h-full w-full object-contain"
+                  src={product.data.imgSrc}
+                  alt={product.data.name}
+                  loading="lazy"
+                  width={IMAGE_SIZES[product.data.imgSrc]?.[0]}
+                  height={IMAGE_SIZES[product.data.imgSrc]?.[1]}
+                />
+                {product.data.outOfStock && (
+                  <span class="absolute right-2 top-2 rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
+                    Stoc temporar epuizat
+                  </span>
+                )}
+              </div>
+              <h3 class="text-xl">{product.data.name}</h3>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </main>
+
+  <Map />
+</Layout>

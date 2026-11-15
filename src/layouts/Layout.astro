@@ -16,12 +16,12 @@ interface Props {
 }
 
 const {
-  title = "Saci.md - Saci din polipropilenă și polietilenă | Sim Construct Grup",
-  description = "Saci albi din polipropilenă pentru cereale, mărfuri industriale, mărfuri de uz gospodăresc și polietilenă pentru gunoi și material de construcții. Big bags, plasa, stretch film. Chișinău, Moldova.",
+  title = "Saci din polipropilenă și polietilenă în Chișinău | Saci.md",
+  description = "Saci din polipropilenă (rafie), plasă și polietilenă pentru legume, cereale, construcții și gunoi. Big bags și stretch film. Livrare în Chișinău, Moldova.",
   keywords = "saci, saci albi, saci pentru zahar, saci pentru cereale, saci pentru faina, polipropilenă, polietilenă, rafie, big bags, plasa, stretch, ambalare, Moldova, Chișinău, saci gunoi, saci construcții, saci agricultura",
-  ogTitle = "Saci.md - Saci din polipropilenă și polietilenă",
+  ogTitle = "Saci din polipropilenă și polietilenă în Chișinău | Saci.md",
   ogDescription = "Saci albi pentru zahăr, cereale și făină. Polipropilenă pentru agricultură și industria alimentară. Polietilenă pentru gunoi și construcții.",
-  ogImage = "https://saci.md/poster.png",
+  ogImage = "https://saci.md/poster.webp",
   ogType = "website",
   canonical = "https://saci.md/",
   jsonLd,
@@ -84,28 +84,63 @@ const markdownHref = pagePath === "" ? "/index.md" : `${pagePath}.md`;
     <meta name="geo.position" content="47.0400;28.8690" />
     <meta name="ICBM" content="47.0400, 28.8690" />
 
-    <!-- Schema.org Structured Data - Organization -->
+    <!--
+      Schema.org Structured Data - Organization and LocalBusiness.
+      sameAs stays empty: the Google Business Profile URL, the Facebook URL,
+      the email address, the CUI and the opening hours are still unknown.
+      Add the links in the sameAs array when they arrive.
+    -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Sim Construct Grup S.R.L.",
-        "url": "https://saci.md",
-        "logo": "https://saci.md/Logo.svg",
-        "description": "Producător și distribuitor de saci din polipropilenă, polietilenă și rafie în Moldova.",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "str. Nicolae Dimo 17/1",
-          "addressLocality": "Chișinău",
-          "addressCountry": "MD"
-        },
-        "telephone": "+37369149730",
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "telephone": "+37369149730",
-          "contactType": "sales"
-        },
-        "sameAs": []
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://saci.md/#organization",
+            "name": "Sim Construct Grup S.R.L.",
+            "url": "https://saci.md/",
+            "logo": "https://saci.md/Logo.svg",
+            "description": "Producător și distribuitor de saci din polipropilenă, polietilenă și rafie în Moldova.",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "str. Nicolae Dimo 17/1",
+              "addressLocality": "Chișinău",
+              "addressCountry": "MD"
+            },
+            "telephone": "+373 69 149 730",
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "telephone": "+373 69 149 730",
+              "contactType": "sales",
+              "areaServed": [
+                { "@type": "City", "name": "Chișinău" },
+                { "@type": "Country", "name": "Republica Moldova" }
+              ]
+            },
+            "sameAs": []
+          },
+          {
+            "@type": "LocalBusiness",
+            "@id": "https://saci.md/#localbusiness",
+            "name": "Sim Construct Grup S.R.L.",
+            "url": "https://saci.md/",
+            "logo": "https://saci.md/Logo.svg",
+            "image": "https://saci.md/poster.webp",
+            "description": "Producător și distribuitor de saci și ambalaje în Chișinău, Republica Moldova.",
+            "telephone": "+373 69 149 730",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "str. Nicolae Dimo 17/1",
+              "addressLocality": "Chișinău",
+              "addressCountry": "MD"
+            },
+            "areaServed": [
+              { "@type": "City", "name": "Chișinău" },
+              { "@type": "Country", "name": "Republica Moldova" }
+            ],
+            "hasMap": "https://maps.app.goo.gl/GAWu84AruE7GSy628"
+          }
+        ]
       }
     </script>
 
@@ -119,6 +154,7 @@ const markdownHref = pagePath === "" ? "/index.md" : `${pagePath}.md`;
         "description": "Saci din polipropilenă pentru cereale și polietilenă pentru gunoi și construcții. Oferim big bags, plasa și stretch film pentru Moldova.",
         "publisher": {
           "@type": "Organization",
+          "@id": "https://saci.md/#organization",
           "name": "Sim Construct Grup S.R.L."
         }
       }

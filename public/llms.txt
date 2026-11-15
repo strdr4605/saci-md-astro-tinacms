@@ -124,6 +124,22 @@ Site-ul este organizat astfel:
 - Paginile individuale ale produselor oferă specificații detaliate
 - Informații de contact și locație în antet și subsol
 
+Pagini de categorie, fiecare cu varianta Markdown la adresa cu sufixul `.md`:
+- [Saci din polipropilenă (rafie) în Chișinău](https://saci.md/categorie/polipropilena/)
+- [Saci din plasă pentru legume și fructe în Chișinău](https://saci.md/categorie/plasa/)
+- [Saci din polietilenă în Chișinău](https://saci.md/categorie/polietilena/)
+- [Big bags în Chișinău](https://saci.md/categorie/big-bags/)
+
+Landing page, cu varianta Markdown la adresa cu sufixul `.md`:
+- [Saci pentru legume în Chișinău](https://saci.md/saci-pentru-legume/)
+
+Ghid, cu varianta Markdown la adresa cu sufixul `.md`:
+- [Cum alegi sacii pentru legume în Chișinău](https://saci.md/ghid/cum-alezi-sacii-pentru-legume/)
+
+Pagini ale companiei, fiecare cu varianta Markdown la adresa cu sufixul `.md`:
+- [Contact Sim Construct Grup S.R.L. în Chișinău](https://saci.md/contact/)
+- [Despre noi: Sim Construct Grup S.R.L. în Chișinău](https://saci.md/despre-noi/)
+
 ---
 
 ## Informații suplimentare

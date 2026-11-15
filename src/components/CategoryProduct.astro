@@ -1,8 +1,16 @@
 ---
+import { formatPriceBlock } from "../lib/pricing";
+import IMAGE_SIZES from "../lib/image-sizes.json";
+
 const { product } = Astro.props;
+
+const [priceLine, wholesaleNote] = formatPriceBlock(
+  product.frontmatter.price,
+  product.frontmatter.unit,
+).split("\n");
 ---
 
-<a href={product.frontmatter.slug} class="block">
+<a href={`/${encodeURIComponent(product.frontmatter.slug)}/`} class="block">
   <div class="flex w-78 flex-col gap-3 pt-8">
     <div class="relative">
       <div class="flex h-72 w-72 items-center justify-center rounded-2xl border border-neutral-200 bg-white p-3">
@@ -10,6 +18,9 @@ const { product } = Astro.props;
           class="h-full w-full object-contain"
           src={product.frontmatter.imgSrc}
           alt={product.frontmatter.name}
+          loading="lazy"
+          width={IMAGE_SIZES[product.frontmatter.imgSrc]?.[0]}
+          height={IMAGE_SIZES[product.frontmatter.imgSrc]?.[1]}
         />
       </div>
       {product.frontmatter.outOfStock && (
@@ -25,13 +36,12 @@ const { product } = Astro.props;
         </h3>
       </div>
 
-      {
-        product.frontmatter.price && (
-          <p class="text-body font-semibold text-green-700/90">
-            {product.frontmatter.price/100} lei/buc
-          </p>
-        )
-      }
+      <p class="text-body font-semibold text-green-700/90">
+        {priceLine}
+      </p>
+      {wholesaleNote && (
+        <p class="text-sm text-neutral-500">{wholesaleNote}</p>
+      )}
     </div>
   </div>
 </a>

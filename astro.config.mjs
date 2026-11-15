@@ -21,13 +21,24 @@ const encodePath = (path) =>
     .map((segment) => encodeURIComponent(segment))
     .join("/");
 
-// Only top-level pages get a markdown twin (product pages and the index).
+// Every page that has a Markdown twin: products, the index, the categories.
+// The agent skills are files, not pages. They get no twin rule.
 const findMarkdownFiles = async (dir) => {
   const entries = await readdir(dir, { withFileTypes: true });
+  const files = [];
 
-  return entries
-    .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
-    .map((entry) => join(dir, entry.name));
+  for (const entry of entries) {
+    if (entry.name === ".well-known") continue;
+
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...(await findMarkdownFiles(full)));
+    } else if (entry.isFile() && entry.name.endsWith(".md")) {
+      files.push(full);
+    }
+  }
+
+  return files;
 };
 
 // Adds a per-page Link header for the markdown version of that page.
@@ -121,12 +132,21 @@ const agentSkillsIndex = {
   },
 };
 
+// /old/ is a duplicate of the old site. It stays online with noindex.
+const EXCLUDED_FROM_SITEMAP = ["/old/"];
+
+// The content has no date field. Every URL gets the build date as lastmod.
+const BUILD_DATE = new Date().toISOString();
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://saci.md",
   integrations: [
     react(),
-    sitemap(),
+    sitemap({
+      filter: (page) => !EXCLUDED_FROM_SITEMAP.includes(new URL(page).pathname),
+      serialize: (item) => ({ ...item, lastmod: BUILD_DATE }),
+    }),
     yeskunallumami({ id: "66be9a3f-6a8b-4cc7-9104-bf59fbf772d2" }),
     markdownAlternates,
     agentSkillsIndex,

@@ -1,0 +1,141 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Map from "../components/Map.astro";
+import { company } from "../lib/markdown";
+
+const pageUrl = "https://saci.md/contact/";
+const h1 = "Contact Sim Construct Grup S.R.L. în Chișinău";
+const title = `${h1} | Saci.md`;
+const description =
+  "Adresa, telefonul și harta depozitului Sim Construct Grup S.R.L. din Chișinău. Saci și ambalaje cu bucata și angro, livrare în Chișinău și în Moldova.";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ContactPage",
+      "@id": `${pageUrl}#page`,
+      url: pageUrl,
+      name: h1,
+      description,
+      inLanguage: "ro",
+      mainEntity: { "@id": "https://saci.md/#localbusiness" },
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Saci.md", item: "https://saci.md/" },
+        { "@type": "ListItem", position: 2, name: h1, item: pageUrl },
+      ],
+    },
+  ],
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  ogTitle={h1}
+  ogDescription={description}
+  canonical={pageUrl}
+  jsonLd={jsonLd}
+>
+  <Header />
+
+  <main class="flex flex-col gap-10 px-6 py-10 sm:px-10 lg:px-14">
+    <nav aria-label="Breadcrumb" class="text-sm text-neutral-500">
+      <a href="/" class="hover:text-brand">Saci.md</a>
+      <span aria-hidden="true"> / </span>
+      <span>{h1}</span>
+    </nav>
+
+    <section class="flex max-w-3xl flex-col gap-4">
+      <h1 class="text-3xl font-bold text-neutral-700 md:text-4xl">{h1}</h1>
+      <p>
+        Sim Construct Grup S.R.L. produce și comercializează saci și ambalaje.
+        Adresa companiei este str. Nicolae Dimo 17/1, Chișinău, Republica Moldova.
+        Sunați la 069 149 730 ca să cereți prețul, mărimea și stocul.
+      </p>
+      <p>
+        Vindem sacii și ambalajele cu bucata și angro. Livrăm în Chișinău și în
+        Republica Moldova. Pentru alegerea mărimii, citiți ghidul
+        <a href="/saci-pentru-legume/" class="font-medium text-brand underline">
+          ce sac se potrivește pentru legume
+        </a>
+        .
+      </p>
+    </section>
+
+    <section class="flex max-w-3xl flex-col gap-3">
+      <h2 class="text-2xl text-neutral-700">Adresă</h2>
+      <p>{company.address}</p>
+      <p>
+        Hartă:{" "}
+        <a
+          href={company.map}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-medium text-brand underline"
+        >
+          depozitul pe Google Maps
+        </a>
+        .
+      </p>
+    </section>
+
+    <section class="flex max-w-3xl flex-col gap-3">
+      <h2 class="text-2xl text-neutral-700">Telefon</h2>
+      <p>
+        Telefon:{" "}
+        <a href="tel:+37369149730" class="font-medium text-brand underline">
+          069 149 730
+        </a>
+        . Format internațional: +373 69 149 730.
+      </p>
+    </section>
+
+    <section class="flex max-w-3xl flex-col gap-3">
+      <h2 class="text-2xl text-neutral-700">Livrare</h2>
+      <p>
+        Livrăm în Chișinău și în Republica Moldova. Pentru o comandă, sunați la
+        069 149 730 și spuneți ce produse și ce cantitate doriți.
+      </p>
+    </section>
+
+    <section class="flex max-w-3xl flex-col gap-3">
+      <h2 class="text-2xl text-neutral-700">Compania</h2>
+      <p>
+        Sim Construct Grup S.R.L. produce și comercializează saci și ambalaje.
+        Citiți <a href="/despre-noi/" class="font-medium text-brand underline">despre
+        companie</a>.
+      </p>
+    </section>
+
+    <section class="flex max-w-3xl flex-col gap-3">
+      <h2 class="text-2xl text-neutral-700">Ce vindem</h2>
+      <p>
+        Saci pentru legume, cereale, făină, zahăr, gunoi și material de
+        construcții, plus big bags și alte ambalaje. Vezi categoriile
+        <a href="/categorie/polipropilena/" class="font-medium text-brand underline">
+          saci din polipropilenă
+        </a>
+        ,{" "}
+        <a href="/categorie/plasa/" class="font-medium text-brand underline">
+          saci din plasă
+        </a>
+        ,{" "}
+        <a href="/categorie/polietilena/" class="font-medium text-brand underline">
+          saci din polietilenă
+        </a>{" "}
+        și{" "}
+        <a href="/categorie/big-bags/" class="font-medium text-brand underline">
+          big bags
+        </a>
+        .
+      </p>
+    </section>
+  </main>
+
+  <Map />
+</Layout>

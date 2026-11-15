@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
+import { WHOLESALE_NOTE, formatPrice } from "../../lib/pricing";
 
 export const prerender = true;
 
@@ -67,6 +68,13 @@ export const GET: APIRoute = async () => {
       `${product.data.name.toLowerCase()} preț`,
       `specificații ${product.data.name.toLowerCase()}`,
     ],
+    price: product.data.price ? product.data.price / 100 : null,
+    priceFormatted: product.data.price
+      ? formatPrice(product.data.price, product.data.unit)
+      : null,
+    currency: "MDL",
+    unit: product.data.unit || "buc",
+    wholesaleNote: WHOLESALE_NOTE,
   }));
 
   const catalog = {

@@ -3,6 +3,24 @@ import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Map from "../components/Map.astro";
+import { formatPriceBlock, formatPriceValue } from "../lib/pricing";
+import {
+  CATEGORY_PAGES,
+  SITE_URL,
+  categoryPagePath,
+  productPath,
+} from "../lib/categories";
+import IMAGE_SIZES from "../lib/image-sizes.json";
+
+// The use of the products, per category file. The description meta names it.
+const CATEGORY_USE: Record<string, string> = {
+  "content/categories/Polipropilena.md": "pentru cartofi, cereale și făină",
+  "content/categories/Plasa.md": "pentru legume și fructe",
+  "content/categories/Polietilena.md": "pentru nisip, pietriș și gunoi",
+  "content/categories/Big-bags.md": "pentru cereale, nisip și deșeuri",
+  "content/categories/Plasa-tubulara-si-stretch.md":
+    "pentru ambalare și paletizare",
+};
 
 export async function getStaticPaths() {
   const products = await getCollection("products");
@@ -21,41 +39,124 @@ const category = categories.find(
   (c) => c.filePath === product.data.categoryPath,
 );
 
+const categoryName = category?.data.name ?? "Saci";
+
+const allProducts = await getCollection("products");
+
+const byName = (a: any, b: any) =>
+  a.data.name.localeCompare(b.data.name, "ro", { numeric: true });
+
+// The other products of the same category, then the rest of the catalog.
+const sameCategory = allProducts
+  .filter((item: any) => item.data.categoryPath === product.data.categoryPath)
+  .filter((item: any) => item.data.slug !== product.data.slug)
+  .sort(byName);
+
+const otherCategory = allProducts
+  .filter((item: any) => item.data.categoryPath !== product.data.categoryPath)
+  .sort(byName);
+
+const related = [...sameCategory, ...otherCategory].slice(
+  0,
+  Math.max(4, sameCategory.length),
+);
+
 // Product-specific data
-const pageTitle = `${product.data.name} | Saci.md - Sim Construct Grup`;
-const pageDescription = product.body.substring(0, 160);
-const pageUrl = `https://saci.md/${product.data.slug}`;
+const price = product.data.price;
+const unit = product.data.unit;
+
+const [priceLine, wholesaleNote] = formatPriceBlock(price, unit).split("\n");
+
+const priceText = price ? `${formatPriceValue(price)} lei` : "";
+
+const pageTitle = `${product.data.name}${priceText ? ` – ${priceText}` : ""} – Chișinău | Saci.md`;
+
+const use = CATEGORY_USE[product.data.categoryPath] ?? "pentru ambalare";
+
+const pageDescription = `${product.data.name} – ${use} în Chișinău. Ridicare de la str. Nicolae Dimo 17/1 sau livrare în Moldova.`;
+
+// The slug of a product can hold spaces. The URL stays encoded.
+const pageUrl = `${SITE_URL}${productPath(product.data.slug)}`;
 const pageImage = `https://saci.md${product.data.imgSrc}`;
+
+// The breadcrumb. Four categories have a page. The others keep the home anchor.
+const categoryPage = CATEGORY_PAGES.find(
+  (item) => item.categoryPath === product.data.categoryPath,
+);
+
+const categoryHref = categoryPage
+  ? categoryPagePath(categoryPage.slug)
+  : `/#${encodeURIComponent(categoryName)}`;
+
+const categoryUrl = `${SITE_URL}${categoryHref}`;
 
 // Generate Product structured data
 const productJsonLd = {
   "@context": "https://schema.org",
-  "@type": "Product",
-  "name": product.data.name,
-  "description": product.body,
-  "image": pageImage,
-  "brand": {
-    "@type": "Brand",
-    "name": "Sim Construct Grup"
-  },
-  "manufacturer": {
-    "@type": "Organization",
-    "name": "Sim Construct Grup S.R.L.",
-    "url": "https://saci.md"
-  },
-  "category": category?.body || "Saci",
-  "offers": {
-    "@type": "Offer",
-    "availability": "https://schema.org/InStock",
-    "priceCurrency": "MDL"
-  }
+  "@graph": [
+    {
+      "@type": "Product",
+      "@id": `${pageUrl}#product`,
+      url: pageUrl,
+      name: product.data.name,
+      description: product.body,
+      image: pageImage,
+      brand: {
+        "@type": "Brand",
+        name: "Sim Construct Grup",
+      },
+      manufacturer: {
+        "@type": "Organization",
+        name: "Sim Construct Grup S.R.L.",
+        url: "https://saci.md",
+      },
+      category: category?.body || "Saci",
+      ...(price
+        ? {
+            offers: {
+              "@type": "Offer",
+              price: formatPriceValue(price),
+              priceCurrency: "MDL",
+              availability: product.data.outOfStock
+                ? "https://schema.org/OutOfStock"
+                : "https://schema.org/InStock",
+              url: pageUrl,
+            },
+          }
+        : {}),
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${pageUrl}#breadcrumb`,
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: `${SITE_URL}/`,
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: categoryName,
+          item: categoryUrl,
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: product.data.name,
+          item: pageUrl,
+        },
+      ],
+    },
+  ],
 };
 ---
 
 <Layout
   title={pageTitle}
   description={pageDescription}
-  keywords={`${product.data.name}, ${category?.body || 'saci'}, Moldova, Chișinău, saci.md`}
+  keywords={`${product.data.name}, ${categoryName}, Moldova, Chișinău, saci.md`}
   ogTitle={product.data.name}
   ogDescription={pageDescription}
   ogImage={pageImage}
@@ -64,33 +165,78 @@ const productJsonLd = {
   jsonLd={productJsonLd}
 >
   <Header />
-  <main class="flex flex-col items-center md:flex-row md:gap-14">
-    <img class="h-96 md:h-[560px]" src={product.data.imgSrc} alt={product.data.name} />
-    <article class="flex flex-col gap-5">
-      <div class="flex flex-col gap-3 border-b border-b-neutral-300 pb-5">
-        <div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-2">
-          <h1 class="text-3xl font-bold text-neutral-600 md:text-4xl">
-            {product.data.name}
-          </h1>
-          {product.data.outOfStock && (
-            <span class="w-fit rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-700">
-              Stoc temporar epuizat
-            </span>
-          )}
-        </div>
-        <p class="leading-6 text-neutral-600 md:text-xl md:leading-9">
-          {product.body}
-        </p>
-      </div>
+  <main class="flex flex-col gap-10 px-6 py-10 sm:px-10 lg:px-14">
+    <nav aria-label="Breadcrumb" class="text-sm text-neutral-500">
+      <a href="/" class="hover:text-brand">Home</a>
+      <span aria-hidden="true"> / </span>
+      <a href={categoryHref} class="hover:text-brand">{categoryName}</a>
+      <span aria-hidden="true"> / </span>
+      <span>{product.data.name}</span>
+    </nav>
 
-      <div class="flex flex-col gap-3 border-b border-b-neutral-300 pb-5">
-        <ul
-          class="flex list-disc flex-col gap-2 pl-5 leading-6 text-neutral-600 md:text-lg"
-        >
-          {product.data.specs?.map((spec: any) => <li>{spec}</li>)}
-        </ul>
-      </div>
-    </article>
+    <div class="flex flex-col items-center md:flex-row md:gap-14">
+      <img
+        class="h-96 md:h-[560px]"
+        src={product.data.imgSrc}
+        alt={product.data.name}
+        loading="lazy"
+        width={IMAGE_SIZES[product.data.imgSrc]?.[0]}
+        height={IMAGE_SIZES[product.data.imgSrc]?.[1]}
+      />
+      <article class="flex flex-col gap-5">
+        <div class="flex flex-col gap-3 border-b border-b-neutral-300 pb-5">
+          <div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-2">
+            <h1 class="text-3xl font-bold text-neutral-600 md:text-4xl">
+              {product.data.name}
+            </h1>
+            {product.data.outOfStock && (
+              <span class="w-fit rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-700">
+                Stoc temporar epuizat
+              </span>
+            )}
+          </div>
+          <div class="flex flex-col gap-1">
+            <p class="text-xl font-semibold text-green-700/90">{priceLine}</p>
+            {wholesaleNote && (
+              <p class="text-sm text-neutral-500">{wholesaleNote}</p>
+            )}
+          </div>
+          <p class="leading-6 text-neutral-600 md:text-xl md:leading-9">
+            {product.body}
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-3 border-b border-b-neutral-300 pb-5">
+          <ul
+            class="flex list-disc flex-col gap-2 pl-5 leading-6 text-neutral-600 md:text-lg"
+          >
+            {product.data.specs?.map((spec: any) => <li>{spec}</li>)}
+          </ul>
+          <p class="text-neutral-600 md:text-lg">
+            Prețuri și comenzi: 069 149 730
+          </p>
+        </div>
+      </article>
+    </div>
+
+    <section class="flex flex-col gap-4">
+      <h2 class="text-2xl text-neutral-700">Alte produse</h2>
+      <ul class="flex flex-col gap-2 text-neutral-600">
+        {related.map((item: any) => (
+          <li>
+            <a
+              href={productPath(item.data.slug)}
+              class="font-medium text-brand hover:underline"
+            >
+              {item.data.name}
+            </a>
+            {item.data.specs?.length > 0 && (
+              <span> — {item.data.specs.join(", ")}</span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </section>
   </main>
   <Map />
 </Layout>

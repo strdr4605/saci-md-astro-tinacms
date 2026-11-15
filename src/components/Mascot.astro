@@ -10,7 +10,14 @@ import mascot from "../assets/mascot.png";
 
     <a class="cta" href="#categories-nav">
       <span>Vezi produsele</span>
-      <img src="/arrowDown.svg" alt="Arrow Icon" class="arrow" />
+      <img
+        src="/arrowDown.svg"
+        alt="Arrow Icon"
+        class="arrow"
+        width="24"
+        height="25"
+        loading="lazy"
+      />
     </a>
   </div>
 
@@ -19,6 +26,9 @@ import mascot from "../assets/mascot.png";
     alt="Mascot"
     id="mascot"
     class="w-24 cursor-pointer select-none"
+    width={mascot.width}
+    height={mascot.height}
+    loading="lazy"
   />
 </div>
 
