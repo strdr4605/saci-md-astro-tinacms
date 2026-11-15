@@ -1,0 +1,23 @@
+# T2 verification — price feature (price, unit, "Preț la cerere", offers schema)
+
+Workspace `/Users/strdr4605/P/saci-md-seo`, head `otkyyvur`. Price commits: `vtzyusxvkqkx` "feat: add price and unit fields to products" + `uxqxwpktvunl` "feat: expose price in machine exports". Real repo untouched (`jj status`: no changes, no product holds a price). Scratch copy `/tmp/saci-t2-scratch` (rsync + node_modules symlink) used for every price test. Build `npm run build:astro`, check `npm run check:seo` → `31 pages, 0 failures, 0 notes`.
+
+## Checks
+
+1. PASS — Feature on branch. `src/lib/pricing.ts:7,13,16` holds `formatPrice`, `formatPriceValue`, `formatPriceBlock`; `src/content.config.ts:13-14` holds `price: z.number().int().optional()` (bani) and `unit: z.string().optional()`.
+2. PASS — Price on every product page. Real build: 24/24 product pages show "Preț la cerere". Scratch `price: 4500` + `unit: buc` on `Saci-Plasa-30x34` → `dist/saci-plasa-30x34/index.html` shows `45.00 lei / buc · cu TVA inclus`; JSON-LD offers = `price "45.00"`, `priceCurrency "MDL"`, `url "https://saci.md/saci-plasa-30x34/"`; landing `dist/saci-pentru-legume/index.html` shows `45.00 lei / buc`.
+3. PASS — offers only with a price. Scratch: `saci-plasa-40x58` (no price) → Product node has no `offers` key, page shows "Preț la cerere"; `saci-plasa-30x34` (priced) → `offers` present. Real build: 0 of 24 pages hold an `offers` key.
+4. PASS — availability follows outOfStock. Scratch: `Plasa-tubulara` (`outOfStock: true`, price 12000) → `availability "https://schema.org/OutOfStock"`; `saci-plasa-30x34` → `"https://schema.org/InStock"`. Source `src/pages/[productSlug].astro:120`. The file is `content/products/Plasa-tubulara.md`, not `Saci-Plasa-tubulara.md` as the task names it.
+5. PASS — Landing price = product price. Scratch with all 5 landing products priced (4500/5200/6100/7300/8400, units buc/set): the landing text and each product page carry the same string, e.g. `84.00 lei / set` on both.
+6. PASS — Checker price rule bites. `scripts/seo-check.mjs:612-625` compares the front matter price with the landing page text and the Markdown twin. Scratch: wrong price (40.00) on the landing page → `FAIL /saci-pentru-legume/ product-price: saci-plasa-30x34: no "45.00 lei / buc" on the page` (5 failures); wrong price in the twin → `FAIL /saci-pentru-legume/ markdown-twin-price: saci-plasa-30x34: no "45.00 lei / buc" in /saci-pentru-legume.md`.
+7. PASS — Exports carry the price fields. Scratch `dist/product-index.json` and `dist/.well-known/ai-catalog.json` product entries hold `price`, `priceFormatted`, `currency "MDL"`, `unit`, `wholesaleNote`. The Markdown twin holds `- Preț: 45.00 lei / buc · cu TVA inclus` and `- Preț angro: se discută individual.` but no `currency` field (F2).
+8. GAP — The machine exports do not list the category pages and the landing page (F1). Verified, not fixed.
+9. PASS — Build and check. Real repo: `npm run build:astro` OK, `npm run check:seo` → `31 pages, 0 failures, 0 notes`. Scratch with one price: same.
+
+## Findings
+
+- F1 (open, owner: the price feature agent; both files were touched by `uxqxwpktvunl`): the machine exports skip the category pages and the landing page. `src/pages/.well-known/ai-catalog.json.ts:55` gives every category the home hash URL `https://saci.md/#<Category name>`, so `/categorie/polipropilena/`, `/categorie/plasa/`, `/categorie/polietilena/`, `/categorie/big-bags/` are absent, and no entry points to `/saci-pentru-legume/`. `src/pages/product-index.json.ts:27-32` lists the categories with `name` + `productCount` only, with no URL and no landing page. Built proof: `grep -c "/categorie/" dist/.well-known/ai-catalog.json` = 0, `grep -c "saci-pentru-legume" dist/.well-known/ai-catalog.json` = 0, same two greps on `dist/product-index.json` = 0. `dist/llms.txt` does list `/categorie/*` and `/saci-pentru-legume/`, so the gap is in the two JSON exports only.
+- F2 (minor, owner: the price feature agent): no Markdown twin states the currency. `src/lib/markdown.ts:19-29` writes the price and the unit in the `Preț:` line and the wholesale note, but "MDL" appears in 0 of the built `.md` twins. The JSON exports carry `currency: "MDL"`, the twins do not.
+- F3 (latent, owner: the T1 checker rule): `scripts/seo-check.mjs` still demands the string "Preț la cerere" in the landing twin (`twinMentions`). With a price on all 5 landing products the twin has no such string and the check fails: `FAIL /saci-pentru-legume/ markdown-twin-mentions: "Preț la cerere" missing from /saci-pentru-legume.md`. The rule is correct today (no product holds a price) but blocks a full price rollout.
+
+VERDICT: PASS

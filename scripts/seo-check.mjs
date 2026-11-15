@@ -120,7 +120,6 @@ const EXPECTATIONS = {
       "Saci pentru legume în Chișinău",
       "Nicolae Dimo 17/1",
       "069 149 730",
-      "Preț la cerere",
     ],
     markdownTwin: true,
     llmsTxt: true,
