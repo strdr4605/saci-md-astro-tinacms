@@ -1,25 +1,19 @@
-# T7 verify — images and speed
+# T7 verify — round 2
 
-Commits: `d1661b3` perf(seo): webp images, dimensions and lazy loading · `deaa7b1` perf(seo): remove the unused svg files.
-Build: `npm run build:astro` exit 0. Check: `npm run check:seo` → `seo-check: 31 pages, 0 failures, 0 notes`.
+Commits: `d1661b3` + `deaa7b1` + fix `7c21738`. Build `npm run build:astro` exit 0. Check `npm run check:seo` → `31 pages, 0 failures, 0 notes`. All mutations ran on copies under /tmp; repo and repo `dist/` untouched (`git status` clean).
 
-1. **PASS** — public 20.8 MB → 3.5 MB. `git ls-tree -r -l 2cfabc6 public/` = 20,806,543 B; `git ls-tree -r -l deaa7b1 public/` = 3,239,461 B; `du -sh public/` = 3.5M.
-2. **PASS** — dist image budget. Biggest non-exempt raster `dist/Plasa.webp` 158,582 B; over 250 KB only `dist/simconstructgrup_poster.jpg` 733,772 B and `dist/plasa_tubulara.jpg` 280,810 B (both exempt). Biggest PNG `dist/down_arrow.png` 1,066 B (limit 102,400 B).
-3. **FAIL** — 155 `<img>` in 32 dist HTML files. alt 155/155. width+height only 75/155 (80 missing): 34 in `dist/index.html` (10 `src/components/CategoriesNavigation.astro:43,67` + 24 `src/components/CategoryProduct.astro:16`), 22 in `dist/categorie/*/index.html` (`src/pages/categorie/[slug].astro:103`), 24 in `dist/<product>/index.html` (`src/pages/[productSlug].astro:82`). `loading` only 107/155 (48 missing: 24 `dist/index.html` + 24 product pages, same two files). `loading="eager"` only 2 (`src/components/Hero.astro:4`, `src/pages/old.astro:36`).
-4. **PASS** — every img src exists. Scan of all 32 dist HTML files: 155/155 local img src resolve under `dist/`; 0 dangling asset refs in html/xml/json/css/js.
-5. **PASS** — home page. `dist/index.html` hero `/hero-warehouse.webp` attr 1976x796 = sharp 1976x796 webp; logo `/Logo.svg` 140x56 = sharp 140x56 svg; arrow `/arrowDown.svg` 24x25 = sharp 24x25 svg. Map = iframe `src/components/Map.astro:4`, present in `dist/index.html` `<section id="map">`. Hero/logo/map classes unchanged vs 2cfabc6. (Saci-pentru-legume has 5 wrong 224x224 attrs — pre-existing, F4.)
-6. **PASS** — WebP valid. sharp reads all 15 new webp: `dist/hero-warehouse.webp` webp 1976x796, `dist/Plasa.webp` webp 1024x1024, `dist/poster.webp` webp 1024x900.
-7. **PASS** — scope. `git diff --name-only 2cfabc6 deaa7b1` = 45 files, none in the forbidden list. Commit 2 touches only `public/Hero.svg`, `public/hero2.svg`, `public/poster.svg`; `git grep` at 2cfabc6 shows zero references, so the delete breaks nothing.
-8. **PASS** — checker only adds rules. `git show d1661b3 -- scripts/seo-check.mjs` = +114/−7; the 7 deletions are the old `img-alt` block moved into `checkImageTags` (`scripts/seo-check.mjs:808`), rule name and condition kept. New rules bite (mutated a copy of dist/, then reverted): img-alt, img-width (`:824`), img-height (`:828`), img-exists (`:838`), image-size (`:870`), png-size (`:874`) each gave 1 failure, exit 1.
-9. **PASS** — `npm run check:seo` = 0 failures. All 24 `content/products/*.md` pages still show their `imgSrc` photo; `/saci-pentru-legume/` and `/ghid/` keep their images.
+1. **PASS** F1 — 155 `<img>` in 32 dist HTML files: alt attribute 155/155 (29 `alt=""` on decorative arrows), width 155/155, height 155/155, loading 155/155 (153 lazy, 2 eager). Missing: 0 of each. Home 37/37, category pages 4/4 to 9/9, product pages 25/25 photos complete.
+2. **FAIL** F2 map — dimensions correct: sharp read all 40 distinct img srcs of all pages, 0 mismatches (sample 27: `/hero-warehouse.webp` attr 1976x796 = file 1976x796, `/saci_plasa_30x34.jpg` attr 177x176 = file 177x176, `/Logo.svg` attr 140x56 = file 140x56). But the map does not match the files: committed `src/lib/image-sizes.json` has 48 keys, public/ holds 47 raster files. It still lists the deleted `/simconstructgrup_poster.jpg` (1011x573). Scratch run `node scripts/image-sizes.mjs` gives 47 keys; diff vs committed = 4 extra lines.
+3. **PASS** F3 — scratch copy of dist/ in /tmp/t7-check, checker run there: no width → `img-width` + `img-size-matches-file` exit 1; no height → `img-height` exit 1; width 1977 → `img-size-matches-file` exit 1; height 797 → `img-size-matches-file` exit 1; no alt → `img-alt` exit 1; missing file → `img-exists` exit 1; product photo width 180 → `img-size-matches-file` on `/saci-plasa-30x34/` exit 1. Restored copy → 0 failures. Rule now covers product photos.
+4. **PASS** F6 — `public/simconstructgrup_poster.jpg` deleted; absent from public/ and dist/; no page or component references it (`src/pages/old.astro:136` uses the .webp only). `dist/simconstructgrup_poster.webp` still served.
+5. **PASS** pages work — check:seo 0 failures; home shows hero `/hero-warehouse.webp` (eager, fetchpriority high), logo `/Logo.svg`, 30 product photos; every product page shows its own photo with the real size; the 4 category pages show their photos.
+6. **PASS** scope — `git diff --name-only 2cfabc6 HEAD` leaves untouched: src/content.config.ts, tina/config.ts, tina/tina-lock.json, content/products/*.md, src/lib/pricing.ts, src/lib/markdown.ts, src/pages/index.md.ts, src/pages/product-index.json.ts, src/pages/.well-known/ai-catalog.json.ts. CategoryProduct.astro and [productSlug].astro changed, as allowed.
 
 ## Findings
 
-- **F1 (blocks 3)** — 48 product photos have no `width`/`height` and no `loading`. 24 come from `src/components/CategoryProduct.astro:16` and 24 from `src/pages/[productSlug].astro:82`; both files are forbidden to touch, so T7 cannot close them. Needs a plan decision, not a code fix.
-- **F2 (blocks 3)** — 32 in-scope images still lack `width`/`height`: `src/components/CategoriesNavigation.astro:43,67` (10, builder touched this file) and `src/pages/categorie/[slug].astro:103` (22, untouched by the commits).
-- **F3** — `scripts/seo-check.mjs:817` skips width/height for any img whose src is a content `imgSrc`, so the 80 gaps pass silently. The build report table says "Every `<img>` has a numeric width attribute"; the code does not.
-- **F4 (pre-existing, not T7)** — `src/pages/saci-pentru-legume.astro:104` hardcodes 224x224 for 5 photos whose real sizes are 177x176 and 1200x1200 → wrong aspect ratio. Same in 2cfabc6.
-- **F5** — `src/components/Header.astro:14` gives the above-the-fold logo `loading="lazy"`. Allowed by criterion 3, but eager fits an above-the-fold logo.
-- **F6** — `public/simconstructgrup_poster.jpg` (716 KB) stays in public/ although no page loads it; only its WebP is used.
+- **F7 (blocks 2)** — `src/lib/image-sizes.json` still holds `/simconstructgrup_poster.jpg`, a file deleted in the same commit. The map disagrees with its own generator, and `node scripts/image-sizes.mjs` drops the key. No page uses it, so nothing renders wrong. Fix: run the script, commit the 4 removed lines.
+- F4 closed — `src/pages/saci-pentru-legume.astro` reads 177x176 and 1200x1200 from the map, not the hardcoded 224x224.
+- F5 open, note — the above-the-fold logo `/Logo.svg` keeps `loading="lazy"` (`src/components/Header.astro:14`). Eager fits better.
+- F3 closed — the checker no longer skips content images; it compares every img against the map.
 
 VERDICT: FAIL
