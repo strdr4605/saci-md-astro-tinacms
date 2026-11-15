@@ -4,6 +4,35 @@ Target query: `de unde cumpăr saci pentru legume rafie polipropilenă Chișină
 Target URL: `https://saci.md/saci-pentru-legume/`.
 Goal: top 10 organic for the query. Measure in Google Search Console (web).
 
+## Status
+
+All eight tasks are built and verified. The reports are in
+`docs/seo/reports/`. The checker reads 33 pages with 0 failures.
+
+| Task | Result | Notes |
+|---|---|---|
+| T1 landing page | PASS | 790 words, FAQ, CollectionPage + ItemList + FAQPage, 5 products |
+| T2 price check | PASS | verification only, no code |
+| T3 product pages | PASS | 24 pages: title, description, encoded canonical, breadcrumb, related products |
+| T4 category pages | PASS | 4 pages, ItemList, Markdown twins |
+| T5 local entity | PASS | LocalBusiness, /contact/, /despre-noi/ |
+| T6 sitemap hygiene | PASS | /old/ noindex, lastmod on every URL |
+| T7 images | PASS | public 20.8 MB to 3.5 MB, dimensions on every image |
+| T8 guide article | PASS | 1300 words, Article + FAQPage schema |
+
+Open, outside the reach of this branch:
+
+- The price feature agent must add the category pages and the landing page to
+  `src/pages/.well-known/ai-catalog.json.ts` and `src/pages/product-index.json.ts`.
+- The price feature agent must write the currency in the Markdown twins.
+- The owner must send the price list. The site then shows the prices with no
+  code change. The checker fails if the landing page shows a wrong price.
+- The owner must send the Google Business Profile URL, the Facebook URL, the
+  email address, the CUI and the opening hours. Then `sameAs`, `openingHours`
+  and the contact details follow in one small commit.
+- `content/products/Saci-Plasa-40x58.md` says `40 x 50 cm` while the name and
+  the slug say 40x58. The owner must confirm.
+
 ## Facts about the current site
 
 Read these files before you change anything. Do not assume.
