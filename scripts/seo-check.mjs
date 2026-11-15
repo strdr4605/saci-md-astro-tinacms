@@ -351,6 +351,8 @@ const productsBySlug = async () => {
     const price = Number(field("price"));
 
     map.set(slug, {
+      name: field("name"),
+      categoryPath: field("categoryPath"),
       price: Number.isFinite(price) && price > 0 ? price : undefined,
       unit: field("unit"),
       imgSrc: field("imgSrc"),
@@ -358,6 +360,39 @@ const productsBySlug = async () => {
   }
 
   return map;
+};
+
+// T3: the name of every category, read from the content front matter.
+const categoryNames = async () => {
+  const dir = fileURLToPath(new URL("content/categories/", root));
+  const map = new Map();
+
+  for (const name of await readdir(dir)) {
+    if (!name.endsWith(".md")) continue;
+
+    const text = await readFile(join(dir, name), "utf8");
+    const front = text.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? "";
+    const value =
+      front.match(/^name:\s*(.+)$/m)?.[1]?.trim().replace(/^["']|["']$/g, "") ??
+      "";
+
+    map.set(`content/categories/${name}`, value);
+  }
+
+  return map;
+};
+
+// T3: the use of the products, per category file. The description meta names
+// it. The words must stay the same as on the product page.
+const PRODUCT_USE = {
+  "content/categories/Polipropilena.md": ["cartofi", "cereale"],
+  "content/categories/Plasa.md": ["legume", "fructe"],
+  "content/categories/Polietilena.md": ["nisip", "gunoi"],
+  "content/categories/Big-bags.md": ["cereale", "nisip"],
+  "content/categories/Plasa-tubulara-si-stretch.md": [
+    "ambalare",
+    "paletizare",
+  ],
 };
 
 const linksOf = (html) =>
@@ -783,6 +818,19 @@ const checkPage = async (path) => {
     seenDescriptions.push({ path, value: attr(descriptions[0][0], "content") ?? "" });
   }
 
+  const product = productRoutes.get(normalizePath(path));
+
+  if (product) {
+    await checkProductPage(
+      path,
+      html,
+      product,
+      nodes,
+      titles[0]?.[1] ?? "",
+      descriptions[0] ? (attr(descriptions[0][0], "content") ?? "") : "",
+    );
+  }
+
   const links = [...html.matchAll(/<a [^>]*href="([^"]+)"/g)].map(
     (match) => match[1],
   );
@@ -798,6 +846,197 @@ const checkPage = async (path) => {
   }
 
   checkInternalLinks(path, html);
+};
+
+// T3: a product page holds the name, the price and the city in the title, the
+// use and the city in the description, an encoded canonical, a visible
+// breadcrumb, a BreadcrumbList and links to the other products.
+const checkProductPage = async (
+  path,
+  html,
+  product,
+  nodes,
+  title,
+  description,
+) => {
+  const categoryName = categoryNameByPath.get(product.categoryPath) ?? "Saci";
+
+  if (title.length > 65) {
+    fail(path, "product-title-length", `${title.length} characters, limit 65`);
+  }
+
+  if (!title.includes(product.name)) {
+    fail(path, "product-title-name", `"${product.name}" missing from the title`);
+  }
+
+  if (!title.includes("Chișinău")) {
+    fail(path, "product-title-city", `"Chișinău" missing from the title`);
+  }
+
+  // The price shows in the title only when the product holds a price.
+  const priceText = product.price
+    ? `${(product.price / 100).toFixed(2)} lei`
+    : null;
+
+  if (priceText && !title.includes(priceText)) {
+    fail(path, "product-title-price", `"${priceText}" missing from the title`);
+  }
+
+  if (!priceText && /\d+[.,]\d{2}\s*lei/i.test(title)) {
+    fail(
+      path,
+      "product-title-price",
+      "the title holds a price, but the product has none",
+    );
+  }
+
+  if (description.length < 70 || description.length > 160) {
+    fail(
+      path,
+      "product-description-length",
+      `${description.length} characters, need 70 to 160`,
+    );
+  }
+
+  if (!description.includes(product.name)) {
+    fail(
+      path,
+      "product-description-name",
+      `"${product.name}" missing from the description`,
+    );
+  }
+
+  if (!description.includes("Chișinău")) {
+    fail(
+      path,
+      "product-description-city",
+      `"Chișinău" missing from the description`,
+    );
+  }
+
+  for (const word of PRODUCT_USE[product.categoryPath] ?? []) {
+    if (!description.includes(word)) {
+      fail(
+        path,
+        "product-description-use",
+        `"${word}" missing from the description`,
+      );
+    }
+  }
+
+  // The canonical must be the encoded product URL.
+  const canonical = html.match(/<link rel="canonical" href="([^"]*)"/)?.[1] ?? "";
+  const expectedCanonical = `${SITE}/${encodeURIComponent(product.slug)}/`;
+
+  if (canonical !== expectedCanonical) {
+    fail(
+      path,
+      "product-canonical-encoded",
+      `${canonical} vs ${expectedCanonical}`,
+    );
+  }
+
+  // The visible breadcrumb holds the same three levels.
+  const expectedLevels = ["Home", categoryName, product.name];
+
+  const nav =
+    html.match(/<nav[^>]*aria-label="Breadcrumb"[^>]*>[\s\S]*?<\/nav>/)?.[0] ??
+    "";
+  const navText = stripTags(nav).replace(/\s+/g, " ").trim();
+
+  if (navText !== expectedLevels.join(" / ")) {
+    fail(
+      path,
+      "product-breadcrumb",
+      `"${navText}" vs "${expectedLevels.join(" / ")}"`,
+    );
+  }
+
+  const lists = nodes.filter((node) => node["@type"] === "BreadcrumbList");
+
+  if (lists.length === 0) {
+    fail(path, "product-breadcrumb-schema", "no BreadcrumbList node");
+  } else {
+    const items = lists[0].itemListElement ?? [];
+    const names = items.map((item) => item.name);
+
+    if (JSON.stringify(names) !== JSON.stringify(expectedLevels)) {
+      fail(
+        path,
+        "product-breadcrumb-schema",
+        `levels ${JSON.stringify(names)}`,
+      );
+    }
+
+    items.forEach((item, index) => {
+      if (item.position !== index + 1) {
+        fail(
+          path,
+          "product-breadcrumb-schema",
+          `position ${item.position} at level ${index + 1}`,
+        );
+      }
+    });
+
+    if (items[2]?.item !== expectedCanonical) {
+      fail(
+        path,
+        "product-breadcrumb-schema",
+        `the last level points to ${items[2]?.item}`,
+      );
+    }
+  }
+
+  // The page links to the other products of the same category, and to at
+  // least two other products.
+  const links = new Set(
+    linksOf(html).map((href) => normalizePath(new URL(href, SITE).pathname)),
+  );
+
+  for (const slug of (await productIndex).get(product.categoryPath) ?? []) {
+    if (slug === product.slug) continue;
+
+    if (!links.has(normalizePath(`/${slug}/`))) {
+      fail(path, "related-product-link", `no link to /${slug}/`);
+    }
+  }
+
+  const productLinks = [...links].filter((route) => productRoutes.has(route));
+
+  if (productLinks.length < 2) {
+    fail(
+      path,
+      "related-product-count",
+      `${productLinks.length} product links, need 2`,
+    );
+  }
+
+  // The Markdown twin holds the price and the breadcrumb.
+  const twin = `${normalizePath(path)}.md`;
+  const twinText = await readFile(
+    join(distDir, twin.replace(/^\//, "")),
+    "utf8",
+  ).catch(() => "");
+
+  const expectedPrice = product.price
+    ? `${(product.price / 100).toFixed(2)} lei / ${product.unit?.trim() || "buc"}`
+    : "la cerere";
+
+  if (!twinText.includes(`Preț: ${expectedPrice}`)) {
+    fail(
+      path,
+      "markdown-twin-price",
+      `no "Preț: ${expectedPrice}" in ${twin}`,
+    );
+  }
+
+  if (!twinText.includes(`Breadcrumb: ${expectedLevels.join(" / ")}`)) {
+    fail(
+      path,
+      "markdown-twin-breadcrumb",
+      `no breadcrumb in ${twin}`,
+    );
+  }
 };
 
 // T7: every <img> of the built pages needs alt, width and height, and its
@@ -945,6 +1184,16 @@ const paths = await sitemapPaths();
 const entries = await sitemapEntries();
 const productIndex = productsByCategory();
 const productPrices = productsBySlug();
+
+// T3: the route of every product, so the product rules run on every product
+// page. The slug can hold spaces.
+const productRoutes = new Map();
+for (const [slug, meta] of await productPrices) {
+  productRoutes.set(normalizePath(`/${slug}/`), { slug, ...meta });
+}
+
+// T3: the name of every category.
+const categoryNameByPath = await categoryNames();
 
 // T7: the images that come from the content front matter.
 const productImages = new Set(

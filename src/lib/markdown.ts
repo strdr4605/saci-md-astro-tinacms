@@ -22,6 +22,7 @@ export const buildProductMarkdown = (
   const lines = [
     `# ${product.data.name}`,
     "",
+    `- Breadcrumb: Home / ${categoryName} / ${product.data.name}`,
     `- Categorie: ${categoryName}`,
     ...(product.data.specs ?? []).map((spec: string) => `- ${spec}`),
     `- Preț: ${priceLine}`,
